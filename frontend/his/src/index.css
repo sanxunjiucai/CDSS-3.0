@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei',
+      'Segoe UI', sans-serif;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 滚动条美化 */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #D0D5E0;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B0B8CC;
+  }
+}
+
+@layer components {
+  /* 功能卡片 */
+  .panel-card {
+    @apply bg-white rounded-md border border-border mb-2 overflow-hidden;
+  }
+
+  /* 卡片标题行 */
+  .panel-header {
+    @apply flex items-center justify-between px-3 py-2 cursor-pointer
+           select-none hover:bg-gray-50 transition-colors;
+  }
+
+  /* 卡片内容区 */
+  .panel-body {
+    @apply px-3 pb-3 pt-1;
+  }
+
+  /* 必查/酌情 tag */
+  .tag-required {
+    @apply text-2xs font-medium px-1 py-0.5 rounded-sm
+           bg-red-50 text-danger border border-red-200;
+  }
+  .tag-optional {
+    @apply text-2xs font-medium px-1 py-0.5 rounded-sm
+           bg-orange-50 text-warning border border-orange-200;
+  }
+  .tag-blue {
+    @apply text-2xs font-medium px-1 py-0.5 rounded-sm
+           bg-primary-50 text-primary border border-primary-200;
+  }
+}
