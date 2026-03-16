@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,13 +14,15 @@ router = APIRouter()
 
 @router.get("/exams", response_model=Response[PaginatedData[ExamListItem]], summary="检验检查列表")
 async def list_exams(
+    q: Optional[str] = Query(None, description="关键词搜索（名称/编码）"),
+    type: Optional[str] = Query(None, description="按类型过滤（lab/exam）"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     session: AsyncSession = Depends(get_db),
 ):
     service = ExamService(session)
     params = PaginationParams(page=page, page_size=page_size)
-    items, total = await service.get_list(params)
+    items, total = await service.get_list(params, type=type, q=q)
     total_pages = (total + page_size - 1) // page_size
     return Response.ok(PaginatedData(
         items=[ExamListItem.model_validate(e) for e in items],

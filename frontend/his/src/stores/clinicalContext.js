@@ -1,15 +1,29 @@
 /**
  * 临床上下文 Store
- * 存储从录音 → NLP提取 → 追问 → 结构化摘要的全流程数据
+ * 存储 HIS患者数据推断 + 追问 + 结构化摘要的全流程数据
  */
 import { create } from 'zustand'
 
 export const useClinicalContextStore = create((set, get) => ({
-  // NLP 提取状态
+  // 推断状态
   isExtracting: false,
+  isInferring: false,
+  isSuggesting: false,
+  isInterpreting: false,
   extractError: null,
 
-  // GLM 提取的结构化实体
+  // GLM 基于患者数据的推断结果
+  // { chief_complaint_refined, present_illness, risk_signals, missing_key_info, stage_hint }
+  inferred: null,
+
+  // GLM 智能诊断推荐列表
+  diagnosisSuggestions: [],
+
+  // GLM 检验结果解读
+  // [{ item_code, item_name, severity, interpretation, action, adjusted_range, range_note }]
+  labInterpretations: [],
+
+  // GLM 提取的结构化实体（保留，供其他模块使用）
   entities: null,
   /*
   entities: {
@@ -47,9 +61,15 @@ export const useClinicalContextStore = create((set, get) => ({
   lastExtractedTranscript: '',
 
   // Actions
-  setExtracting: (v) => set({ isExtracting: v }),
-  setExtractError: (e) => set({ extractError: e }),
+  setExtracting:  (v) => set({ isExtracting: v }),
+  setInferring:           (v)   => set({ isInferring: v }),
+  setSuggesting:          (v)   => set({ isSuggesting: v }),
+  setInterpreting:        (v)   => set({ isInterpreting: v }),
+  setExtractError:        (e)   => set({ extractError: e }),
 
+  setInferred:            (inferred)  => set({ inferred }),
+  setDiagnosisSuggestions:(arr)       => set({ diagnosisSuggestions: arr }),
+  setLabInterpretations:  (arr)       => set({ labInterpretations: arr }),
   setEntities: (entities) => set({ entities }),
 
   setFollowUpQuestions: (questions) => set({ followUpQuestions: questions }),
@@ -64,7 +84,13 @@ export const useClinicalContextStore = create((set, get) => ({
 
   reset: () => set({
     isExtracting: false,
+    isInferring: false,
+    isSuggesting: false,
     extractError: null,
+    inferred: null,
+    diagnosisSuggestions: [],
+    labInterpretations: [],
+    isInterpreting: false,
     entities: null,
     followUpQuestions: [],
     followUpAnswers: {},

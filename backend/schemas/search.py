@@ -14,5 +14,6 @@ class SearchResultItem(BaseModel):
 class SearchResponse(BaseModel):
     query: str
     total: int
+    total_pages: int = 1
     items: List[SearchResultItem]
     facets: dict = {}  # 分类统计：{"disease": 10, "drug": 5, ...}

@@ -53,18 +53,27 @@ class PatientContextService:
             current_medications=his_info.current_medications if his_info else [],
         )
 
-        await self.redis.setex(
-            _context_key(data.patient_id),
-            CONTEXT_TTL,
-            context.model_dump_json(),
-        )
+        try:
+            await self.redis.setex(
+                _context_key(data.patient_id),
+                CONTEXT_TTL,
+                context.model_dump_json(),
+            )
+        except Exception:
+            pass  # Redis 不可用时跳过缓存，直接返回
         return context
 
     async def get_context(self, patient_id: str) -> Optional[PatientContext]:
-        raw = await self.redis.get(_context_key(patient_id))
-        if raw:
-            return PatientContext.model_validate_json(raw)
+        try:
+            raw = await self.redis.get(_context_key(patient_id))
+            if raw:
+                return PatientContext.model_validate_json(raw)
+        except Exception:
+            pass  # Redis 不可用时降级返回 None
         return None
 
     async def clear_context(self, patient_id: str) -> None:
-        await self.redis.delete(_context_key(patient_id))
+        try:
+            await self.redis.delete(_context_key(patient_id))
+        except Exception:
+            pass

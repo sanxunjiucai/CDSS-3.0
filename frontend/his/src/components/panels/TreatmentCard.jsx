@@ -1,4 +1,4 @@
-import { HeartPulse, ChevronRight, Star, BookOpen } from 'lucide-react'
+import { HeartPulse, ChevronRight, Star, BookOpen, PlusCircle, CheckCircle2 } from 'lucide-react'
 import { useState } from 'react'
 import { CollapsibleCard } from '@/components/ui/collapsible-card'
 import { Badge } from '@/components/ui/badge'
@@ -61,7 +61,7 @@ export function TreatmentCard({ defaultOpen = true }) {
       icon={<HeartPulse size={11} className="text-white" />}
       defaultOpen={defaultOpen}
     >
-      {/* 西医 / 中医 Tab */}
+      {/* 通用治疗 / 个性化治疗 Tab */}
       <div className="flex gap-1.5 mb-3">
         {['western', 'traditional'].map(tab => (
           <button
@@ -74,7 +74,7 @@ export function TreatmentCard({ defaultOpen = true }) {
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             )}
           >
-            {tab === 'western' ? '西医治疗' : '中医治疗'}
+            {tab === 'western' ? '通用治疗' : '个性化治疗'}
           </button>
         ))}
       </div>
@@ -103,6 +103,14 @@ export function TreatmentCard({ defaultOpen = true }) {
 
 function TreatmentPlan({ plan, isExpanded, onToggle, patient }) {
   const hasAllergyNote = plan.allergyNote && patient?.allergies?.length > 0
+  const [added, setAdded] = useState(false)
+
+  const handleAdd = (e) => {
+    e.stopPropagation()
+    console.log('[HIS WriteBack] treatment_plan', { label: plan.label, tag: plan.tag, drugs: plan.drugs })
+    setAdded(true)
+    setTimeout(() => setAdded(false), 2000)
+  }
 
   return (
     <div className="rounded border border-border overflow-hidden">
@@ -117,24 +125,37 @@ function TreatmentPlan({ plan, isExpanded, onToggle, patient }) {
 
         {/* 指南徽章 */}
         {plan.guideline && (
-          <span className="flex items-center gap-0.5 text-2xs text-indigo-600
-                           bg-indigo-50 border border-indigo-200 px-1 py-0.5 rounded-sm">
+          <span className="flex items-center gap-0.5 text-2xs text-gray-500
+                           bg-gray-100 border border-gray-200 px-1 py-0.5 rounded-sm">
             <BookOpen size={9} />
             {plan.guideline.level}
           </span>
         )}
 
         {plan.isFirst && (
-          <div className="flex items-center gap-0.5 text-2xs text-amber-500 ml-auto">
+          <div className="flex items-center gap-0.5 text-2xs text-amber-500">
             <Star size={10} fill="currentColor" />
             <span>首选</span>
           </div>
         )}
+
+        {/* 回写 HIS 按钮 */}
+        <button
+          onClick={handleAdd}
+          title="将治疗方案写入 HIS"
+          className={cn(
+            'ml-auto flex-shrink-0 transition-colors',
+            added ? 'text-success' : 'text-gray-300 hover:text-primary'
+          )}
+        >
+          {added ? <CheckCircle2 size={13} /> : <PlusCircle size={13} />}
+        </button>
+
         {!plan.isFirst && (
           <ChevronRight
             size={12}
             className={cn(
-              'ml-auto text-gray-400 transition-transform',
+              'text-gray-400 transition-transform flex-shrink-0',
               isExpanded && 'rotate-90'
             )}
           />
@@ -146,9 +167,9 @@ function TreatmentPlan({ plan, isExpanded, onToggle, patient }) {
         <div className="px-2.5 py-2 space-y-2">
           {/* 过敏提示 */}
           {hasAllergyNote && (
-            <div className="flex items-start gap-1.5 bg-amber-50 border border-amber-200
-                             rounded px-2 py-1.5">
-              <span className="text-2xs text-amber-700">
+            <div className="flex items-start gap-1.5 border-l-2 border-l-warning bg-white
+                             rounded px-2 py-1.5 border border-border">
+              <span className="text-2xs text-warning">
                 ⚠ {plan.allergyNote}
               </span>
             </div>
@@ -163,8 +184,8 @@ function TreatmentPlan({ plan, isExpanded, onToggle, patient }) {
               {plan.drugs.map(drug => (
                 <span
                   key={drug}
-                  className="text-2xs bg-primary-50 text-primary border border-primary-200
-                             px-1.5 py-0.5 rounded-sm cursor-pointer hover:bg-primary-100"
+                  className="text-2xs bg-gray-100 text-gray-600 border border-gray-200
+                             px-1.5 py-0.5 rounded-sm cursor-pointer hover:bg-gray-200"
                 >
                   {drug}
                 </span>

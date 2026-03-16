@@ -1,0 +1,1828 @@
+[
+  {
+    "name": "白细胞计数（WBC）",
+    "code": "WBC",
+    "type": "lab",
+    "description": "白细胞是血液中的免疫细胞，主要功能是防御感染。",
+    "unit": "×10⁹/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.5,
+        "high": 9.5,
+        "unit": "×10⁹/L",
+        "condition": "成人",
+        "text": "3.5–9.5"
+      },
+      {
+        "gender": "",
+        "age_min": 0,
+        "age_max": 28,
+        "low": 15.0,
+        "high": 20.0,
+        "unit": "×10⁹/L",
+        "condition": "新生儿",
+        "text": "15.0–20.0"
+      }
+    ],
+    "clinical_significance": "升高见于细菌感染、炎症、白血病；降低见于病毒感染、骨髓抑制、自身免疫病。",
+    "indications": "感染筛查、血液病筛查、化疗监测",
+    "preparation": "无特殊准备，避免剧烈运动后立即采血",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "红细胞计数（RBC）",
+    "code": "RBC",
+    "type": "lab",
+    "description": "红细胞负责携带氧气从肺部输送到全身组织。",
+    "unit": "×10¹²/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 4.3,
+        "high": 5.8,
+        "unit": "×10¹²/L",
+        "condition": "成年男性",
+        "text": "4.3–5.8"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.8,
+        "high": 5.1,
+        "unit": "×10¹²/L",
+        "condition": "成年女性",
+        "text": "3.8–5.1"
+      }
+    ],
+    "clinical_significance": "升高见于真性红细胞增多症、高原居住；降低见于各类贫血。",
+    "indications": "贫血评估、红细胞增多症诊断",
+    "preparation": "无特殊要求",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "血红蛋白（HGB/Hb）",
+    "code": "HGB",
+    "type": "lab",
+    "description": "血红蛋白是红细胞中负责携氧的蛋白质。",
+    "unit": "g/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 130,
+        "high": 175,
+        "unit": "g/L",
+        "condition": "成年男性",
+        "text": "130–175"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 115,
+        "high": 150,
+        "unit": "g/L",
+        "condition": "成年女性",
+        "text": "115–150"
+      },
+      {
+        "gender": "",
+        "age_min": 0,
+        "age_max": 28,
+        "low": 170,
+        "high": 200,
+        "unit": "g/L",
+        "condition": "新生儿",
+        "text": "170–200"
+      }
+    ],
+    "clinical_significance": "降低（贫血）：<120g/L（女）/<130g/L（男）；升高：见于脱水、红细胞增多症。",
+    "indications": "贫血诊断与分级、手术前评估",
+    "preparation": "无特殊要求",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "血小板计数（PLT）",
+    "code": "PLT",
+    "type": "lab",
+    "description": "血小板参与止血过程，通过聚集形成血凝块。",
+    "unit": "×10⁹/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 100,
+        "high": 300,
+        "unit": "×10⁹/L",
+        "condition": "成人",
+        "text": "100–300"
+      }
+    ],
+    "clinical_significance": "<100×10⁹/L为血小板减少；>400×10⁹/L为血小板增多。<50时出血风险显著增加。",
+    "indications": "出血倾向评估、血液病筛查、化疗监测",
+    "preparation": "无特殊要求",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "中性粒细胞百分比（NEUT%）",
+    "code": "NEUT%",
+    "type": "lab",
+    "description": "中性粒细胞是最主要的抗感染白细胞。",
+    "unit": "%",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 40,
+        "high": 75,
+        "unit": "%",
+        "condition": "成人",
+        "text": "40–75%"
+      }
+    ],
+    "clinical_significance": "升高：细菌感染、炎症、应激；降低：病毒感染、粒细胞缺乏。",
+    "indications": "感染类型鉴别",
+    "preparation": "无特殊要求",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "淋巴细胞百分比（LYMPH%）",
+    "code": "LYMPH%",
+    "type": "lab",
+    "description": "淋巴细胞包括T细胞、B细胞，参与适应性免疫。",
+    "unit": "%",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 20,
+        "high": 50,
+        "unit": "%",
+        "condition": "成人",
+        "text": "20–50%"
+      }
+    ],
+    "clinical_significance": "升高：病毒感染、淋巴细胞白血病；降低：化疗、免疫抑制。",
+    "indications": "感染类型鉴别、免疫评估",
+    "preparation": "无特殊要求",
+    "source": "WS/T 405-2012",
+    "source_url": ""
+  },
+  {
+    "name": "丙氨酸氨基转移酶（ALT）",
+    "code": "ALT",
+    "type": "lab",
+    "description": "ALT主要存在于肝细胞中，是肝损伤的高度特异性指标。",
+    "unit": "U/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 9,
+        "high": 50,
+        "unit": "U/L",
+        "condition": "成年男性",
+        "text": "9–50"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 7,
+        "high": 40,
+        "unit": "U/L",
+        "condition": "成年女性",
+        "text": "7–40"
+      }
+    ],
+    "clinical_significance": "显著升高（>3倍正常值上限）提示急性肝损伤、肝炎、药物性肝损害。",
+    "indications": "肝病筛查、药物肝毒性监测、肝炎随访",
+    "preparation": "空腹8小时采血",
+    "source": "WS/T 404.1-2012",
+    "source_url": ""
+  },
+  {
+    "name": "天冬氨酸氨基转移酶（AST）",
+    "code": "AST",
+    "type": "lab",
+    "description": "AST存在于心肌、肝脏、骨骼肌中，特异性低于ALT。",
+    "unit": "U/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 15,
+        "high": 40,
+        "unit": "U/L",
+        "condition": "成年男性",
+        "text": "15–40"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 13,
+        "high": 35,
+        "unit": "U/L",
+        "condition": "成年女性",
+        "text": "13–35"
+      }
+    ],
+    "clinical_significance": "AST/ALT>2提示酒精性肝病；心梗时AST升高早于ALT。",
+    "indications": "肝病评估、心肌损伤鉴别",
+    "preparation": "空腹8小时采血",
+    "source": "WS/T 404.1-2012",
+    "source_url": ""
+  },
+  {
+    "name": "总胆红素（TBIL）",
+    "code": "TBIL",
+    "type": "lab",
+    "description": "总胆红素是直接胆红素和间接胆红素之和，反映胆红素代谢。",
+    "unit": "μmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.4,
+        "high": 17.1,
+        "unit": "μmol/L",
+        "condition": "成人",
+        "text": "3.4–17.1"
+      },
+      {
+        "gender": "",
+        "age_min": 0,
+        "age_max": 28,
+        "low": null,
+        "high": 220,
+        "unit": "μmol/L",
+        "condition": "新生儿（生理性黄疸上限）",
+        "text": "<220"
+      }
+    ],
+    "clinical_significance": "升高见于肝炎、胆道梗阻、溶血性疾病。>34μmol/L时临床出现黄疸。",
+    "indications": "黄疸鉴别诊断、肝功能评估",
+    "preparation": "空腹8小时，避光处理",
+    "source": "WS/T 404.2-2012",
+    "source_url": ""
+  },
+  {
+    "name": "白蛋白（ALB）",
+    "code": "ALB",
+    "type": "lab",
+    "description": "白蛋白是血浆中含量最多的蛋白质，反映肝脏合成功能和营养状态。",
+    "unit": "g/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 40,
+        "high": 55,
+        "unit": "g/L",
+        "condition": "成人",
+        "text": "40–55"
+      }
+    ],
+    "clinical_significance": "<35g/L为低蛋白血症，见于肝硬化、肾病综合征、营养不良。",
+    "indications": "肝功能评估、营养状态评估、慢性病预后",
+    "preparation": "无特殊要求（避免溶血）",
+    "source": "WS/T 404.2-2012",
+    "source_url": ""
+  },
+  {
+    "name": "血肌酐（SCr）",
+    "code": "SCr",
+    "type": "lab",
+    "description": "肌酐是肌肉代谢产物，经肾小球滤过排出，是评估肾功能的核心指标。",
+    "unit": "μmol/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 57,
+        "high": 111,
+        "unit": "μmol/L",
+        "condition": "成年男性",
+        "text": "57–111"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 41,
+        "high": 81,
+        "unit": "μmol/L",
+        "condition": "成年女性",
+        "text": "41–81"
+      }
+    ],
+    "clinical_significance": "升高提示肾功能损害，结合eGFR分期；急性升高提示AKI。",
+    "indications": "肾功能筛查、CKD分期、肾毒性药物监测",
+    "preparation": "清晨空腹，避免大量肉食",
+    "source": "WS/T 404.3-2012",
+    "source_url": ""
+  },
+  {
+    "name": "血尿素氮（BUN）",
+    "code": "BUN",
+    "type": "lab",
+    "description": "尿素氮是蛋白质代谢终产物，反映肾小球滤过功能。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.1,
+        "high": 8.0,
+        "unit": "mmol/L",
+        "condition": "成人",
+        "text": "3.1–8.0"
+      }
+    ],
+    "clinical_significance": "升高见于肾功能不全、高蛋白饮食、上消化道出血；降低见于低蛋白饮食、肝衰竭。",
+    "indications": "肾功能评估、蛋白质代谢评估",
+    "preparation": "空腹8小时，避免高蛋白饮食",
+    "source": "WS/T 404.3-2012",
+    "source_url": ""
+  },
+  {
+    "name": "尿酸（UA）",
+    "code": "UA",
+    "type": "lab",
+    "description": "尿酸是嘌呤代谢终产物，高尿酸血症与痛风密切相关。",
+    "unit": "μmol/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 208,
+        "high": 428,
+        "unit": "μmol/L",
+        "condition": "成年男性",
+        "text": "208–428"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 155,
+        "high": 357,
+        "unit": "μmol/L",
+        "condition": "成年女性",
+        "text": "155–357"
+      }
+    ],
+    "clinical_significance": ">420μmol/L（男）/>360μmol/L（女）为高尿酸血症，痛风风险增加。",
+    "indications": "痛风筛查与随访、肾功能评估",
+    "preparation": "空腹，避免高嘌呤食物",
+    "source": "WS/T 404.3-2012",
+    "source_url": ""
+  },
+  {
+    "name": "空腹血糖（FBG/GLU）",
+    "code": "FBG",
+    "type": "lab",
+    "description": "空腹血糖是诊断糖尿病和糖代谢异常的基础指标。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.9,
+        "high": 6.1,
+        "unit": "mmol/L",
+        "condition": "正常空腹",
+        "text": "3.9–6.1"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 6.1,
+        "high": 7.0,
+        "unit": "mmol/L",
+        "condition": "空腹血糖受损（IFG）",
+        "text": "6.1–7.0"
+      }
+    ],
+    "clinical_significance": "≥7.0mmol/L（两次）可诊断糖尿病；6.1-7.0为IFG（糖调节受损）。",
+    "indications": "糖尿病筛查与诊断、血糖监测",
+    "preparation": "空腹8–10小时",
+    "source": "WS/T 404.4-2012",
+    "source_url": ""
+  },
+  {
+    "name": "糖化血红蛋白（HbA1c）",
+    "code": "HbA1c",
+    "type": "lab",
+    "description": "反映过去2-3个月平均血糖水平，是糖尿病长期控制的金标准指标。",
+    "unit": "%",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 6.0,
+        "unit": "%",
+        "condition": "正常",
+        "text": "<6.0%"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 6.0,
+        "high": 6.5,
+        "unit": "%",
+        "condition": "糖尿病前期",
+        "text": "6.0–6.5%"
+      }
+    ],
+    "clinical_significance": "≥6.5%支持糖尿病诊断；糖尿病患者控制目标通常<7%。",
+    "indications": "糖尿病诊断、血糖长期控制评估",
+    "preparation": "无需空腹",
+    "source": "WS/T 461-2015",
+    "source_url": ""
+  },
+  {
+    "name": "总胆固醇（TC）",
+    "code": "TC",
+    "type": "lab",
+    "description": "总胆固醇包括LDL、HDL等各类胆固醇，是心血管风险评估基础指标。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 5.2,
+        "unit": "mmol/L",
+        "condition": "合适水平",
+        "text": "<5.2"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 5.2,
+        "high": 6.2,
+        "unit": "mmol/L",
+        "condition": "边缘升高",
+        "text": "5.2–6.2"
+      }
+    ],
+    "clinical_significance": "≥6.2mmol/L为高胆固醇血症，心血管疾病风险显著增加。",
+    "indications": "心血管风险评估、血脂异常筛查",
+    "preparation": "空腹12小时，3天内保持普通饮食",
+    "source": "WS/T 404.6-2015",
+    "source_url": ""
+  },
+  {
+    "name": "低密度脂蛋白胆固醇（LDL-C）",
+    "code": "LDL-C",
+    "type": "lab",
+    "description": "LDL-C是动脉粥样硬化的核心风险因素，俗称'坏胆固醇'。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 3.4,
+        "unit": "mmol/L",
+        "condition": "合适水平（一般人群）",
+        "text": "<3.4"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 1.8,
+        "unit": "mmol/L",
+        "condition": "目标值（心血管高危）",
+        "text": "<1.8"
+      }
+    ],
+    "clinical_significance": "是他汀类药物治疗的主要靶点；心血管高危患者目标<1.8mmol/L。",
+    "indications": "心血管风险分层、血脂治疗监测",
+    "preparation": "空腹12小时",
+    "source": "WS/T 404.6-2015",
+    "source_url": ""
+  },
+  {
+    "name": "高密度脂蛋白胆固醇（HDL-C）",
+    "code": "HDL-C",
+    "type": "lab",
+    "description": "HDL-C具有心血管保护作用，俗称'好胆固醇'。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "M",
+        "age_min": 18,
+        "age_max": null,
+        "low": 1.0,
+        "high": null,
+        "unit": "mmol/L",
+        "condition": "成年男性（最低值）",
+        "text": "≥1.0"
+      },
+      {
+        "gender": "F",
+        "age_min": 18,
+        "age_max": null,
+        "low": 1.3,
+        "high": null,
+        "unit": "mmol/L",
+        "condition": "成年女性（最低值）",
+        "text": "≥1.3"
+      }
+    ],
+    "clinical_significance": "<1.0mmol/L（男）/<1.3mmol/L（女）为低HDL-C，心血管风险增加。",
+    "indications": "心血管风险评估",
+    "preparation": "空腹12小时",
+    "source": "WS/T 404.6-2015",
+    "source_url": ""
+  },
+  {
+    "name": "甘油三酯（TG）",
+    "code": "TG",
+    "type": "lab",
+    "description": "甘油三酯是血脂的重要组成，与代谢综合征和胰腺炎相关。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 1.7,
+        "unit": "mmol/L",
+        "condition": "合适水平",
+        "text": "<1.7"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 1.7,
+        "high": 2.3,
+        "unit": "mmol/L",
+        "condition": "边缘升高",
+        "text": "1.7–2.3"
+      }
+    ],
+    "clinical_significance": "≥5.6mmol/L急性胰腺炎风险显著增加。",
+    "indications": "代谢综合征筛查、胰腺炎风险评估",
+    "preparation": "空腹12小时，3天内避免高脂饮食和饮酒",
+    "source": "WS/T 404.6-2015",
+    "source_url": ""
+  },
+  {
+    "name": "凝血酶原时间（PT）",
+    "code": "PT",
+    "type": "lab",
+    "description": "PT反映外源性凝血途径功能，用于评估肝脏合成凝血因子能力。",
+    "unit": "s",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 11,
+        "high": 14,
+        "unit": "s",
+        "condition": "成人",
+        "text": "11–14s"
+      }
+    ],
+    "clinical_significance": "延长见于肝功能损害、维生素K缺乏、华法林治疗。INR=PT/正常对照PT。",
+    "indications": "抗凝治疗监测（华法林）、术前评估、肝功能评估",
+    "preparation": "采血前不做剧烈运动",
+    "source": "WS/T 406-2024",
+    "source_url": ""
+  },
+  {
+    "name": "活化部分凝血活酶时间（APTT）",
+    "code": "APTT",
+    "type": "lab",
+    "description": "APTT反映内源性凝血途径功能，用于肝素治疗监测。",
+    "unit": "s",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 25,
+        "high": 35,
+        "unit": "s",
+        "condition": "成人",
+        "text": "25–35s"
+      }
+    ],
+    "clinical_significance": "延长见于因子缺乏、肝素过量、DIC；用于监测普通肝素治疗（目标1.5-2.5倍正常值）。",
+    "indications": "肝素治疗监测、出血性疾病筛查",
+    "preparation": "采血前不做剧烈运动",
+    "source": "WS/T 406-2024",
+    "source_url": ""
+  },
+  {
+    "name": "D-二聚体（D-Dimer）",
+    "code": "D-Dimer",
+    "type": "lab",
+    "description": "D-二聚体是纤维蛋白降解产物，反映体内纤溶活性。",
+    "unit": "μg/L（FEU）",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 500,
+        "unit": "μg/L",
+        "condition": "正常（FEU）",
+        "text": "<500"
+      }
+    ],
+    "clinical_significance": "升高见于DVT、PE、DIC、感染；阴性可排除DVT/PE（敏感性高，特异性低）。",
+    "indications": "DVT/PE筛查（排除诊断）、DIC诊断",
+    "preparation": "无特殊要求",
+    "source": "WS/T 406-2024",
+    "source_url": ""
+  },
+  {
+    "name": "血钠（Na⁺）",
+    "code": "Na",
+    "type": "lab",
+    "description": "钠是细胞外液的主要阳离子，维持渗透压和水平衡。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 137,
+        "high": 147,
+        "unit": "mmol/L",
+        "condition": "成人",
+        "text": "137–147"
+      }
+    ],
+    "clinical_significance": "<135低钠血症；>145高钠血症，两者均需评估液体状态。",
+    "indications": "水电解质平衡评估、神经系统症状鉴别",
+    "preparation": "无特殊要求",
+    "source": "WS/T 404.5-2015",
+    "source_url": ""
+  },
+  {
+    "name": "血钾（K⁺）",
+    "code": "K",
+    "type": "lab",
+    "description": "钾是细胞内液的主要阳离子，对心肌电生理至关重要。",
+    "unit": "mmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 3.5,
+        "high": 5.3,
+        "unit": "mmol/L",
+        "condition": "成人",
+        "text": "3.5–5.3"
+      }
+    ],
+    "clinical_significance": "<3.5低钾血症（肌无力、心律失常）；>5.5高钾血症（致命性心律失常风险）。",
+    "indications": "电解质紊乱评估、利尿剂治疗监测、肾功能评估",
+    "preparation": "避免溶血（溶血可导致假性高钾）",
+    "source": "WS/T 404.5-2015",
+    "source_url": ""
+  },
+  {
+    "name": "肌钙蛋白I（cTnI）",
+    "code": "cTnI",
+    "type": "lab",
+    "description": "心肌特异性标志物，心肌损伤时释放入血，是AMI诊断的金标准。",
+    "unit": "ng/mL",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 0.04,
+        "unit": "ng/mL",
+        "condition": "正常上限（第99百分位）",
+        "text": "<0.04"
+      }
+    ],
+    "clinical_significance": ">正常上限99th百分位，结合临床症状和ECG，诊断NSTEMI/STEMI。",
+    "indications": "急性心肌梗死诊断、心肌损伤评估",
+    "preparation": "急诊检测，无需空腹",
+    "source": "ACC/AHA指南",
+    "source_url": ""
+  },
+  {
+    "name": "B型脑钠肽（BNP）",
+    "code": "BNP",
+    "type": "lab",
+    "description": "BNP由心室肌细胞分泌，反映心室壁张力，是心衰的生物标志物。",
+    "unit": "pg/mL",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 100,
+        "unit": "pg/mL",
+        "condition": "心衰排除（BNP）",
+        "text": "<100"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 300,
+        "unit": "pg/mL",
+        "condition": "心衰排除（NT-proBNP）",
+        "text": "<300（NT-proBNP）"
+      }
+    ],
+    "clinical_significance": "<100pg/mL基本排除心衰；>400pg/mL高度提示心衰失代偿。",
+    "indications": "心衰诊断与分级、心衰治疗监测、急性呼吸困难鉴别",
+    "preparation": "无特殊要求",
+    "source": "中国心力衰竭诊断和治疗指南2018",
+    "source_url": ""
+  },
+  {
+    "name": "促甲状腺激素（TSH）",
+    "code": "TSH",
+    "type": "lab",
+    "description": "TSH是筛查甲状腺功能最敏感的指标。",
+    "unit": "mIU/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 0.27,
+        "high": 4.2,
+        "unit": "mIU/L",
+        "condition": "成人",
+        "text": "0.27–4.2"
+      },
+      {
+        "gender": "F",
+        "age_min": 0,
+        "age_max": null,
+        "low": 0.1,
+        "high": 2.5,
+        "unit": "mIU/L",
+        "condition": "孕早期目标值",
+        "text": "0.1–2.5（孕早期）"
+      }
+    ],
+    "clinical_significance": "升高提示甲减；降低提示甲亢。TSH异常时进一步查FT4/FT3。",
+    "indications": "甲状腺功能筛查、甲状腺激素替代治疗监测",
+    "preparation": "无特殊要求，建议清晨采血",
+    "source": "WS/T 404.7-2015",
+    "source_url": ""
+  },
+  {
+    "name": "游离甲状腺素（FT4）",
+    "code": "FT4",
+    "type": "lab",
+    "description": "FT4是生理活性甲状腺激素，不受甲状腺结合蛋白影响。",
+    "unit": "pmol/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 12,
+        "high": 22,
+        "unit": "pmol/L",
+        "condition": "成人",
+        "text": "12–22"
+      }
+    ],
+    "clinical_significance": "降低（+TSH升高）=甲减；升高（+TSH降低）=甲亢。",
+    "indications": "甲状腺功能异常进一步评估",
+    "preparation": "无特殊要求",
+    "source": "WS/T 404.7-2015",
+    "source_url": ""
+  },
+  {
+    "name": "C反应蛋白（CRP）",
+    "code": "CRP",
+    "type": "lab",
+    "description": "急性时相反应蛋白，感染/炎症时迅速升高，半衰期19小时。",
+    "unit": "mg/L",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 10,
+        "unit": "mg/L",
+        "condition": "正常",
+        "text": "<10"
+      }
+    ],
+    "clinical_significance": "10–100：局部细菌感染/炎症；>100：严重细菌感染/脓毒症。病毒感染通常轻度升高。",
+    "indications": "感染和炎症评估、治疗反应监测",
+    "preparation": "无特殊要求",
+    "source": "WS/T 404-2012",
+    "source_url": ""
+  },
+  {
+    "name": "降钙素原（PCT）",
+    "code": "PCT",
+    "type": "lab",
+    "description": "细菌感染特异性标志物，对脓毒症诊断和抗生素治疗指导有价值。",
+    "unit": "ng/mL",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": null,
+        "high": 0.1,
+        "unit": "ng/mL",
+        "condition": "正常",
+        "text": "<0.1"
+      },
+      {
+        "gender": "",
+        "age_min": 18,
+        "age_max": null,
+        "low": 0.1,
+        "high": 0.5,
+        "unit": "ng/mL",
+        "condition": "低度细菌感染风险",
+        "text": "0.1–0.5"
+      }
+    ],
+    "clinical_significance": ">0.5：中高度细菌感染；>2：脓毒症可能；>10：严重脓毒症/感染性休克。",
+    "indications": "脓毒症诊断、抗生素治疗指导（停药时机）",
+    "preparation": "无特殊要求",
+    "source": "中国脓毒症指南",
+    "source_url": ""
+  },
+  {
+    "name": "白蛋白",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "碱性磷酸酶",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "氨基转移酶，丙氨酸（ALT，以前SGPT）",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "氨基转移酶，天门冬氨酸（AST，以前SGOT）",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "胆红素，直接",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "胆红素，总",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "二氧化碳",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "胆固醇，总",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "胆固醇，高密度脂蛋白",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "肌酐",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "空腹血糖",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "A型肝炎，IgM型抗体",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "乙肝核心抗体，IgM抗体",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "乙肝表面抗原",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "丙型肝炎抗体",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "蛋白质，总",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "甘油三酯*",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "尿素氮（BUN）",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "卡马西平",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "4.0 微克/毫升"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "12.0 微克/毫升"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "地高辛",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "0.8 mg/dL"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "2.0 毫克/分升"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "庆大霉素",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "谷值：1.0mcg/mL峰值：5.0mcg/mL"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "谷值：1.9mcg/mL峰值：8.0mcg/mL"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "苯巴比妥",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "10.0 微克/毫升"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "30.0 微克/毫升"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "苯妥英",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "10.0 微克/毫升"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "20.0 微克/毫升"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "妥布霉素",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "—谷值：0.5mcg/mL峰值：6.0mcg/mL"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "—谷值：2.0mcg/mL峰值：9.9mcg/mL"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "丙戊酸",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "50微克/毫升"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "99mcg/mL"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "万古霉素",
+    "code": "",
+    "type": "lab",
+    "description": "",
+    "unit": "",
+    "reference_ranges": [
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "—谷值：5mcg/mL峰值：20 mcg/mL"
+      },
+      {
+        "gender": "",
+        "age_min": null,
+        "age_max": null,
+        "unit": "",
+        "low": null,
+        "high": null,
+        "condition": "",
+        "text": "—谷值：10mcg/mL峰值：40mcg/mL"
+      }
+    ],
+    "clinical_significance": "",
+    "indications": "",
+    "preparation": "",
+    "source": "默沙东诊疗手册",
+    "source_url": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  },
+  {
+    "name": "胸部X线平片",
+    "code": "X-CHEST",
+    "type": "imaging",
+    "description": "利用X射线穿透人体组织后的衰减差异形成影像，用于观察肺部、心脏、纵隔及肋骨等结构。",
+    "indications": "咳嗽、咯血、胸痛、呼吸困难；肺炎、结核、肺癌初步筛查；心脏增大、胸腔积液；术前常规检查；体检筛查。",
+    "contraindications": "妊娠早期（相对禁忌）。",
+    "preparation": "去除胸部金属饰品及衣物；深吸气后屏气摄片；配合技术员指令。",
+    "clinical_significance": "可发现肺部浸润影、肺不张、气胸、胸腔积液、心影增大、肋骨骨折等。是呼吸系统疾病最基础的影像学检查。"
+  },
+  {
+    "name": "腹部X线平片",
+    "code": "X-ABD",
+    "type": "imaging",
+    "description": "腹部X线平片（包括立卧位），用于观察腹腔气体、液体及钙化灶分布。",
+    "indications": "急腹症（肠梗阻、肠穿孔、肠套叠）；泌尿系结石初步评估；腹部异物；消化道穿孔气腹征。",
+    "contraindications": "妊娠（尽量避免，若必须则做好防护）。",
+    "preparation": "急诊可即刻检查；择期检查前清除肠道气体有助提高图像质量。",
+    "clinical_significance": "立位平片见膈下游离气体提示消化道穿孔；阶梯状液气平面提示肠梗阻；肾区钙化灶提示肾结石。"
+  },
+  {
+    "name": "骨骼X线平片",
+    "code": "X-BONE",
+    "type": "imaging",
+    "description": "对四肢、脊柱、骨盆等骨骼部位的X线检查，是骨科最基础的影像学方法。",
+    "indications": "骨折评估与随访；骨关节病（关节间隙、骨赘）；骨质疏松评估；骨肿瘤初步筛查；关节脱位。",
+    "contraindications": "无绝对禁忌；妊娠早期非肢体部位慎用。",
+    "preparation": "去除受检部位金属物品；必要时拍摄健侧对比。",
+    "clinical_significance": "骨皮质中断提示骨折；关节间隙变窄提示骨关节炎；骨密度降低提示骨质疏松；溶骨性/成骨性病变需进一步CT/MRI评估。"
+  },
+  {
+    "name": "脊柱X线检查",
+    "code": "X-SPINE",
+    "type": "imaging",
+    "description": "颈椎、胸椎、腰椎X线正侧位片，评估脊柱曲度、椎体及椎间隙。",
+    "indications": "颈肩腰痛；外伤后脊椎损伤筛查；脊柱侧弯评估；椎间盘退变评估；椎体压缩骨折。",
+    "contraindications": "妊娠（非急症尽量避免腰椎X线）。",
+    "preparation": "去除腰带、手机等金属物品；必要时拍摄功能位（前屈/后伸）。",
+    "clinical_significance": "椎体骨折、脱位、椎间隙变窄、骨赘形成、脊柱侧弯角度（Cobb角）测量。"
+  },
+  {
+    "name": "头颅CT平扫",
+    "code": "CT-HEAD",
+    "type": "imaging",
+    "description": "头颅计算机断层扫描，无需注射对比剂，是颅脑急症首选检查方法。",
+    "indications": "急性脑卒中（脑出血与脑梗死鉴别）；头颅外伤；意识障碍；剧烈头痛；颅内占位性病变筛查；癫痫发作后评估。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "去除头部金属饰品（耳环、发夹）；烦躁患者可给予镇静；去除假牙（颅底层面）。",
+    "clinical_significance": "急性脑出血呈高密度影；大面积脑梗死发病24h后可见低密度影（早期可正常）；硬膜外/下血肿；颅骨骨折；脑疝表现。"
+  },
+  {
+    "name": "头颅CT增强扫描",
+    "code": "CT-HEAD-C",
+    "type": "imaging",
+    "description": "注射碘对比剂后行头颅CT扫描，用于评估血脑屏障破坏、肿瘤强化及血管病变。",
+    "indications": "颅内肿瘤（良恶性鉴别）；脑脓肿；脑膜炎；血脑屏障破坏；颅内血管畸形。",
+    "contraindications": "碘对比剂过敏史（相对禁忌，可预处理）；严重肾功能不全（SCr>177μmol/L）；甲亢（活动期）；二甲双胍服用（检查前后48h停用）。",
+    "preparation": "检查前4h禁食；签署知情同意书；建立静脉通路；询问过敏史及肾功能；检查后多饮水促进对比剂排泄。",
+    "clinical_significance": "肿瘤明显强化提示血脑屏障破坏；环形强化见于脑脓肿或胶质母细胞瘤；脑膜强化提示脑膜炎/脑膜转移。"
+  },
+  {
+    "name": "胸部CT平扫",
+    "code": "CT-CHEST",
+    "type": "imaging",
+    "description": "胸部CT较X线分辨率大幅提升，可清晰显示肺实质、纵隔、胸膜及大血管结构。",
+    "indications": "肺部结节评估（尤其<1cm结节）；肺癌筛查（低剂量CT）；间质性肺疾病；肺栓塞（结合CTA）；纵隔病变；胸腔积液病因；肺部感染进一步评估。",
+    "contraindications": "妊娠（相对禁忌，必要时可行）；幽闭恐惧症（可镇静）。",
+    "preparation": "去除胸部金属；呼吸训练（吸气末屏气）；高分辨率CT（HRCT）需薄层重建。",
+    "clinical_significance": "实性/磨玻璃结节性质评估；间质性改变（蜂窝肺、牵拉性支气管扩张）；纵隔淋巴结肿大；胸膜增厚钙化；肺气肿程度。"
+  },
+  {
+    "name": "腹部CT平扫+增强",
+    "code": "CT-ABD-C",
+    "type": "imaging",
+    "description": "腹部CT三期扫描（平扫、动脉期、静脉期），用于腹部实质脏器及血管评估。",
+    "indications": "腹痛病因（阑尾炎、胰腺炎、胆石症）；肝胆胰脾肾占位性病变；腹腔/盆腔肿瘤分期；腹主动脉瘤；外伤评估；黄疸病因。",
+    "contraindications": "碘对比剂禁忌同上；严重肾功能不全时仅行平扫。",
+    "preparation": "检查前禁食4h；口服对比剂充盈肠腔（择期）；建立静脉通路；肾功能检测。",
+    "clinical_significance": "肝癌典型'快进快出'强化方式；胰腺坏死范围评估；肾脏肿瘤鉴别；腹腔淋巴结；腹水；肠道缺血；血管受侵。"
+  },
+  {
+    "name": "冠状动脉CTA",
+    "code": "CTA-CAD",
+    "type": "imaging",
+    "description": "利用多排CT对冠状动脉进行三维重建，评估冠脉钙化及狭窄程度，属无创冠脉检查。",
+    "indications": "胸痛评估（中低度预测概率）；稳定型冠心病排查；冠脉畸形；冠脉搭桥/支架术后随访；心房颤动消融前肺静脉解剖评估。",
+    "contraindications": "心率>70次/分（需控制心率至60次/分以下）；严重肾功能不全；碘对比剂过敏；严重心律不齐。",
+    "preparation": "检查前12h禁咖啡因；心率>65次/分者口服美托洛尔控制心率；建立静脉通路（右肘静脉，18G以上）；屏气训练。",
+    "clinical_significance": "Agatston钙化积分评估动脉硬化程度；CTA阴性预测值高，可排除冠心病；中重度狭窄需进一步功能学评估（FFR-CT或造影）。"
+  },
+  {
+    "name": "头颈部CTA",
+    "code": "CTA-NECK",
+    "type": "imaging",
+    "description": "颈部及颅内动脉CTA，评估颅内外血管狭窄、动脉瘤及夹层。",
+    "indications": "急性脑卒中血管评估；颈动脉狭窄；颅内动脉瘤；脑血管畸形；颈动脉夹层；TIA病因评估。",
+    "contraindications": "碘对比剂禁忌；急性脑梗死溶栓后出血（相对禁忌）。",
+    "preparation": "去除颈部金属（项链）；建立静脉通路；肾功能评估。",
+    "clinical_significance": "颈内动脉狭窄程度（NASCET法）；颅内大血管闭塞（提示血管内治疗指征）；动脉瘤大小及瘤颈；侧支循环评估。"
+  },
+  {
+    "name": "头颅MRI平扫",
+    "code": "MRI-HEAD",
+    "type": "imaging",
+    "description": "利用磁共振成像技术对颅脑进行多序列扫描（T1WI、T2WI、FLAIR、DWI），软组织分辨率优于CT。",
+    "indications": "急性脑梗死（DWI序列早期诊断）；脑肿瘤（良恶性评估）；脱髓鞘疾病（多发性硬化）；颅神经病变；垂体病变；癫痫病灶；CT结果不确定时进一步评估。",
+    "contraindications": "体内植入铁磁性金属（心脏起搏器旧型、人工耳蜗、金属弹片）；幽闭恐惧症（可镇静）；MRI兼容性不明的植入物。",
+    "preparation": "去除所有金属物品（手表、发夹、胸罩钢圈、硬币）；填写金属植入物问卷；幽闭恐惧症患者提前告知；扫描时保持静止（约20-30分钟）。",
+    "clinical_significance": "DWI高信号（ADC低信号）诊断急性脑梗死（发病数分钟可见）；T1WI强化提示血脑屏障破坏；FLAIR序列对皮层病变及蛛网膜下腔出血敏感；白质高信号提示小血管病。"
+  },
+  {
+    "name": "脊柱MRI",
+    "code": "MRI-SPINE",
+    "type": "imaging",
+    "description": "对颈椎、胸椎或腰椎及脊髓进行MRI检查，是椎间盘疾病及脊髓病变的标准检查。",
+    "indications": "颈腰椎间盘突出症；脊髓压迫症状（四肢无力、感觉障碍、大小便障碍）；脊柱肿瘤；脊髓炎；脊柱外伤（韧带及脊髓损伤评估）；椎管狭窄。",
+    "contraindications": "同头颅MRI；金属内固定物（视材料而定，钛合金一般可行）。",
+    "preparation": "同头颅MRI；告知有无脊柱手术史及植入物。",
+    "clinical_significance": "T2WI椎间盘高信号示髓核变性；脊髓受压变形；髓内T2高信号示脊髓水肿/损伤；椎体终板信号改变（Modic分型）；脊髓T2高信号+强化提示脊髓炎。"
+  },
+  {
+    "name": "膝关节MRI",
+    "code": "MRI-KNEE",
+    "type": "imaging",
+    "description": "膝关节MRI是评估半月板、韧带、软骨及骨髓水肿的最佳无创检查方法。",
+    "indications": "半月板损伤；前后交叉韧带断裂；软骨损伤；隐匿性骨折（X线阴性）；骨坏死；关节积液病因；滑膜炎。",
+    "contraindications": "同MRI通用禁忌；膝关节置换术后（视假体材料）。",
+    "preparation": "去除金属物品；告知手术史及植入物；扫描时保持体位约30-45分钟。",
+    "clinical_significance": "半月板T2高信号达关节面提示撕裂；ACL连续性中断提示断裂；软骨厚度及信号异常；骨髓水肿（T2高信号+T1低信号）提示骨挫伤或隐匿骨折。"
+  },
+  {
+    "name": "腹部MRI（肝胆胰）",
+    "code": "MRI-LIVER",
+    "type": "imaging",
+    "description": "腹部MRI（含MRCP）对肝胆胰脾的软组织分辨率优于CT，无辐射，含肝脏特异性对比剂可提高肝癌检出率。",
+    "indications": "肝脏局灶性病变鉴别（肝癌/血管瘤/转移瘤）；胆管扩张病因（MRCP）；胆管癌；胰腺癌；自身免疫性胰腺炎；肝纤维化评估；CT对比剂过敏患者替代方案。",
+    "contraindications": "同MRI通用禁忌；幽闭恐惧症；严重心肺功能不全（不能屏气）。",
+    "preparation": "检查前禁食4-6h；训练屏气（约15-20秒）；增强MRI需建立静脉通路；使用肝脏特异性对比剂（钆塞酸二钠）时检查时间较长（约1h）。",
+    "clinical_significance": "肝癌动脉期强化+门静脉期廓清；肝血管瘤向心性强化；MRCP清晰显示胆管结构；胰管扩张原因（胰腺癌vs慢性胰腺炎）；脂肪肝定量评估（Dixon序列）。"
+  },
+  {
+    "name": "腹部超声",
+    "code": "US-ABD",
+    "type": "imaging",
+    "description": "利用超声波对腹腔脏器（肝、胆、胰、脾、肾、膀胱）进行实时扫查，无辐射，可床旁操作。",
+    "indications": "腹痛初筛；肝胆系统疾病（脂肪肝、肝硬化、胆囊炎、胆石症）；肾盂积水、泌尿系结石；腹腔积液；脾大；腹部包块；常规体检。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "检查前空腹8h（胆囊充盈）；膀胱充盈（泌尿系检查）；肠道气体多时可换日检查。",
+    "clinical_significance": "胆囊结石（强回声+声影）；肝实质回声增强（脂肪肝）；肝硬化（表面不光滑、门脉增宽）；肾积水分级；腹腔积液定量；脾脏大小。"
+  },
+  {
+    "name": "心脏超声（经胸超声心动图）",
+    "code": "ECHO-TTE",
+    "type": "imaging",
+    "description": "经胸壁超声心动图（TTE），实时评估心脏结构、功能及血流动力学，是心脏疾病最重要的无创检查。",
+    "indications": "心脏杂音评估；心力衰竭（EF值测定）；心脏瓣膜病（狭窄/关闭不全）；先天性心脏病；心包积液；心肌病；急性心肌梗死机械并发症；心内血栓；肺动脉高压；心内膜炎。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "暴露胸前区；左侧卧位有助于改善图像质量；必要时屏气配合。",
+    "clinical_significance": "左室射血分数（EF，正常≥55%）；室壁运动异常（节段性提示缺血）；瓣膜面积及压差；心室腔大小；心包积液量；肺动脉压估测；二尖瓣反流量。"
+  },
+  {
+    "name": "颈动脉超声",
+    "code": "US-CAROTID",
+    "type": "imaging",
+    "description": "颈动脉（颈总/颈内/颈外动脉）超声检查，评估内膜中层厚度（IMT）、斑块及血流情况。",
+    "indications": "脑卒中/TIA病因评估；动脉粥样硬化风险评估（心血管高危人群）；颈部搏动性肿块；颈动脉狭窄程度评估；颈动脉内膜剥脱术/支架术前后评估。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "无需特殊准备；颈部充分暴露。",
+    "clinical_significance": "IMT≥0.9mm为增厚（动脉硬化早期标志）；斑块性质（强回声钙化斑/低回声软斑）；狭窄程度（血流加速）；TI-RADS评分。"
+  },
+  {
+    "name": "下肢静脉超声",
+    "code": "US-DVT",
+    "type": "imaging",
+    "description": "下肢深静脉超声检查，是诊断深静脉血栓（DVT）的首选无创检查方法。",
+    "indications": "下肢肿胀、疼痛、皮温升高（疑DVT）；肺栓塞病因追踪；长期卧床/手术后/肿瘤患者血栓筛查；溶栓/抗凝治疗后随访。",
+    "contraindications": "无绝对禁忌（急性血栓时操作轻柔，避免栓子脱落）。",
+    "preparation": "暴露下肢；检查时取仰卧位（近端静脉）及俯卧位（腓静脉）。",
+    "clinical_significance": "管腔内低回声充填（血栓）；加压探头不能压瘪静脉（特异性>95%）；CDFI示血流充盈缺损；急性血栓（低回声/无回声）vs慢性血栓（高回声，管腔变小）。"
+  },
+  {
+    "name": "甲状腺超声",
+    "code": "US-THYROID",
+    "type": "imaging",
+    "description": "甲状腺高频超声，是甲状腺结节评估的首选方法，可指导细针穿刺活检。",
+    "indications": "甲状腺结节评估；甲状腺肿大；甲亢/甲减辅助诊断；颈部淋巴结评估；甲状腺癌随访；甲状腺穿刺引导。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "颈部充分暴露；仰卧位垫高肩部。",
+    "clinical_significance": "结节TIRADS分类（1-5类，5类恶性风险>80%）；恶性征象：低回声、微钙化、边缘不规则、纵横比>1、血流丰富；颈部淋巴结转移特征。"
+  },
+  {
+    "name": "乳腺超声",
+    "code": "US-BREAST",
+    "type": "imaging",
+    "description": "乳腺高频超声，与乳腺X线摄影互补，对致密型乳腺检出率优于X线。",
+    "indications": "乳腺肿块评估；乳房疼痛；乳头溢液；乳腺X线密度增高的进一步评估；乳腺炎/脓肿；乳腺癌高危人群筛查补充；乳腺穿刺引导。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "仰卧位，双手上举充分暴露乳腺。",
+    "clinical_significance": "BI-RADS分类（0-6类）；恶性征象：低回声、不规则形态、毛刺征、后方回声衰减、微钙化；淋巴结结构破坏。"
+  },
+  {
+    "name": "全身骨扫描（骨闪烁显像）",
+    "code": "NM-BONE",
+    "type": "imaging",
+    "description": "注射99mTc-MDP后全身骨扫描，早期发现骨转移、骨折及骨代谢异常，灵敏度高于X线。",
+    "indications": "恶性肿瘤骨转移筛查（乳腺癌、前列腺癌、肺癌等）；隐匿性骨折；应力性骨折；骨髓炎早期诊断；Paget病；代谢性骨病。",
+    "contraindications": "妊娠（禁忌）；哺乳期（暂停哺乳48h）；碘对比剂无关，一般耐受良好。",
+    "preparation": "注射显像剂后大量饮水（500-1000ml），2-4h后显像前排尿；去除身上金属物品。",
+    "clinical_significance": "放射性浓聚（热区）提示骨代谢旺盛（骨转移、骨折愈合、感染）；多发性浓聚高度提示骨转移；'超级骨扫描'提示弥漫骨转移。"
+  },
+  {
+    "name": "PET-CT",
+    "code": "PET-CT",
+    "type": "imaging",
+    "description": "正电子发射断层扫描（PET）与CT融合，利用18F-FDG反映葡萄糖代谢，是肿瘤分期最全面的检查。",
+    "indications": "恶性肿瘤分期与再分期；肿瘤治疗疗效评估；不明原因发热（FUO）；癫痫术前定位；心肌存活性评估；淋巴瘤；肺结节良恶性鉴别。",
+    "contraindications": "妊娠（禁忌）；哺乳期（暂停哺乳24h）；血糖>11.1mmol/L（影响显像，需控制后检查）。",
+    "preparation": "检查前禁食6h（可饮水）；检查当日禁止剧烈运动；血糖控制<11.1mmol/L；注射18F-FDG后静息1h（保温、减少运动）；注射后大量饮水并排尿。",
+    "clinical_significance": "SUV（标准摄取值）>2.5提示高代谢病变；肿瘤分期（原发灶+淋巴结+远处转移）；残留/复发与瘢痕鉴别；全身炎症灶定位（FUO）。"
+  },
+  {
+    "name": "十二导联心电图",
+    "code": "ECG-12L",
+    "type": "function",
+    "description": "同步记录12个导联的心电活动，是心脏疾病最基础的电生理检查，床旁可立即完成。",
+    "indications": "胸痛（急性心肌梗死诊断）；心悸、黑矇、晕厥；心律失常诊断；电解质紊乱（高/低钾、低钙）；洋地黄中毒；药物（QT延长）监测；术前常规；心脏病随访。",
+    "contraindications": "无绝对禁忌。",
+    "preparation": "平卧位静息5min；暴露四肢和胸前区；皮肤去脂（酒精棉球）；接好肢体导联和胸前导联；检查时放松，避免肌电干扰。",
+    "clinical_significance": "ST段抬高→急性心肌梗死（STEMI）；ST段压低→心肌缺血/NSTEMI；QRS波群增宽→束支传导阻滞或室内传导异常；P波消失+绝对不规则→房颤；QTc延长→致命性心律失常风险；T波高尖→高钾血症。"
+  },
+  {
+    "name": "动态心电图（Holter）",
+    "code": "HOLTER",
+    "type": "function",
+    "description": "连续记录24-48小时心电图，捕捉阵发性心律失常及一过性缺血改变，是心悸和晕厥的重要检查。",
+    "indications": "阵发性心悸评估；反复晕厥/黑矇病因；间歇性心律失常（房颤、预激综合征等）；评估抗心律失常药物疗效；心脏起搏器功能评估；无症状缺血检测。",
+    "contraindications": "无绝对禁忌（皮肤过敏者换用低过敏性电极）。",
+    "preparation": "皮肤去脂剃毛后贴电极；记录日志（症状发生时间、活动内容）；避免洗浴（防止监护仪进水）；尽量维持正常日常活动。",
+    "clinical_significance": "评估全天最快/最慢/平均心率；房颤负荷及阵发性发作时间；室性早搏总数及分布；窦性停搏时长；ST段压低累积时间；相关症状与心律失常的时间对应。"
+  },
+  {
+    "name": "运动平板试验（运动负荷心电图）",
+    "code": "TMT",
+    "type": "function",
+    "description": "在跑步机上按Bruce方案递增运动负荷，诱发心肌缺血，是冠心病功能诊断的经典方法。",
+    "indications": "胸痛的冠心病中危评估；已知冠心病的运动耐量评估；心肌梗死后危险分层；心律失常与运动的相关性；瓣膜病手术时机评估。",
+    "contraindications": "急性心肌梗死（2天内）；不稳定型心绞痛；急性心肌炎/心包炎；重度主动脉狭窄；失代偿心力衰竭；严重高血压（>200/110mmHg）；严重心律失常（未控制的室性心律失常）。",
+    "preparation": "检查前2h禁食禁烟；穿舒适运动鞋；停用β受体阻滞剂48h（影响结果，须医生决定）；签署知情同意；备好急救药品和除颤仪。",
+    "clinical_significance": "阳性：运动中出现典型心绞痛+ST压低≥1mm（水平型或下斜型）；运动耐量（METs）评估预后；血压反应；心率恢复速率（每分钟<12次提示预后差）。"
+  },
+  {
+    "name": "动态血压监测（ABPM）",
+    "code": "ABPM",
+    "type": "function",
+    "description": "佩戴全自动血压计24小时，每20-30分钟自动测量血压，了解全天血压节律。",
+    "indications": "白大衣高血压识别；隐蔽性高血压诊断；夜间高血压评估；降压治疗效果评估；血压波动大患者评估；抗高血压治疗方案调整。",
+    "contraindications": "重度心律不齐（测量不准确）；皮肤病变（无法佩戴）；患者不配合。",
+    "preparation": "佩戴左上臂袖带；记录活动日志及症状；睡眠时保持上臂伸直；避免剧烈运动（运动前暂停监测）。",
+    "clinical_significance": "24h平均BP>130/80mmHg为高血压；白天>135/85mmHg；夜间>120/70mmHg；夜间血压下降10-20%为'杓型'（正常）；非杓型/反杓型预示心血管风险升高；晨峰血压评估。"
+  },
+  {
+    "name": "肺功能检查（肺通气功能）",
+    "code": "PFT-SPIRO",
+    "type": "function",
+    "description": "通过呼气流速-容积曲线测定FVC、FEV1、FEV1/FVC等参数，评估阻塞性/限制性肺疾病。",
+    "indications": "慢阻肺（COPD）诊断及严重程度分级；哮喘诊断及可逆性评估（支气管舒张试验）；术前肺功能评估；职业性肺疾病评估；限制性肺疾病（间质性肺病、胸廓畸形）评估；呼吸困难病因鉴别。",
+    "contraindications": "近1个月内心肌梗死/脑卒中；未控制的高血压（>180/110mmHg）；活动性肺结核（传染期）；气胸；大咯血活动期；认知障碍无法配合。",
+    "preparation": "检查前2h停用支气管扩张剂（用于评估基础值）；检查前24h停用长效β2激动剂；练习用力呼气动作；松开紧身衣物；坐位或站位检查。",
+    "clinical_significance": "阻塞性通气功能障碍：FEV1/FVC<70%；COPD分级（GOLD 1-4级）；限制性：FVC<80%预计值；混合性：两者均降低；支气管舒张试验阳性（FEV1改善≥12%且≥200ml）支持哮喘诊断。"
+  },
+  {
+    "name": "弥散功能检测（DLCO）",
+    "code": "PFT-DLCO",
+    "type": "function",
+    "description": "用CO单次呼吸法测定肺弥散量，反映肺泡-毛细血管气体交换能力。",
+    "indications": "间质性肺疾病（肺纤维化）随访；肺气肿程度评估；肺高压；结缔组织病肺受累；化疗/放疗肺毒性监测；鉴别阻塞性vs限制性病变。",
+    "contraindications": "同肺通气功能检查；CO过敏（极罕见）。",
+    "preparation": "检查前24h禁烟；检查时屏气10s；血红蛋白水平影响结果需校正。",
+    "clinical_significance": "DLCO<80%预计值为降低；肺气肿和间质性肺病均可降低DLCO；肺出血时DLCO升高（CO被血红蛋白摄取）；早期肺纤维化DLCO下降早于胸片改变。"
+  },
+  {
+    "name": "脑电图（EEG）",
+    "code": "EEG",
+    "type": "function",
+    "description": "记录大脑皮层自发性电活动，是癫痫诊断和分类的金标准检查。",
+    "indications": "癫痫诊断及分型；抗癫痫药物调整的参考；意识障碍病因（代谢性脑病、脑炎）；脑死亡辅助诊断；术中监测；Creutzfeldt-Jakob病（特征性EEG改变）。",
+    "contraindications": "头部大面积皮肤破损（相对禁忌）。",
+    "preparation": "检查前洗发（不用护发素）；检查前睡眠剥夺（提高痫样放电检出率）；停用镇静药（条件允许时）；记录检查时的意识状态。",
+    "clinical_significance": "棘波/棘慢复合波→癫痫样放电；局灶性慢波→局部脑损伤；弥漫性慢化→代谢性脑病；爆发-抑制→严重脑损伤；等电位→脑死亡；特异性改变：3Hz棘慢波（失神发作）、PLED（脑炎/卒中）。"
+  },
+  {
+    "name": "肌电图（EMG）/神经传导速度（NCS）",
+    "code": "EMG-NCS",
+    "type": "function",
+    "description": "测定周围神经传导速度和肌肉电活动，鉴别神经源性、肌源性及神经肌肉接头疾病。",
+    "indications": "周围神经病（糖尿病周围神经病、腕管综合征）；运动神经元病（ALS）；肌病（肌营养不良、多发性肌炎）；神经肌肉接头疾病（重症肌无力）；神经根压迫（椎间盘突出的神经定位）；格林-巴利综合征。",
+    "contraindications": "凝血障碍（针极EMG相对禁忌）；心脏起搏器（体表EMG可行）；传染性皮肤病（局部禁忌）。",
+    "preparation": "告知患者检查有轻度不适感（针刺）；检查前洗澡（减少皮肤阻抗）；停用胆碱酯酶抑制剂（评估重症肌无力前）。",
+    "clinical_significance": "NCS：运动传导速度减慢+波幅降低→轴索损伤；传导速度减慢+波幅正常→脱髓鞘；EMG：纤颤电位+正锐波→失神经支配（神经源性）；多相波增宽增大→再生；早募集小运动单位→肌病。"
+  },
+  {
+    "name": "诱发电位（视觉/听觉/体感）",
+    "code": "EP",
+    "type": "function",
+    "description": "通过特定刺激诱发大脑皮层电位，评估感觉传导通路完整性，对多发性硬化（MS）有重要意义。",
+    "indications": "多发性硬化（亚临床病灶检测）；视神经炎；听神经瘤；脊髓病变监测（术中）；昏迷预后评估；听力评估（客观）；婴幼儿听力筛查（ABR）。",
+    "contraindications": "无绝对禁忌（部分检查需配合）。",
+    "preparation": "视觉诱发电位：需保持注视屏幕，视力校正；ABR：安静或睡眠状态（儿童）；SSEP：暴露刺激部位。",
+    "clinical_significance": "VEP：P100潜伏期延长→视神经传导障碍（MS视神经炎典型改变）；ABR：波间潜伏期延长→听觉通路损害；SSEP：N20延迟或消失→脊髓/皮质通路损害。"
+  },
+  {
+    "name": "胃镜（食管胃十二指肠镜）",
+    "code": "EGD",
+    "type": "endoscopy",
+    "description": "经口进行食管、胃及十二指肠降部的直视检查，可同时进行活检、治疗操作，是上消化道疾病诊断金标准。",
+    "indications": "上腹痛、消化不良；吞咽困难；上消化道出血（诊断+止血治疗）；呕吐；食管/胃癌筛查；幽门螺旋杆菌检测（CLO试验/活检）；贲门失弛缓症；胃食管反流病（GERD）评估。",
+    "contraindications": "严重心肺功能不全；食管穿孔/严重食管曲张（相对，可慎重操作）；凝血功能极差（活检禁忌）；不能配合患者（可无痛胃镜）；口咽部急性炎症。",
+    "preparation": "检查前禁食8h、禁水4h；取下假牙；签署知情同意；无痛胃镜需建立静脉通路；检查后2h方可进食（普通）；无痛胃镜苏醒后需家属陪同。",
+    "clinical_significance": "胃溃疡/十二指肠溃疡（形态、Hp感染）；早期胃癌；食管炎（Los Angeles分级）；Barrett食管；静脉曲张分级；胃黏膜萎缩及肠化（OLGA/OLGIM分期）。"
+  },
+  {
+    "name": "结肠镜",
+    "code": "COLO",
+    "type": "endoscopy",
+    "description": "经肛门进行全结肠（至回盲部）及末段回肠直视检查，是大肠疾病诊断和大肠癌筛查的金标准。",
+    "indications": "便血、大便习惯改变；结肠癌筛查（50岁以上或高危人群）；炎症性肠病诊断及随访（克罗恩病/溃疡性结肠炎）；结肠息肉发现及切除（EMR/ESD）；腹泻（慢性）病因；铁缺乏性贫血原因查找。",
+    "contraindications": "严重凝血障碍（活检/切除）；中毒性巨结肠；急性结肠炎活动期（相对）；近期心肌梗死；肠穿孔。",
+    "preparation": "检查前1-3天低渣饮食；检查前6-8h服用泻药（聚乙二醇电解质散或磷酸钠）直至排出清亮液体；禁食；糖尿病患者调整用药；铁剂停用1周（染色影响视野）。",
+    "clinical_significance": "息肉（形态、Paris分类）；大肠癌（部位、大小、活检病理）；UC/CD（黏膜连续性、溃疡形态、活检）；结肠憩室；缺血性结肠炎（分布特点）。"
+  },
+  {
+    "name": "支气管镜",
+    "code": "BRONCHO",
+    "type": "endoscopy",
+    "description": "经口或鼻进入气管-支气管系统，可直视观察气道、取样（BAL/活检/刷检）及治疗操作。",
+    "indications": "肺部肿块（活检诊断）；不明原因咯血；肺不张病因；异物取出；感染病原学取样（BAL）；气管插管困难引导；经支气管冷冻活检（间质性肺疾病）；肺癌分期（EBUS-TBNA）。",
+    "contraindications": "严重低氧血症（PaO₂<60mmHg，未吸氧）；严重凝血障碍（活检禁忌）；急性哮喘发作；严重心律失常；血小板<20×10⁹/L（活检禁忌）。",
+    "preparation": "检查前禁食4h；局麻（利多卡因雾化/喷雾）或全麻（EBUS）；建立静脉通路；监测SPO₂；备好吸痰设备和急救药品；术后禁食2h（局麻后咽部麻木消退）。",
+    "clinical_significance": "直接活检：阳性率70-80%（中央型肺癌）；BAL细胞分类（嗜酸细胞↑→嗜酸粒细胞性肺炎；淋巴细胞↑→HP/结节病）；EBUS-TBNA纵隔淋巴结取样灵敏度>90%；异物定位及类型。"
+  },
+  {
+    "name": "内镜逆行胰胆管造影（ERCP）",
+    "code": "ERCP",
+    "type": "endoscopy",
+    "description": "经十二指肠镜行乳头插管，在X线引导下对胆胰管进行造影、取石、支架置入等操作，属诊断+治疗性内镜。",
+    "indications": "胆总管结石（取石首选）；胆道梗阻（黄疸）病因诊断及支架引流；胰腺分裂；胆道狭窄良恶性鉴别；Oddi括约肌功能障碍；胆漏处理。",
+    "contraindications": "严重心肺疾病；碘对比剂严重过敏；急性胰腺炎（相对禁忌，胆源性胰腺炎合并胆道梗阻除外）；胃肠道重建手术后（毕II式需特殊镜）。",
+    "preparation": "禁食8h；凝血功能检查；建立静脉通路；签署知情同意（告知胰腺炎风险）；预防性使用非甾体消炎药（吲哚美辛栓）降低术后胰腺炎风险；术后需监测血淀粉酶。",
+    "clinical_significance": "胆总管结石取石成功率>90%；胆道狭窄形态（渐进性→恶性；局段性→良性）；胆管癌刷检/活检；支架引流改善梗阻性黄疸。"
+  },
+  {
+    "name": "膀胱镜",
+    "code": "CYSTO",
+    "type": "endoscopy",
+    "description": "经尿道进入膀胱，直视检查膀胱黏膜及输尿管开口，是膀胱肿瘤诊断的金标准。",
+    "indications": "血尿（镜下/肉眼）原因查找；膀胱癌诊断及随访；复发性尿路感染；排尿困难（前列腺/尿道评估）；输尿管开口异常；膀胱结石。",
+    "contraindications": "急性尿路感染（禁忌，感染控制后进行）；严重尿道狭窄；凝血障碍（相对）。",
+    "preparation": "检查前排尿（保留少量尿液）；局麻（利多卡因凝胶）或全麻；外阴消毒；术后多饮水；术后可能出现轻度血尿和尿道不适（1-2天）。",
+    "clinical_significance": "膀胱肿瘤：乳头状（Ta/T1低恶性）vs实性无蒂（T2+高恶性）；膀胱炎特征（充血、溃疡）；憩室；输尿管口异位。"
+  },
+  {
+    "name": "腰椎穿刺（脑脊液检查）",
+    "code": "LP-CSF",
+    "type": "procedure",
+    "description": "在L3/4或L4/5椎间隙穿刺进入蛛网膜下腔，采集脑脊液（CSF）进行压力测定及细胞学/生化/病原学检测。",
+    "indications": "脑膜炎/脑炎诊断（细菌、病毒、结核、真菌）；蛛网膜下腔出血（CT阴性但高度疑诊）；脱髓鞘疾病（寡克隆带）；脑膜癌病；特发性颅内高压（诊断+治疗）；吉兰-巴利综合征（蛋白细胞分离）。",
+    "contraindications": "颅内高压伴脑疝风险（须CT排除占位后决定）；穿刺部位皮肤感染；凝血障碍（INR>1.5或血小板<50×10⁹/L）；脊髓占位（相对）。",
+    "preparation": "术前CT排除颅内占位/脑疝；凝血功能检查；签署知情同意；侧卧位弓身（充分暴露椎间隙）；局部麻醉；穿刺后平卧4-6h防止低颅压头痛。",
+    "clinical_significance": "开放压（正常70-180mmH₂O）；白细胞（多核细胞↑→细菌性；淋巴细胞↑→病毒性/结核/真菌）；蛋白（正常0.15-0.45g/L）；糖（正常为血糖60-70%）；革兰染色/培养/PCR；寡克隆带（MS敏感标志）。"
+  },
+  {
+    "name": "骨髓穿刺及活检",
+    "code": "BMA-BMB",
+    "type": "procedure",
+    "description": "从髂后上棘（或胸骨、髂前上棘）穿刺抽取骨髓液（骨穿）或取骨髓组织（活检），是血液疾病诊断必需的操作。",
+    "indications": "血细胞减少或增多原因不明；白血病诊断与分型（WHO分类）；骨髓增生异常综合征（MDS）；淋巴瘤骨髓侵犯评估；多发性骨髓瘤；再生障碍性贫血；骨髓转移癌；发热查因（骨髓培养）；造血干细胞移植前后评估。",
+    "contraindications": "凝血障碍（严重血友病）；穿刺部位感染；血小板<20×10⁹/L（活检相对禁忌，可行骨穿）。",
+    "preparation": "局部麻醉；签署知情同意；俯卧位（髂后上棘）；术后压迫止血5-10min；穿刺后24h内保持穿刺点清洁干燥。",
+    "clinical_significance": "增生程度（活跃/明显活跃/减低）；各系比例及形态；原始细胞比例（≥20%→急性白血病）；巨核细胞计数；骨髓活检：骨髓纤维化分级、淋巴瘤侵犯、造血岛形态。"
+  },
+  {
+    "name": "超声引导下穿刺活检",
+    "code": "US-BIOPSY",
+    "type": "procedure",
+    "description": "在超声实时引导下对体表或腹部脏器病变进行细针穿刺（FNA）或空芯针活检（CNB），获取病理组织。",
+    "indications": "肝脏占位性病变定性（肝癌/转移癌/血管瘤）；甲状腺结节（TIRADS 4-5类）；乳腺肿块（BI-RADS 4-5类）；腹部淋巴结；腹膜后肿物；不明原因腹腔积液；肾脏占位。",
+    "contraindications": "凝血障碍（INR>1.5，血小板<50×10⁹/L）；无安全穿刺路径；嗜铬细胞瘤（穿刺可导致高血压危象）。",
+    "preparation": "凝血功能检查；签署知情同意；禁食4h（腹部脏器）；必要时停抗凝药（阿司匹林5天，华法林3-5天）；术后压迫止血；留观30-60min。",
+    "clinical_significance": "细针穿刺细胞学（FNA）：快速、创伤小，适于淋巴结/甲状腺；空芯针活检（CNB）：获取组织结构，可行免疫组化/基因检测，适于肝脏/乳腺肿块；诊断准确率>90%。"
+  },
+  {
+    "name": "眼底检查（眼底镜/眼底照相）",
+    "code": "FUNDUS",
+    "type": "function",
+    "description": "通过检眼镜或免散瞳眼底相机观察视网膜、视盘、黄斑及视网膜血管，是糖尿病和高血压靶器官损害的重要检查。",
+    "indications": "糖尿病视网膜病变筛查及分级；高血压眼底改变；视力下降病因（黄斑变性、视网膜脱落）；颅内高压（视盘水肿）；神经科疾病（视神经炎）。",
+    "contraindications": "散瞳禁忌：闭角型青光眼、前列腺增生（扩瞳药可加重）。",
+    "preparation": "免散瞳相机可直接检查；散瞳检查需使用复方托吡卡胺等散瞳剂，散瞳后畏光6-8h，禁止驾车。",
+    "clinical_significance": "糖尿病视网膜病变分期（非增殖期I-III→增殖期IV-VI）；高血压眼底Keith-Wagener分级；视盘水肿（颅压升高）；视网膜动脉硬化（铜丝样/银丝样改变）。"
+  },
+  {
+    "name": "踝肱指数（ABI）",
+    "code": "ABI",
+    "type": "function",
+    "description": "测定踝部收缩压与上臂收缩压之比，无创评估下肢动脉狭窄程度，是外周动脉疾病（PAD）的简便筛查工具。",
+    "indications": "下肢间歇性跛行评估；糖尿病/高血压/高脂血症患者PAD筛查；下肢溃疡/坏疽病因（动脉性vs静脉性）；外周血管病随访；>65岁有症状人群。",
+    "contraindications": "无绝对禁忌；急性DVT期间压迫可能导致栓子脱落（慎用）。",
+    "preparation": "仰卧静息5min；测量双侧肱动脉及双侧踝部（足背+胫后动脉）收缩压；使用多普勒超声仪或自动ABI仪。",
+    "clinical_significance": "ABI正常：0.91-1.30；ABI 0.71-0.90：轻度PAD；ABI 0.41-0.70：中度（间歇性跛行）；ABI≤0.40：重度（静息痛/坏疽）；ABI>1.30：血管钙化（不可压缩，见于糖尿病/透析患者）。"
+  },
+  {
+    "name": "骨密度检测（DXA）",
+    "code": "DXA",
+    "type": "function",
+    "description": "双能X线吸收法（DXA）测定腰椎和髋部骨矿物质密度，是骨质疏松症诊断的金标准。",
+    "indications": "骨质疏松筛查（女性≥65岁、男性≥70岁、绝经后<65岁伴危险因素）；骨折风险评估（FRAX评分）；骨质疏松症治疗后随访；长期使用糖皮质激素者；甲亢/甲旁亢/库欣综合征；多发性骨髓瘤；慢性肾病。",
+    "contraindications": "妊娠；近期核医学检查（放射性同位素干扰，需待4-7天后）；钡餐检查后（需3-7天）。",
+    "preparation": "检查前去除腰带、钥匙等金属；无需特殊准备；告知有无脊柱手术/骨折病史。",
+    "clinical_significance": "T值≥-1.0：正常；T值-1.0~-2.5：骨量减少（骨质减少）；T值≤-2.5：骨质疏松症；T值≤-2.5且有脆性骨折：严重骨质疏松。FRAX评分结合BMD和临床危险因素计算10年骨折概率。"
+  }
+]

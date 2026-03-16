@@ -1,0 +1,3890 @@
+[
+  {
+    "name": "CURB-65 肺炎严重程度评分",
+    "category": "感染/呼吸",
+    "description": "用于社区获得性肺炎（CAP）严重程度评估和住院决策。CURB-65是BTS推荐的简易评分工具。",
+    "questions": [
+      {
+        "id": "C",
+        "text": "意识障碍（新发的定向障碍，与原有认知无关）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "U",
+        "text": "尿素氮 > 7 mmol/L（BUN > 20 mg/dL）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否/不适用"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "R",
+        "text": "呼吸频率 ≥ 30 次/分",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "text": "收缩压 < 90 mmHg 或舒张压 ≤ 60 mmHg",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "65",
+        "text": "年龄 ≥ 65 岁",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 0,
+        "level": "低危",
+        "interpretation": "30天死亡率约1.5%",
+        "recommendation": "可考虑门诊治疗"
+      },
+      {
+        "range_min": 1,
+        "range_max": 1,
+        "level": "低-中危",
+        "interpretation": "30天死亡率约2.7%",
+        "recommendation": "可考虑门诊治疗（短期随访）"
+      },
+      {
+        "range_min": 2,
+        "range_max": 2,
+        "level": "中危",
+        "interpretation": "30天死亡率约9.2%",
+        "recommendation": "建议住院治疗"
+      },
+      {
+        "range_min": 3,
+        "range_max": 3,
+        "level": "高危",
+        "interpretation": "30天死亡率约14.5%",
+        "recommendation": "住院治疗，考虑ICU"
+      },
+      {
+        "range_min": 4,
+        "range_max": 5,
+        "level": "极高危",
+        "interpretation": "30天死亡率约40%",
+        "recommendation": "直接收入ICU"
+      }
+    ]
+  },
+  {
+    "name": "qSOFA 快速脓毒症相关器官功能衰竭评分",
+    "category": "感染/脓毒症",
+    "description": "院外/急诊快速识别脓毒症高危患者（Sepsis-3标准），无需实验室检查。",
+    "questions": [
+      {
+        "id": "R",
+        "text": "呼吸频率 ≥ 22 次/分",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "M",
+        "text": "意识状态改变（GCS < 15）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "S",
+        "text": "收缩压 ≤ 100 mmHg",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 1,
+        "level": "低危",
+        "interpretation": "脓毒症可能性低",
+        "recommendation": "继续监测，若临床恶化重新评估"
+      },
+      {
+        "range_min": 2,
+        "range_max": 3,
+        "level": "高危",
+        "interpretation": "脓毒症高度可能，死亡率>10%",
+        "recommendation": "立即评估器官功能，完整SOFA评分，尽快开始脓毒症集束化治疗"
+      }
+    ]
+  },
+  {
+    "name": "SOFA 序贯器官功能衰竭评分",
+    "category": "感染/脓毒症",
+    "description": "评估ICU患者器官功能障碍严重程度，用于脓毒症诊断（Sepsis-3）和预后评估。",
+    "questions": [
+      {
+        "id": "resp",
+        "text": "呼吸系统：PaO₂/FiO₂（mmHg）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "≥ 400"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "300–399"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "200–299"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "100–199（需机械通气）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "< 100（需机械通气）"
+          }
+        ]
+      },
+      {
+        "id": "coag",
+        "text": "凝血：血小板（×10⁹/L）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "≥ 150"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "100–149"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "50–99"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "20–49"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "< 20"
+          }
+        ]
+      },
+      {
+        "id": "liver",
+        "text": "肝脏：胆红素（μmol/L）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "< 20"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "20–32"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "33–101"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "102–204"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≥ 205"
+          }
+        ]
+      },
+      {
+        "id": "cardio",
+        "text": "循环：血压/血管活性药物",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "MAP ≥ 70 mmHg"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "MAP < 70 mmHg"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "多巴胺 ≤ 5 或 多巴酚丁胺任何剂量"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "多巴胺 > 5 或 肾上腺素/去甲肾上腺素 ≤ 0.1"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "多巴胺 > 15 或 肾上腺素/去甲肾上腺素 > 0.1"
+          }
+        ]
+      },
+      {
+        "id": "neuro",
+        "text": "中枢神经系统：格拉斯哥昏迷评分（GCS）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "15"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "13–14"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "10–12"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "6–9"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "< 6"
+          }
+        ]
+      },
+      {
+        "id": "renal",
+        "text": "肾脏：肌酐（μmol/L）或尿量",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "< 110"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "110–170"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "171–299"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "300–440 或尿量<500 mL/d"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "> 440 或尿量<200 mL/d"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 6,
+        "level": "低危",
+        "interpretation": "器官功能基本正常",
+        "recommendation": "维持治疗，密切监测"
+      },
+      {
+        "range_min": 7,
+        "range_max": 9,
+        "level": "中危",
+        "interpretation": "中度器官功能障碍",
+        "recommendation": "强化监测，积极处理原发病"
+      },
+      {
+        "range_min": 10,
+        "range_max": 12,
+        "level": "高危",
+        "interpretation": "严重器官功能障碍，死亡率40-50%",
+        "recommendation": "ICU治疗，多学科协作"
+      },
+      {
+        "range_min": 13,
+        "range_max": 24,
+        "level": "极高危",
+        "interpretation": "多器官衰竭，死亡率>80%",
+        "recommendation": "ICU治疗，评估治疗目标"
+      }
+    ]
+  },
+  {
+    "name": "CHA₂DS₂-VASc 房颤卒中风险评分",
+    "category": "心血管",
+    "description": "评估非瓣膜性房颤患者血栓栓塞/卒中风险，指导抗凝治疗决策。",
+    "questions": [
+      {
+        "id": "CHF",
+        "text": "充血性心力衰竭/左心室收缩功能障碍",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "HT",
+        "text": "高血压（静息血压>140/90 mmHg或使用降压药）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "AGE75",
+        "text": "年龄 ≥ 75 岁",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "是（计2分）"
+          }
+        ]
+      },
+      {
+        "id": "DM",
+        "text": "糖尿病（空腹血糖>125mg/dL或使用降糖药）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "STROKE",
+        "text": "既往卒中/TIA/血栓栓塞史",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "是（计2分）"
+          }
+        ]
+      },
+      {
+        "id": "VD",
+        "text": "血管疾病（既往心肌梗死、外周动脉疾病或主动脉斑块）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "AGE65",
+        "text": "年龄 65–74 岁",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "SEX",
+        "text": "女性",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否（男性）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是（女性）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 0,
+        "level": "低危（男性）",
+        "interpretation": "年卒中风险约0%",
+        "recommendation": "男性：不需要抗凝治疗"
+      },
+      {
+        "range_min": 1,
+        "range_max": 1,
+        "level": "低-中危",
+        "interpretation": "年卒中风险约1.3%",
+        "recommendation": "男性1分：考虑抗凝；女性仅因性别1分：不需要抗凝"
+      },
+      {
+        "range_min": 2,
+        "range_max": 9,
+        "level": "中-高危",
+        "interpretation": "年卒中风险>2%，随分值增加",
+        "recommendation": "推荐口服抗凝治疗（NOAC优先于华法林）"
+      }
+    ]
+  },
+  {
+    "name": "HAS-BLED 出血风险评分",
+    "category": "心血管",
+    "description": "评估房颤患者抗凝治疗的出血风险，与CHA₂DS₂-VASc联合使用。",
+    "questions": [
+      {
+        "id": "H",
+        "text": "高血压（未控制，SBP>160 mmHg）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "A",
+        "text": "肾功能/肝功能异常（各1分，共2分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "均正常"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "其中一项异常"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "两项均异常"
+          }
+        ]
+      },
+      {
+        "id": "S",
+        "text": "既往卒中史",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "B",
+        "text": "出血史或出血倾向",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "L",
+        "text": "INR 不稳定（TTR<60%）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否/不适用"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "E",
+        "text": "老年（年龄>65岁）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "D",
+        "text": "药物（抗血小板/非甾体抗炎药）或饮酒（各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "均无"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "一项"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "两项均有"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 2,
+        "level": "低出血风险",
+        "interpretation": "年大出血风险<2%",
+        "recommendation": "可安全抗凝，不应因出血风险而拒绝抗凝"
+      },
+      {
+        "range_min": 3,
+        "range_max": 9,
+        "level": "高出血风险",
+        "interpretation": "年大出血风险>3%，需权衡利弊",
+        "recommendation": "寻找并纠正可逆危险因素，不应单纯以高HAS-BLED为由停止抗凝"
+      }
+    ]
+  },
+  {
+    "name": "格拉斯哥昏迷评分（GCS）",
+    "category": "神经系统",
+    "description": "评估意识障碍程度，适用于所有昏迷患者的快速评估。",
+    "questions": [
+      {
+        "id": "E",
+        "text": "睁眼反应（E）",
+        "options": [
+          {
+            "value": 4,
+            "score": 4,
+            "label": "自发睁眼"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "呼唤睁眼"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "刺痛睁眼"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "无反应"
+          }
+        ]
+      },
+      {
+        "id": "V",
+        "text": "语言反应（V）",
+        "options": [
+          {
+            "value": 5,
+            "score": 5,
+            "label": "正确回答（定向力正常）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "混乱回答"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "单词（不适当）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "发声（无意义）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "无反应"
+          }
+        ]
+      },
+      {
+        "id": "M",
+        "text": "运动反应（M）",
+        "options": [
+          {
+            "value": 6,
+            "score": 6,
+            "label": "遵嘱运动"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "定位刺痛"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "回缩反应"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "屈曲（去皮质）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "伸展（去大脑）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "无反应"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 13,
+        "range_max": 15,
+        "level": "轻度意识障碍",
+        "interpretation": "轻度脑损伤",
+        "recommendation": "密切观察，评估原因"
+      },
+      {
+        "range_min": 9,
+        "range_max": 12,
+        "level": "中度意识障碍",
+        "interpretation": "中度脑损伤",
+        "recommendation": "住院治疗，动态评估"
+      },
+      {
+        "range_min": 3,
+        "range_max": 8,
+        "level": "重度意识障碍/昏迷",
+        "interpretation": "严重脑损伤（≤8分为昏迷定义）",
+        "recommendation": "ICU治疗，评估气道保护必要性，查颅脑影像"
+      }
+    ]
+  },
+  {
+    "name": "Wells DVT 评分（深静脉血栓）",
+    "category": "血栓/凝血",
+    "description": "评估下肢深静脉血栓（DVT）的临床前概率，指导诊断策略。",
+    "questions": [
+      {
+        "id": "cancer",
+        "text": "活动期肿瘤（治疗中或治疗结束<6个月，或姑息治疗）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "paralysis",
+        "text": "肢体瘫痪/麻痹，或近期石膏固定",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "bedridden",
+        "text": "最近卧床>3天或12周内全麻/局麻大手术",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "tenderness",
+        "text": "深静脉分布区局部压痛",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "swelling",
+        "text": "整条腿肿胀",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "calf",
+        "text": "小腿肿胀（患侧比健侧粗>3 cm）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "pitting",
+        "text": "可凹性水肿（患侧比健侧重）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "collateral",
+        "text": "患侧有浅静脉侧支（非静脉曲张）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "alt_dx",
+        "text": "有与DVT同样可能的其他诊断",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": -2,
+            "score": -2,
+            "label": "是（减2分）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": -10,
+        "range_max": 1,
+        "level": "低概率",
+        "interpretation": "DVT概率约5%",
+        "recommendation": "D-Dimer阴性可排除DVT；D-Dimer阳性行超声检查"
+      },
+      {
+        "range_min": 2,
+        "range_max": 2,
+        "level": "中概率",
+        "interpretation": "DVT概率约17%",
+        "recommendation": "行下肢静脉超声检查"
+      },
+      {
+        "range_min": 3,
+        "range_max": 10,
+        "level": "高概率",
+        "interpretation": "DVT概率约53%",
+        "recommendation": "直接行下肢静脉超声；若阴性，D-Dimer+重复超声"
+      }
+    ]
+  },
+  {
+    "name": "Wells PE 评分（肺栓塞）",
+    "category": "血栓/凝血",
+    "description": "评估肺栓塞（PE）的临床前概率，指导诊断策略。",
+    "questions": [
+      {
+        "id": "dvt_sx",
+        "text": "DVT症状和体征（腿部肿胀和深静脉触痛）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "pe_likely",
+        "text": "PE与其他诊断同样或更可能",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "hr",
+        "text": "心率 > 100 次/分",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1.5,
+            "score": 1.5,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "immobile",
+        "text": "近4周内制动≥3天或手术",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1.5,
+            "score": 1.5,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "prev_dvt_pe",
+        "text": "既往DVT/PE病史",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1.5,
+            "score": 1.5,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "hemoptysis",
+        "text": "咯血",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "cancer",
+        "text": "肿瘤（治疗中或6个月内治疗，或姑息性）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "是"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 1,
+        "level": "低概率",
+        "interpretation": "PE概率约1.3%",
+        "recommendation": "D-Dimer检测；阴性排除PE"
+      },
+      {
+        "range_min": 2,
+        "range_max": 6,
+        "level": "中概率",
+        "interpretation": "PE概率约16%",
+        "recommendation": "CTPA确诊"
+      },
+      {
+        "range_min": 7,
+        "range_max": 20,
+        "level": "高概率",
+        "interpretation": "PE概率约41%",
+        "recommendation": "直接行CTPA；若不能行，可启动抗凝治疗"
+      }
+    ]
+  },
+  {
+    "name": "数字评定量表（NRS）疼痛评分",
+    "category": "症状评估",
+    "description": "用0-10数字描述疼痛强度，0为无痛，10为最剧烈疼痛。",
+    "questions": [
+      {
+        "id": "pain",
+        "text": "请用0-10的数字描述您现在的疼痛程度（0=无痛，10=最剧烈疼痛）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0 - 无痛"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "4"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "5 - 中度疼痛"
+          },
+          {
+            "value": 6,
+            "score": 6,
+            "label": "6"
+          },
+          {
+            "value": 7,
+            "score": 7,
+            "label": "7"
+          },
+          {
+            "value": 8,
+            "score": 8,
+            "label": "8"
+          },
+          {
+            "value": 9,
+            "score": 9,
+            "label": "9"
+          },
+          {
+            "value": 10,
+            "score": 10,
+            "label": "10 - 最剧烈疼痛"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 0,
+        "level": "无痛",
+        "interpretation": "无疼痛",
+        "recommendation": "无需镇痛处理"
+      },
+      {
+        "range_min": 1,
+        "range_max": 3,
+        "level": "轻度疼痛",
+        "interpretation": "疼痛轻微，不影响活动",
+        "recommendation": "非药物措施或对乙酰氨基酚/NSAID"
+      },
+      {
+        "range_min": 4,
+        "range_max": 6,
+        "level": "中度疼痛",
+        "interpretation": "疼痛影响日常活动",
+        "recommendation": "规律镇痛，可考虑弱阿片类"
+      },
+      {
+        "range_min": 7,
+        "range_max": 10,
+        "level": "重度疼痛",
+        "interpretation": "疼痛严重，需要积极处理",
+        "recommendation": "阿片类镇痛，多模式镇痛方案"
+      }
+    ]
+  },
+  {
+    "name": "NRS-2002 营养风险筛查",
+    "category": "营养评估",
+    "description": "住院患者营养风险筛查工具（ESPEN推荐），适用于成人住院患者。",
+    "questions": [
+      {
+        "id": "nutrition",
+        "text": "营养状态受损评分",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常营养状态"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "3个月内体重下降>5%，或近1周进食量为正常需要量的50-75%"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2个月内体重下降>5%，或BMI 18.5-20.5+一般情况差，或近1周进食量为正常需要量的25-50%"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "1个月内体重下降>5%（或3个月内>15%），或BMI<18.5+一般情况差，或近1周进食量0-25%正常需要量"
+          }
+        ]
+      },
+      {
+        "id": "disease",
+        "text": "疾病严重程度评分",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常营养需求"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "髋关节骨折、慢性疾病急性加重（肝硬化、COPD、血液透析、糖尿病、肿瘤）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "腹部大手术、卒中、血液系统肿瘤"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "颅脑损伤、骨髓移植、ICU患者（APACHE>10）"
+          }
+        ]
+      },
+      {
+        "id": "age",
+        "text": "年龄调整",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "< 70 岁"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "≥ 70 岁（加1分）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 2,
+        "level": "无营养风险",
+        "interpretation": "目前无营养风险",
+        "recommendation": "每周重新筛查一次"
+      },
+      {
+        "range_min": 3,
+        "range_max": 7,
+        "level": "有营养风险",
+        "interpretation": "存在营养风险，需要营养支持",
+        "recommendation": "制定营养支持计划，请营养科会诊"
+      }
+    ]
+  },
+  {
+    "name": "Child-Pugh 肝功能分级",
+    "category": "肝病",
+    "description": "评估肝硬化患者肝脏储备功能，指导治疗和手术风险评估。",
+    "questions": [
+      {
+        "id": "bili",
+        "text": "总胆红素（μmol/L）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "< 34"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "34–51"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "> 51"
+          }
+        ]
+      },
+      {
+        "id": "alb",
+        "text": "白蛋白（g/L）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "> 35"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "28–35"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "< 28"
+          }
+        ]
+      },
+      {
+        "id": "pt",
+        "text": "凝血酶原时间延长（秒）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "< 4"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "4–6"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "> 6"
+          }
+        ]
+      },
+      {
+        "id": "ascites",
+        "text": "腹水",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "无"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "轻度（利尿剂控制）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "中-重度（顽固性腹水）"
+          }
+        ]
+      },
+      {
+        "id": "enceph",
+        "text": "肝性脑病",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "无"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "I–II级（轻度）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "III–IV级（重度）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 5,
+        "range_max": 6,
+        "level": "A级",
+        "interpretation": "代偿期，1年生存率约100%",
+        "recommendation": "可耐受手术，继续随访治疗"
+      },
+      {
+        "range_min": 7,
+        "range_max": 9,
+        "level": "B级",
+        "interpretation": "功能受损，1年生存率约80%",
+        "recommendation": "手术风险中等，需肝移植评估"
+      },
+      {
+        "range_min": 10,
+        "range_max": 15,
+        "level": "C级",
+        "interpretation": "失代偿期，1年生存率约45%",
+        "recommendation": "手术风险极高，优先考虑肝移植"
+      }
+    ]
+  },
+  {
+    "name": "Morse 跌倒风险评估量表",
+    "category": "护理评估",
+    "description": "住院患者跌倒风险筛查，适用于所有住院成人患者。",
+    "questions": [
+      {
+        "id": "fall_history",
+        "text": "近3个月有跌倒史",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 25,
+            "score": 25,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "diagnosis",
+        "text": "存在多个诊断（≥2个疾病诊断）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 15,
+            "score": 15,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "ambulatory_aid",
+        "text": "行走辅助",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "卧床/坐轮椅/护士协助"
+          },
+          {
+            "value": 15,
+            "score": 15,
+            "label": "使用拐杖/助行器/手杖"
+          },
+          {
+            "value": 30,
+            "score": 30,
+            "label": "依扶家具行走"
+          }
+        ]
+      },
+      {
+        "id": "iv",
+        "text": "有静脉输液/肝素帽",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "否"
+          },
+          {
+            "value": 20,
+            "score": 20,
+            "label": "是"
+          }
+        ]
+      },
+      {
+        "id": "gait",
+        "text": "步态",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常/卧床不动/轮椅"
+          },
+          {
+            "value": 10,
+            "score": 10,
+            "label": "步态虚弱"
+          },
+          {
+            "value": 20,
+            "score": 20,
+            "label": "步态损伤"
+          }
+        ]
+      },
+      {
+        "id": "cognition",
+        "text": "精神状态",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "了解自身活动限制"
+          },
+          {
+            "value": 15,
+            "score": 15,
+            "label": "过高估计自己能力/忘记自身限制"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 24,
+        "level": "低跌倒风险",
+        "interpretation": "跌倒风险低",
+        "recommendation": "基本护理措施"
+      },
+      {
+        "range_min": 25,
+        "range_max": 44,
+        "level": "中跌倒风险",
+        "interpretation": "跌倒风险中等",
+        "recommendation": "实施标准跌倒预防措施"
+      },
+      {
+        "range_min": 45,
+        "range_max": 125,
+        "level": "高跌倒风险",
+        "interpretation": "跌倒高风险",
+        "recommendation": "实施高风险跌倒预防方案"
+      }
+    ]
+  },
+  {
+    "name": "Braden 压疮风险评估量表",
+    "category": "护理评估",
+    "description": "评估住院患者压力性损伤（压疮）的风险，适用于所有住院患者。",
+    "questions": [
+      {
+        "id": "sensory",
+        "text": "感知能力（对压力相关不适的反应能力）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "完全受限"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "非常受限"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "轻度受限"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "无损害"
+          }
+        ]
+      },
+      {
+        "id": "moisture",
+        "text": "潮湿度（皮肤暴露于潮湿的程度）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "持续潮湿"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "经常潮湿"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "偶尔潮湿"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "很少潮湿"
+          }
+        ]
+      },
+      {
+        "id": "activity",
+        "text": "活动能力（身体活动程度）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "卧床"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "坐椅"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "偶尔行走"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "经常行走"
+          }
+        ]
+      },
+      {
+        "id": "mobility",
+        "text": "移动能力（控制和改变体位的能力）",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "完全固定"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "非常受限"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "轻度受限"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "不受限"
+          }
+        ]
+      },
+      {
+        "id": "nutrition",
+        "text": "营养状态",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "非常差"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "可能不足"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "足够"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "非常好"
+          }
+        ]
+      },
+      {
+        "id": "friction",
+        "text": "摩擦力和剪切力",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "存在问题"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "潜在问题"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "无明显问题"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 6,
+        "range_max": 12,
+        "level": "高压疮风险",
+        "interpretation": "压疮高风险",
+        "recommendation": "每2小时翻身，使用减压床垫，加强营养"
+      },
+      {
+        "range_min": 13,
+        "range_max": 14,
+        "level": "中度压疮风险",
+        "interpretation": "压疮中等风险",
+        "recommendation": "每4小时翻身，保持皮肤清洁干燥"
+      },
+      {
+        "range_min": 15,
+        "range_max": 18,
+        "level": "低压疮风险",
+        "interpretation": "压疮低风险",
+        "recommendation": "基础皮肤护理"
+      },
+      {
+        "range_min": 19,
+        "range_max": 23,
+        "level": "无压疮风险",
+        "interpretation": "无压疮风险",
+        "recommendation": "常规护理"
+      }
+    ]
+  },
+  {
+    "name": "PHQ-9 患者健康问卷抑郁量表",
+    "category": "精神/心理",
+    "description": "用于抑郁症的筛查、诊断和严重程度评估，基于DSM-IV抑郁症标准9个条目。过去两周内症状频率评分。",
+    "questions": [
+      {
+        "id": "q1",
+        "text": "做事缺乏兴趣或乐趣",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "感到心情低落、沮丧或绝望",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "入睡困难或嗜睡",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q4",
+        "text": "感到疲劳或精力不足",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q5",
+        "text": "食欲不振或暴饮暴食",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q6",
+        "text": "感到自己是失败者，或令自己和家人失望",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q7",
+        "text": "注意力难以集中（如看报纸或看电视时）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q8",
+        "text": "行动或说话速度明显减缓，或反之——烦躁不安、坐立不安",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q9",
+        "text": "有死亡或自我伤害的念头",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 4,
+        "level": "无/极轻",
+        "interpretation": "无抑郁或极轻微",
+        "recommendation": "无需特殊干预，必要时随访"
+      },
+      {
+        "range_min": 5,
+        "range_max": 9,
+        "level": "轻度",
+        "interpretation": "轻度抑郁症状",
+        "recommendation": "观察随访，考虑心理咨询"
+      },
+      {
+        "range_min": 10,
+        "range_max": 14,
+        "level": "中度",
+        "interpretation": "中度抑郁",
+        "recommendation": "建议心理治疗和/或抗抑郁药物"
+      },
+      {
+        "range_min": 15,
+        "range_max": 19,
+        "level": "中重度",
+        "interpretation": "中重度抑郁",
+        "recommendation": "建议药物治疗，考虑精神科转诊"
+      },
+      {
+        "range_min": 20,
+        "range_max": 27,
+        "level": "重度",
+        "interpretation": "重度抑郁",
+        "recommendation": "立即精神科评估，评估自杀风险"
+      }
+    ],
+    "note": "第9题（自伤念头）任何阳性均需独立评估自杀风险。总分≥10分建议进一步诊断评估。"
+  },
+  {
+    "name": "GAD-7 广泛性焦虑障碍量表",
+    "category": "精神/心理",
+    "description": "用于广泛性焦虑障碍（GAD）的筛查和严重程度评估。过去两周内症状频率评分，7个条目。",
+    "questions": [
+      {
+        "id": "q1",
+        "text": "感到紧张、焦虑或坐立不安",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q2",
+        "text": "无法停止或控制担忧",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "对各种不同的事情过分担忧",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q4",
+        "text": "难以放松下来",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q5",
+        "text": "烦躁不安，无法安静坐下",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q6",
+        "text": "容易烦恼或激惹",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      },
+      {
+        "id": "q7",
+        "text": "感到害怕，像是某件可怕的事情将要发生",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "从未"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "有几天"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "超过一周"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "几乎每天"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 4,
+        "level": "极轻/无",
+        "interpretation": "无焦虑或极轻微",
+        "recommendation": "无需特殊干预"
+      },
+      {
+        "range_min": 5,
+        "range_max": 9,
+        "level": "轻度",
+        "interpretation": "轻度焦虑",
+        "recommendation": "观察，心理支持"
+      },
+      {
+        "range_min": 10,
+        "range_max": 14,
+        "level": "中度",
+        "interpretation": "中度焦虑",
+        "recommendation": "考虑心理治疗（CBT）和/或药物"
+      },
+      {
+        "range_min": 15,
+        "range_max": 21,
+        "level": "重度",
+        "interpretation": "重度焦虑",
+        "recommendation": "精神科评估，药物治疗"
+      }
+    ]
+  },
+  {
+    "name": "NIHSS 美国国立卫生研究院卒中量表",
+    "category": "神经/卒中",
+    "description": "急性缺血性脑卒中神经功能缺损的标准化评估工具，用于病情严重程度判断、溶栓适应症评估和预后评估。满分42分。",
+    "questions": [
+      {
+        "id": "1a",
+        "text": "意识水平（0=清醒；1=嗜睡；2=昏睡；3=昏迷）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "清醒"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "嗜睡"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "昏睡"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "昏迷"
+          }
+        ]
+      },
+      {
+        "id": "1b",
+        "text": "意识水平问题（回答2个问题：月份/年龄，0=全对；1=一个正确；2=全错）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "全部回答正确"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "回答1题正确"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "全部回答错误"
+          }
+        ]
+      },
+      {
+        "id": "1c",
+        "text": "意识水平指令（睁眼/握拳，0=全做；1=做一个；2=全不做）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "完成2个指令"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "完成1个指令"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "两个均不能完成"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "text": "凝视（水平眼球运动，0=正常；1=部分凝视麻痹；2=强制凝视）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "部分凝视麻痹"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "强制凝视"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "text": "视野（0=无视野缺损；1=部分偏盲；2=完全偏盲；3=双侧偏盲/皮质盲）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无视野缺损"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "部分偏盲"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "完全偏盲"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "双侧偏盲"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "text": "面瘫（0=正常；1=轻微；2=部分；3=完全）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "轻微"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "部分麻痹"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "完全麻痹"
+          }
+        ]
+      },
+      {
+        "id": "5a",
+        "text": "左上肢运动（抬臂90°/45°维持10s，0=无坠落；1=维持<10s；2=不能抵抗重力；3=无运动）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无坠落"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "坠落但有运动"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "不能抵抗重力"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "无运动"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "截肢或关节融合"
+          }
+        ]
+      },
+      {
+        "id": "5b",
+        "text": "右上肢运动",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无坠落"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "坠落但有运动"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "不能抵抗重力"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "无运动"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "截肢或关节融合"
+          }
+        ]
+      },
+      {
+        "id": "6a",
+        "text": "左下肢运动（抬腿30°维持5s）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无坠落"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "坠落但有运动"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "不能抵抗重力"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "无运动"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "截肢或关节融合"
+          }
+        ]
+      },
+      {
+        "id": "6b",
+        "text": "右下肢运动",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无坠落"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "坠落但有运动"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "不能抵抗重力"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "无运动"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "截肢或关节融合"
+          }
+        ]
+      },
+      {
+        "id": "7",
+        "text": "肢体共济失调（指鼻/跟膝胫试验，0=无；1=一个肢体；2=两个肢体）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无共济失调"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "一个肢体"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "两个肢体"
+          }
+        ]
+      },
+      {
+        "id": "8",
+        "text": "感觉（0=正常；1=轻-中度减退；2=严重减退或消失）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "轻中度减退"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "严重减退"
+          }
+        ]
+      },
+      {
+        "id": "9",
+        "text": "最佳语言（0=无失语；1=轻-中度失语；2=重度失语；3=完全失语/哑）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无失语"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "轻中度失语"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "重度失语"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "完全失语"
+          }
+        ]
+      },
+      {
+        "id": "10",
+        "text": "构音障碍（0=正常；1=轻-中度；2=重度/不能发音）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "正常"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "轻中度"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "重度"
+          }
+        ]
+      },
+      {
+        "id": "11",
+        "text": "忽视症（0=无；1=一种感觉忽视；2=严重忽视）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无忽视"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "一种感觉忽视"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "严重忽视"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 0,
+        "level": "无卒中症状",
+        "interpretation": "正常",
+        "recommendation": "继续观察"
+      },
+      {
+        "range_min": 1,
+        "range_max": 4,
+        "level": "小卒中/轻微",
+        "interpretation": "轻微神经功能缺损",
+        "recommendation": "评估静脉溶栓/取栓适应症"
+      },
+      {
+        "range_min": 5,
+        "range_max": 15,
+        "level": "中度",
+        "interpretation": "中度神经功能缺损",
+        "recommendation": "积极再灌注治疗（溶栓/取栓）"
+      },
+      {
+        "range_min": 16,
+        "range_max": 20,
+        "level": "中重度",
+        "interpretation": "中重度神经功能缺损",
+        "recommendation": "大血管闭塞可能，优先取栓"
+      },
+      {
+        "range_min": 21,
+        "range_max": 42,
+        "level": "重度",
+        "interpretation": "重度神经功能缺损",
+        "recommendation": "ICU/卒中单元，综合评估取栓适应症"
+      }
+    ]
+  },
+  {
+    "name": "mRS 改良Rankin量表",
+    "category": "神经/卒中",
+    "description": "评估卒中后神经功能残疾程度和日常生活活动能力，是卒中临床试验的标准预后指标。",
+    "questions": [
+      {
+        "id": "mRS",
+        "text": "整体功能状态评估（选择最符合的等级）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0级：完全无症状"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1级：有症状但无明显功能障碍，能完成所有日常活动"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2级：轻度残疾，不能完成以前所有活动，但能不需帮助地照顾自己"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3级：中度残疾，需要一些帮助，但能自己行走"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "4级：重度残疾，不能自己行走，无他人帮助不能满足自身需求"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "5级：严重残疾，卧床、大小便失禁，需持续护理和关注"
+          },
+          {
+            "value": 6,
+            "score": 6,
+            "label": "6级：死亡"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 1,
+        "level": "预后良好",
+        "interpretation": "无/轻微残疾",
+        "recommendation": "定期神经科随访"
+      },
+      {
+        "range_min": 2,
+        "range_max": 3,
+        "level": "预后中等",
+        "interpretation": "轻中度残疾",
+        "recommendation": "康复治疗，二级预防"
+      },
+      {
+        "range_min": 4,
+        "range_max": 5,
+        "level": "预后不良",
+        "interpretation": "重度残疾",
+        "recommendation": "康复医院，长期照护评估"
+      },
+      {
+        "range_min": 6,
+        "range_max": 6,
+        "level": "死亡",
+        "interpretation": "死亡",
+        "recommendation": ""
+      }
+    ],
+    "note": "临床试验常用mRS 0-2定义功能独立（预后良好）。"
+  },
+  {
+    "name": "MMSE 简易智力状态检查量表",
+    "category": "神经/认知",
+    "description": "最广泛使用的认知功能筛查量表，评估定向力、记忆力、计算力、语言和视空间能力。满分30分，约10分钟完成。",
+    "questions": [
+      {
+        "id": "orientation_time",
+        "text": "时间定向（年/季/月/日/星期，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "4分"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "5分"
+          }
+        ]
+      },
+      {
+        "id": "orientation_place",
+        "text": "地点定向（省/市/医院/科室/楼层，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "4分"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "5分"
+          }
+        ]
+      },
+      {
+        "id": "registration",
+        "text": "即刻记忆（复述3个词：苹果/手表/国家，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          }
+        ]
+      },
+      {
+        "id": "attention",
+        "text": "注意和计算（100-7连续5次，或倒拼WORLD，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "4分"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "5分"
+          }
+        ]
+      },
+      {
+        "id": "recall",
+        "text": "延迟回忆（回忆上述3个词，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          }
+        ]
+      },
+      {
+        "id": "language_naming",
+        "text": "语言-命名（铅笔/手表，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          }
+        ]
+      },
+      {
+        "id": "language_repeat",
+        "text": "语言-复述（\"四十四只石狮子\"，1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "不能"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "能"
+          }
+        ]
+      },
+      {
+        "id": "language_command",
+        "text": "语言-三步指令（拿纸折叠放膝上，各1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0分"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "1分"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2分"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "3分"
+          }
+        ]
+      },
+      {
+        "id": "language_read",
+        "text": "语言-阅读（照'闭上眼睛'执行，1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "不能"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "能"
+          }
+        ]
+      },
+      {
+        "id": "language_write",
+        "text": "语言-书写（自发写一句完整的话，1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "不能"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "能"
+          }
+        ]
+      },
+      {
+        "id": "visuospatial",
+        "text": "视空间（临摹交叉五边形，1分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "不能"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "能"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 27,
+        "range_max": 30,
+        "level": "正常",
+        "interpretation": "认知功能正常",
+        "recommendation": "基线记录，定期复查（高危人群）"
+      },
+      {
+        "range_min": 24,
+        "range_max": 26,
+        "level": "可疑",
+        "interpretation": "可疑认知障碍",
+        "recommendation": "神经心理学全面评估，查找可逆原因"
+      },
+      {
+        "range_min": 18,
+        "range_max": 23,
+        "level": "轻-中度痴呆",
+        "interpretation": "轻到中度认知损害",
+        "recommendation": "神经科评估，考虑胆碱酯酶抑制剂"
+      },
+      {
+        "range_min": 10,
+        "range_max": 17,
+        "level": "中度痴呆",
+        "interpretation": "中度痴呆",
+        "recommendation": "长期照护计划，药物治疗"
+      },
+      {
+        "range_min": 0,
+        "range_max": 9,
+        "level": "重度痴呆",
+        "interpretation": "重度痴呆",
+        "recommendation": "全托护理，安全评估"
+      }
+    ],
+    "note": "教育程度校正：文盲<17分、小学<20分、中学以上<24分为认知障碍参考切点。"
+  },
+  {
+    "name": "NYHA 心功能分级",
+    "category": "心血管",
+    "description": "纽约心脏病协会（NYHA）心功能分级，基于主观症状评估心力衰竭患者的活动耐量，广泛用于心衰严重程度分级和治疗决策。",
+    "questions": [
+      {
+        "id": "nyha",
+        "text": "根据体力活动受限程度，选择最符合患者情况的等级",
+        "options": [
+          {
+            "value": 1,
+            "score": 1,
+            "label": "I级：体力活动不受限，日常活动不引起症状"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "II级：体力活动轻度受限，日常活动引起症状（乏力、心悸、气促），休息时无症状"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "III级：体力活动明显受限，轻微活动即引起症状，休息时无症状"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "IV级：任何体力活动均引起不适，休息时亦有症状"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 1,
+        "range_max": 1,
+        "level": "I级",
+        "interpretation": "无症状，预后相对较好",
+        "recommendation": "治疗基础病，定期随访"
+      },
+      {
+        "range_min": 2,
+        "range_max": 2,
+        "level": "II级",
+        "interpretation": "轻度心功能不全",
+        "recommendation": "ACEI/ARB/ARNI + β受体阻滞剂，限盐"
+      },
+      {
+        "range_min": 3,
+        "range_max": 3,
+        "level": "III级",
+        "interpretation": "中度心功能不全，1年死亡率约10-15%",
+        "recommendation": "心衰专科管理，考虑加用醛固酮拮抗剂/SGLT-2i，CRT评估"
+      },
+      {
+        "range_min": 4,
+        "range_max": 4,
+        "level": "IV级",
+        "interpretation": "重度心功能不全，1年死亡率约50%",
+        "recommendation": "住院治疗，静脉利尿/正性肌力药，MCS/心脏移植评估"
+      }
+    ]
+  },
+  {
+    "name": "APACHE II 急性生理和慢性健康评分",
+    "category": "重症医学",
+    "description": "ICU患者疾病严重程度和死亡风险预测评分，由急性生理评分（APS）+ 年龄分值 + 慢性健康状况评分组成。满分71分。",
+    "questions": [
+      {
+        "id": "temp",
+        "text": "体温（℃）（取最差值，分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "36-38.4（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "34-35.9或38.5-38.9（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "32-33.9或39-40.9（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "30-31.9（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≤29.9或≥41（4分）"
+          }
+        ]
+      },
+      {
+        "id": "map",
+        "text": "平均动脉压（mmHg）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "70-109（0分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "50-69或110-129（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "130-159（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≤49或≥160（4分）"
+          }
+        ]
+      },
+      {
+        "id": "hr",
+        "text": "心率（次/分）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "70-109（0分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "55-69或110-139（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "40-54或140-179（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≤39或≥180（4分）"
+          }
+        ]
+      },
+      {
+        "id": "rr",
+        "text": "呼吸频率（次/分）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "12-24（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "10-11或25-34（1分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "6-9或35-49（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≤5或≥50（4分）"
+          }
+        ]
+      },
+      {
+        "id": "pao2",
+        "text": "氧合（FiO₂<0.5用PaO₂；≥0.5用A-aDO₂）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "PaO₂>70或A-aDO₂<200（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "PaO₂61-70（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "A-aDO₂200-349（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "PaO₂55-60或A-aDO₂350-499（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "PaO₂<55或A-aDO₂≥500（4分）"
+          }
+        ]
+      },
+      {
+        "id": "ph",
+        "text": "动脉pH（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "7.33-7.49（0分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "7.25-7.32或7.50-7.59（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "7.15-7.24或7.60-7.69（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "<7.15或≥7.70（4分）"
+          }
+        ]
+      },
+      {
+        "id": "na",
+        "text": "血清钠（mmol/L）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "130-149（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "150-154（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "120-129或155-159（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "111-119或160-179（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "≤110或≥180（4分）"
+          }
+        ]
+      },
+      {
+        "id": "k",
+        "text": "血清钾（mmol/L）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "3.5-5.4（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "3.0-3.4或5.5-5.9（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "2.5-2.9（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "6.0-6.9（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "<2.5或≥7.0（4分）"
+          }
+        ]
+      },
+      {
+        "id": "cr",
+        "text": "血清肌酐（μmol/L，急性肾衰×2）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "53-123（0分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "<53或124-176（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "177-300（3分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": ">300（4分）"
+          }
+        ]
+      },
+      {
+        "id": "hct",
+        "text": "红细胞比容（%）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "30-45.9（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "46-49.9（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "20-29.9或50-59.9（2分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "<20或≥60（4分）"
+          }
+        ]
+      },
+      {
+        "id": "wbc",
+        "text": "白细胞（×10⁹/L）（分值0-4）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "3.0-14.9（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "15-19.9（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "1.0-2.9或20-39.9（2分）"
+          },
+          {
+            "value": 4,
+            "score": 4,
+            "label": "<1.0或≥40（4分）"
+          }
+        ]
+      },
+      {
+        "id": "gcs_apache",
+        "text": "格拉斯哥昏迷评分（GCS分值=15-实际GCS得分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "GCS 15（0分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "GCS 12（3分）"
+          },
+          {
+            "value": 6,
+            "score": 6,
+            "label": "GCS 9（6分）"
+          },
+          {
+            "value": 9,
+            "score": 9,
+            "label": "GCS 6（9分）"
+          },
+          {
+            "value": 12,
+            "score": 12,
+            "label": "GCS 3（12分）"
+          }
+        ]
+      },
+      {
+        "id": "age",
+        "text": "年龄（分值0-6）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "<44岁（0分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "45-54岁（2分）"
+          },
+          {
+            "value": 3,
+            "score": 3,
+            "label": "55-64岁（3分）"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "65-74岁（5分）"
+          },
+          {
+            "value": 6,
+            "score": 6,
+            "label": "≥75岁（6分）"
+          }
+        ]
+      },
+      {
+        "id": "chronic",
+        "text": "慢性健康状况（有无慢性器官功能不全或免疫抑制）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "有，择期手术"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "有，急诊手术或非手术"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 9,
+        "level": "低危",
+        "interpretation": "预计ICU死亡率约4-8%",
+        "recommendation": "标准ICU监护"
+      },
+      {
+        "range_min": 10,
+        "range_max": 19,
+        "level": "中危",
+        "interpretation": "预计ICU死亡率约15-25%",
+        "recommendation": "积极治疗，密切监测"
+      },
+      {
+        "range_min": 20,
+        "range_max": 29,
+        "level": "高危",
+        "interpretation": "预计ICU死亡率约40-55%",
+        "recommendation": "强化治疗，与家属充分沟通"
+      },
+      {
+        "range_min": 30,
+        "range_max": 71,
+        "level": "极高危",
+        "interpretation": "预计ICU死亡率>75%",
+        "recommendation": "评估治疗目标，姑息治疗讨论"
+      }
+    ],
+    "note": "APACHE II是预测工具，不用于个体死亡率的直接预测。仅作为患者群体比较的参考。"
+  },
+  {
+    "name": "Apgar 新生儿评分",
+    "category": "新生儿/产科",
+    "description": "评估新生儿出生时生命体征状况，在出生后1分钟和5分钟分别评分，指导复苏决策。由Virginia Apgar博士于1952年提出。",
+    "questions": [
+      {
+        "id": "hr",
+        "text": "心率（次/分）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "<100（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "≥100（2分）"
+          }
+        ]
+      },
+      {
+        "id": "resp",
+        "text": "呼吸",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "弱/不规则（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "正常/哭声响亮（2分）"
+          }
+        ]
+      },
+      {
+        "id": "tone",
+        "text": "肌张力",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "松弛（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "四肢稍弯曲（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "四肢活动良好（2分）"
+          }
+        ]
+      },
+      {
+        "id": "reflex",
+        "text": "刺激反应（弹足底或鼻导管刺激）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "无反应（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "皱眉（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "哭、喷嚏、咳嗽（2分）"
+          }
+        ]
+      },
+      {
+        "id": "color",
+        "text": "肤色",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "全身青紫/苍白（0分）"
+          },
+          {
+            "value": 1,
+            "score": 1,
+            "label": "躯干红/四肢青紫（1分）"
+          },
+          {
+            "value": 2,
+            "score": 2,
+            "label": "全身红润（2分）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 3,
+        "level": "重度窒息",
+        "interpretation": "重度新生儿窒息",
+        "recommendation": "立即心肺复苏（正压通气+胸外按压），必要时气管插管"
+      },
+      {
+        "range_min": 4,
+        "range_max": 6,
+        "level": "轻度窒息",
+        "interpretation": "轻度新生儿窒息",
+        "recommendation": "清理气道，正压通气，保暖，持续监测"
+      },
+      {
+        "range_min": 7,
+        "range_max": 10,
+        "level": "正常",
+        "interpretation": "新生儿状态良好",
+        "recommendation": "常规护理，保暖，母婴皮肤接触"
+      }
+    ],
+    "note": "Apgar评分是助产/新生儿复苏的参考工具，不用于决定是否复苏（复苏决策在评估前即开始）。5分钟评分<7时每5分钟复评至20分钟。"
+  },
+  {
+    "name": "DAS28 类风湿关节炎疾病活动度评分",
+    "category": "风湿/免疫",
+    "description": "类风湿关节炎（RA）疾病活动度的标准化评分，基于28个关节检查，广泛用于RA随访和生物制剂治疗决策。需计算公式。",
+    "questions": [
+      {
+        "id": "tender28",
+        "text": "28个关节中压痛关节数（TJC28，0-28）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0个"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "约5个（示例）"
+          },
+          {
+            "value": 10,
+            "score": 10,
+            "label": "约10个（示例）"
+          },
+          {
+            "value": 28,
+            "score": 28,
+            "label": "28个"
+          }
+        ]
+      },
+      {
+        "id": "swollen28",
+        "text": "28个关节中肿胀关节数（SJC28，0-28）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0个"
+          },
+          {
+            "value": 5,
+            "score": 5,
+            "label": "约5个（示例）"
+          },
+          {
+            "value": 10,
+            "score": 10,
+            "label": "约10个（示例）"
+          },
+          {
+            "value": 28,
+            "score": 28,
+            "label": "28个"
+          }
+        ]
+      },
+      {
+        "id": "esr_or_crp",
+        "text": "炎症指标（ESR mm/h 或 CRP mg/L）",
+        "options": [
+          {
+            "value": 5,
+            "score": 5,
+            "label": "ESR 5（正常）"
+          },
+          {
+            "value": 20,
+            "score": 20,
+            "label": "ESR 20（轻度升高）"
+          },
+          {
+            "value": 50,
+            "score": 50,
+            "label": "ESR 50（明显升高）"
+          }
+        ]
+      },
+      {
+        "id": "gh",
+        "text": "患者整体健康状态评估（GH，VAS 0-100mm）",
+        "options": [
+          {
+            "value": 0,
+            "score": 0,
+            "label": "0（非常好）"
+          },
+          {
+            "value": 25,
+            "score": 25,
+            "label": "25"
+          },
+          {
+            "value": 50,
+            "score": 50,
+            "label": "50（一般）"
+          },
+          {
+            "value": 75,
+            "score": 75,
+            "label": "75"
+          },
+          {
+            "value": 100,
+            "score": 100,
+            "label": "100（非常差）"
+          }
+        ]
+      }
+    ],
+    "scoring_rules": [
+      {
+        "range_min": 0,
+        "range_max": 27,
+        "level": "缓解",
+        "interpretation": "DAS28<2.6：疾病缓解",
+        "recommendation": "维持治疗，尝试减量（TAR策略）"
+      },
+      {
+        "range_min": 27,
+        "range_max": 32,
+        "level": "低活动度",
+        "interpretation": "DAS28 2.6-3.2：低疾病活动度",
+        "recommendation": "治疗达标，可考虑维持"
+      },
+      {
+        "range_min": 32,
+        "range_max": 51,
+        "level": "中活动度",
+        "interpretation": "DAS28 3.2-5.1：中度疾病活动度",
+        "recommendation": "调整方案，考虑加用bDMARDs/tsDMARDs"
+      },
+      {
+        "range_min": 51,
+        "range_max": 99,
+        "level": "高活动度",
+        "interpretation": "DAS28>5.1：高疾病活动度",
+        "recommendation": "积极强化治疗，风湿科专科随访"
+      }
+    ],
+    "note": "DAS28计算公式（ESR版）：0.56×√TJC28 + 0.28×√SJC28 + 0.70×ln(ESR) + 0.014×GH。建议使用计算器计算，此处评分仅为示意。"
+  }
+]

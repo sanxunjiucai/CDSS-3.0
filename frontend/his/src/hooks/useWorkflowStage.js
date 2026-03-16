@@ -69,19 +69,19 @@ export const STAGE_META = {
 // ChiefComplaintCard 已固定在 MainPanel 顶部，不参与动态排序
 export const STAGE_LAYOUT = {
   initial: {
-    order:    ['alert', 'diagnosis', 'exam', 'treatment', 'labresult', 'guideline', 'risk', 'intervention'],
+    order:    ['alert', 'diagnosis', 'risk', 'exam', 'treatment', 'labresult', 'transfer', 'guideline', 'intervention'],
     expanded: ['alert', 'diagnosis'],
   },
   has_labs: {
-    order:    ['alert', 'labresult', 'diagnosis', 'risk', 'treatment', 'exam', 'guideline', 'intervention'],
+    order:    ['alert', 'labresult', 'diagnosis', 'risk', 'transfer', 'treatment', 'exam', 'guideline', 'intervention'],
     expanded: ['alert', 'labresult'],
   },
   has_diagnosis: {
-    order:    ['alert', 'treatment', 'guideline', 'risk', 'labresult', 'exam', 'intervention'],
-    expanded: ['alert', 'treatment', 'guideline'],
+    order:    ['alert', 'treatment', 'risk', 'transfer', 'guideline', 'labresult', 'exam', 'intervention'],
+    expanded: ['alert', 'treatment', 'risk'],
   },
   high_risk: {
-    order:    ['alert', 'labresult', 'risk', 'treatment', 'diagnosis', 'guideline', 'exam', 'intervention'],
-    expanded: ['alert', 'labresult', 'risk'],
+    order:    ['alert', 'transfer', 'risk', 'labresult', 'treatment', 'diagnosis', 'guideline', 'exam', 'intervention'],
+    expanded: ['alert', 'transfer', 'risk'],
   },
 }

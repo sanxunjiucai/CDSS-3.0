@@ -1,210 +1,216 @@
 /**
- * 诊断合理性审核卡
- * PRD #20：开单/开药前审核诊断与处置一致性
+ * 智能预警卡（统一预警入口）
  *
- * 三类规则：
- *  1. 诊断 × 当前用药 → 矛盾/禁忌
- *  2. 诊断 → 必要检查缺口
- *  3. 诊断 → 时间窗提醒
+ * 合并来源：
+ *   1. 客户端规则 — 过敏史、危急值、异常检验值、实时患者数据规则
+ *   2. 后端规则   — 患者上下文变化时自动调用 POST /audit/diagnosis-consistency
  *
- * 严重度：error（必须处理）/ warning（建议处理）/ info（知悉）
- * 医生可逐条"知道了"关闭（本次会话有效）
+ * 以 rule_id 去重，error 优先，其次 warning，最后 info。
+ * 医生可逐条「知道了」关闭（本次会话有效）。
  */
-import { useState } from 'react'
-import { XCircle, AlertTriangle, Info, ChevronDown, ChevronUp, ClipboardCheck } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { XCircle, AlertTriangle, Info, ChevronDown, ChevronUp, ClipboardCheck, Loader2 } from 'lucide-react'
 import { usePatientStore } from '@/stores/patient'
 import { cn } from '@/lib/utils'
 
-/* ── 规则引擎 ────────────────────────────────────────────────── */
+const API_BASE = import.meta.env.VITE_API_BASE ?? '/api/v1'
 
-const RULES = [
-  // ── 类型1：诊断 × 用药禁忌 ────────────────────────────────
-  {
-    id: 'metformin_stemi',
-    level: 'warning',
-    tag: '用药禁忌',
-    check: (p) =>
-      p.diagnosis_names?.includes('急性ST段抬高型心肌梗死') &&
-      p.current_medications?.some(m => m.includes('二甲双胍')),
-    title: '建议暂停二甲双胍',
-    content: 'STEMI 急性期肾灌注不稳定，二甲双胍有乳酸酸中毒风险。建议改用胰岛素控制血糖，请内分泌科会诊。',
-  },
-  {
-    id: 'nsaid_stemi',
-    level: 'error',
-    tag: '用药禁忌',
-    check: (p) =>
-      p.diagnosis_names?.includes('急性ST段抬高型心肌梗死') &&
-      p.current_medications?.some(m => ['布洛芬', '吲哚美辛', '双氯芬酸', 'NSAIDs'].some(n => m.includes(n))),
-    title: 'NSAIDs 禁用于 STEMI',
-    content: 'NSAIDs 可增加 STEMI 患者死亡率及心衰风险，应立即停用，考虑替代镇痛方案（如吗啡）。',
-  },
-  {
-    id: 'allergy_med_conflict',
-    level: 'error',
-    tag: '过敏禁忌',
-    check: (p) => {
-      const allergies = p.allergies || []
-      const meds = p.current_medications || []
-      if (!allergies.length || !meds.length) return false
-      return allergies.some(a =>
-        meds.some(m => m.includes(a.replace(/过敏$/, '')) || a.includes(m.split(/[\d\s]/)[0]))
-      )
-    },
-    title: (p) => {
-      const allergies = p.allergies || []
-      const meds = p.current_medications || []
-      const conflict = meds.find(m =>
-        allergies.some(a => m.includes(a.replace(/过敏$/, '')))
-      )
-      return `用药含过敏成分：${conflict || '请核查'}`
-    },
-    content: (p) => {
-      const allergies = p.allergies || []
-      return `患者有【${allergies.join('、')}】过敏史，当前用药可能含相关成分，请立即核查并替换。`
-    },
-  },
-  {
-    id: 'betablocker_bradycardia',
-    level: 'warning',
-    tag: '用药禁忌',
-    check: (p) => {
-      const hasBradycardia = p.lab_results?.some(
-        l => l.item_name?.includes('心率') && l.value < 60
-      )
-      const hasBetaBlocker = p.current_medications?.some(
-        m => ['美托洛尔', '比索洛尔', '阿替洛尔'].some(b => m.includes(b))
-      )
-      return hasBradycardia && hasBetaBlocker
-    },
-    title: 'β受体阻滞剂 × 心动过缓',
-    content: '当前心率 < 60 次/分，使用 β受体阻滞剂需谨慎，可能加重心动过缓，建议评估后决定是否继续用药。',
-  },
+/* ── 客户端规则（需要实时患者数据，无法在后端简单替代）─────────────── */
 
-  // ── 类型2：诊断 → 必要检查缺口 ───────────────────────────
-  {
-    id: 'stemi_echo_missing',
-    level: 'warning',
-    tag: '检查缺口',
-    check: (p) => {
-      if (!p.diagnosis_names?.includes('急性ST段抬高型心肌梗死')) return false
-      const labNames = (p.lab_results || []).map(l => l.item_name || '')
-      return !labNames.some(n => n.includes('超声') || n.includes('心动图') || n.includes('ECHO'))
-    },
-    title: '超声心动图（LVEF 评估）尚未完成',
-    content: 'STEMI 标准诊疗路径要求评估 LVEF 及室壁运动异常。建议血流动力学稳定后尽快开具床旁超声心动图。',
-  },
-  {
-    id: 'stemi_troponin_missing',
-    level: 'warning',
-    tag: '检查缺口',
-    check: (p) => {
-      if (!p.diagnosis_names?.includes('急性ST段抬高型心肌梗死')) return false
-      const labNames = (p.lab_results || []).map(l => l.item_name || '')
-      return !labNames.some(n => n.includes('肌钙蛋白') || n.includes('TNI') || n.includes('TNT'))
-    },
-    title: '肌钙蛋白尚未检测',
-    content: '肌钙蛋白（cTnI/cTnT）是 STEMI 诊断及梗死面积评估的关键指标，建议立即开具动态检测。',
-  },
-  {
-    id: 'dm_hba1c_missing',
-    level: 'info',
-    tag: '检查建议',
-    check: (p) => {
-      if (!p.diagnosis_names?.includes('2型糖尿病')) return false
-      const labNames = (p.lab_results || []).map(l => l.item_name || '')
-      return !labNames.some(n => n.includes('糖化') || n.includes('HbA1c'))
-    },
-    title: '糖化血红蛋白（HbA1c）未检测',
-    content: '糖尿病患者建议检测 HbA1c 评估近3个月血糖控制情况，辅助制定降糖方案。',
-  },
+function runClientRules(patient) {
+  const findings = []
 
-  // ── 类型3：时间窗提醒 ─────────────────────────────────────
-  {
-    id: 'stemi_dtb_window',
-    level: 'info',
-    tag: '时间窗',
-    check: (p) => p.diagnosis_names?.includes('急性ST段抬高型心肌梗死'),
-    title: 'D-to-B 目标 ≤ 90 分钟',
-    content: 'STEMI 首选直接 PCI，从就诊到球囊扩张时间应控制在 90 分钟内。请确认导管室及介入团队是否已通知。',
-  },
-  {
-    id: 'stemi_antiplatelet_timing',
-    level: 'info',
-    tag: '时间窗',
-    check: (p) =>
-      p.diagnosis_names?.includes('急性ST段抬高型心肌梗死') &&
-      !p.current_medications?.some(m => ['阿司匹林', '氯吡格雷', '替格瑞洛'].some(d => m.includes(d))),
-    title: '抗血小板药物尚未使用',
-    content: 'STEMI 患者应尽早启动双联抗血小板治疗（阿司匹林 + P2Y12 抑制剂），尽量在 PCI 前给药。',
-  },
-]
+  // 过敏史（始终最高优先级）
+  if (patient.allergies?.length) {
+    findings.push({
+      id:      'patient_allergies',
+      level:   'error',
+      tag:     '过敏史',
+      title:   patient.allergies.join('、') + ' 过敏',
+      content: `患者有【${patient.allergies.join('、')}】过敏史，开药时请注意回避相关药物及同类药物。`,
+    })
+  }
 
-/* ── 工具函数 ────────────────────────────────────────────────── */
+  // 危急检验值（超正常上限 5 倍以上）
+  const critical = (patient.lab_results || []).filter(l =>
+    l.is_abnormal && l.reference_high && l.abnormal_type === 'high' &&
+    l.value / l.reference_high >= 5
+  )
+  critical.forEach(l => {
+    findings.push({
+      id:      `critical_${l.item_code || l.item_name}`,
+      level:   'error',
+      tag:     '危急值',
+      title:   `${l.item_name} ${l.value} ${l.unit ?? ''} ↑↑`,
+      content: `【${l.item_name}】${l.value} ${l.unit ?? ''}，超出正常上限约 ${(l.value / l.reference_high).toFixed(0)} 倍，请立即处置。`,
+    })
+  })
 
-function resolve(fieldOrFn, patient) {
-  return typeof fieldOrFn === 'function' ? fieldOrFn(patient) : fieldOrFn
+  // 普通异常检验值
+  const criticalCodes = new Set(critical.map(l => l.item_code || l.item_name))
+  const abnormal = (patient.lab_results || []).filter(
+    l => l.is_abnormal && !criticalCodes.has(l.item_code || l.item_name)
+  )
+  abnormal.forEach(l => {
+    findings.push({
+      id:      `abnormal_${l.item_code || l.item_name}`,
+      level:   'warning',
+      tag:     '检验异常',
+      title:   `${l.item_name} ${l.abnormal_type === 'high' ? '偏高 ↑' : '偏低 ↓'}`,
+      content: `【${l.item_name}】${l.value} ${l.unit ?? ''}（参考 ${l.reference_low}–${l.reference_high}），${l.abnormal_type === 'high' ? '偏高' : '偏低'}，请关注临床意义。`,
+    })
+  })
+
+  // β受体阻滞剂 × 心动过缓（依赖实时心率数值）
+  const hasBradycardia = patient.lab_results?.some(
+    l => l.item_name?.includes('心率') && l.value < 60
+  )
+  const hasBetaBlocker = patient.current_medications?.some(
+    m => ['美托洛尔', '比索洛尔', '阿替洛尔'].some(b => m.includes(b))
+  )
+  if (hasBradycardia && hasBetaBlocker) {
+    findings.push({
+      id:      'betablocker_bradycardia',
+      level:   'warning',
+      tag:     '用药禁忌',
+      title:   'β受体阻滞剂 × 心动过缓',
+      content: '当前心率 < 60 次/分，使用 β受体阻滞剂需谨慎，可能加重心动过缓，建议评估后决定是否继续用药。',
+    })
+  }
+
+  // STEMI 时间窗提醒
+  if (patient.diagnosis_names?.includes('急性ST段抬高型心肌梗死')) {
+    findings.push({
+      id:      'stemi_dtb_window',
+      level:   'info',
+      tag:     '时间窗',
+      title:   'D-to-B 目标 ≤ 90 分钟',
+      content: 'STEMI 首选直接 PCI，从就诊到球囊扩张时间应控制在 90 分钟内。请确认导管室及介入团队是否已通知。',
+    })
+  }
+
+  return findings
 }
 
-function runRules(patient) {
-  return RULES
-    .filter(r => r.check(patient))
-    .map(r => ({
-      id:      r.id,
-      level:   r.level,
-      tag:     resolve(r.tag,     patient),
-      title:   resolve(r.title,   patient),
-      content: resolve(r.content, patient),
-    }))
+/* ── 后端 code → 显示标签映射 ─────────────────────────────────────── */
+
+const CODE_TAG = {
+  DRUG_CONTRAINDICATED:     '用药禁忌',
+  DRUG_CAUTION:             '用药禁忌',
+  DRUG_ALLERGY:             '过敏禁忌',
+  REQUIRED_DRUG_MISSING:    '药物缺口',
+  RECOMMENDED_DRUG_MISSING: '药物建议',
+  REQUIRED_EXAM_MISSING:    '检查缺口',
+  RECOMMENDED_EXAM_MISSING: '检查建议',
 }
 
-/* ── 样式配置 ────────────────────────────────────────────────── */
+/* ── 样式配置 ─────────────────────────────────────────────────────── */
 
 const LEVEL_CFG = {
   error: {
-    icon:        XCircle,
-    iconColor:   'text-danger',
-    bg:          'bg-red-50',
-    border:      'border-red-200',
-    tagBg:       'bg-red-100 text-danger',
-    dismissCls:  'text-danger/70 hover:text-danger',
+    Icon:       XCircle,
+    iconColor:  'text-danger',
+    accent:     'border-l-2 border-l-danger',
+    tagBg:      'bg-red-50 text-danger',
+    dismissCls: 'text-gray-400 hover:text-danger',
   },
   warning: {
-    icon:        AlertTriangle,
-    iconColor:   'text-warning',
-    bg:          'bg-orange-50',
-    border:      'border-orange-200',
-    tagBg:       'bg-orange-100 text-warning',
-    dismissCls:  'text-warning/70 hover:text-warning',
+    Icon:       AlertTriangle,
+    iconColor:  'text-warning',
+    accent:     'border-l-2 border-l-warning',
+    tagBg:      'bg-orange-50 text-warning',
+    dismissCls: 'text-gray-400 hover:text-warning',
   },
   info: {
-    icon:        Info,
-    iconColor:   'text-primary',
-    bg:          'bg-blue-50',
-    border:      'border-blue-200',
-    tagBg:       'bg-blue-100 text-primary',
-    dismissCls:  'text-primary/60 hover:text-primary',
+    Icon:       Info,
+    iconColor:  'text-primary',
+    accent:     'border-l-2 border-l-primary',
+    tagBg:      'bg-primary-50 text-primary',
+    dismissCls: 'text-gray-400 hover:text-primary',
   },
 }
 
-/* ── 主组件 ──────────────────────────────────────────────────── */
+/* ── 主组件 ───────────────────────────────────────────────────────── */
 
 export function SmartAlertCard({ defaultOpen = true }) {
-  const patient  = usePatientStore(s => s.context)
-  const [open,      setOpen]      = useState(defaultOpen)
-  const [dismissed, setDismissed] = useState(new Set())
+  const patient = usePatientStore(s => s.context)
+
+  const [open,            setOpen]            = useState(defaultOpen)
+  const [dismissed,       setDismissed]       = useState(new Set())
+  const [backendFindings, setBackendFindings] = useState([])
+  const [backendLoading,  setBackendLoading]  = useState(false)
+
+  const abortRef = useRef(null)
+
+  // 患者上下文变化时自动调后端审核
+  useEffect(() => {
+    if (!patient?.diagnosis_names?.length) {
+      setBackendFindings([])
+      return
+    }
+
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
+    setBackendLoading(true)
+
+    fetch(`${API_BASE}/audit/diagnosis-consistency`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        patient_id: patient.patient_id,
+        diagnoses:  patient.diagnosis_names      || [],
+        drug_names: patient.current_medications  || [],
+        exam_names: [],
+      }),
+      signal: controller.signal,
+    })
+      .then(r => r.json())
+      .then(json => {
+        const findings = (json.data?.warnings || []).map(w => ({
+          id:      w.rule_id,
+          level:   w.level,
+          tag:     CODE_TAG[w.code] || w.code,
+          title:   w.message,
+          content: w.suggestion,
+        }))
+        setBackendFindings(findings)
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') setBackendFindings([])
+      })
+      .finally(() => setBackendLoading(false))
+
+    return () => controller.abort()
+  }, [
+    patient?.patient_id,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    patient?.diagnosis_names?.join(','),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    patient?.current_medications?.join(','),
+  ])
 
   if (!patient) return null
 
-  const allFindings  = runRules(patient)
-  const findings     = allFindings.filter(f => !dismissed.has(f.id))
+  // 合并：客户端 + 后端（rule_id 去重），按严重度排序
+  const clientFindings = runClientRules(patient)
+  const clientIds      = new Set(clientFindings.map(f => f.id))
+  const allFindings    = [
+    ...clientFindings,
+    ...backendFindings.filter(f => !clientIds.has(f.id)),
+  ].sort((a, b) => {
+    const order = { error: 0, warning: 1, info: 2 }
+    return (order[a.level] ?? 9) - (order[b.level] ?? 9)
+  })
 
-  if (!allFindings.length) return null
+  const visibleFindings = allFindings.filter(f => !dismissed.has(f.id))
+
+  if (!allFindings.length && !backendLoading) return null
+
+  const errorCount   = visibleFindings.filter(f => f.level === 'error').length
+  const warningCount = visibleFindings.filter(f => f.level === 'warning').length
 
   const dismiss = (id) => setDismissed(prev => new Set([...prev, id]))
-
-  const errorCount   = findings.filter(f => f.level === 'error').length
-  const warningCount = findings.filter(f => f.level === 'warning').length
 
   return (
     <div className="border-b border-border bg-white">
@@ -218,10 +224,13 @@ export function SmartAlertCard({ defaultOpen = true }) {
         <div className="w-5 h-5 rounded bg-amber-400 flex items-center justify-center flex-shrink-0">
           <ClipboardCheck size={11} className="text-white" />
         </div>
-        <span className="text-xs font-semibold text-gray-800 flex-1">诊断合理性审核</span>
+        <span className="text-xs font-semibold text-gray-800 flex-1">智能预警</span>
 
-        {/* 未关闭数量 */}
-        {findings.length > 0 && (
+        {backendLoading && (
+          <Loader2 size={11} className="text-gray-300 animate-spin flex-shrink-0" />
+        )}
+
+        {!backendLoading && visibleFindings.length > 0 && (
           <div className="flex items-center gap-1">
             {errorCount > 0 && (
               <span className="text-2xs bg-red-100 text-danger px-1.5 py-0.5 rounded-full font-medium">
@@ -236,12 +245,12 @@ export function SmartAlertCard({ defaultOpen = true }) {
           </div>
         )}
 
-        {findings.length === 0 && allFindings.length > 0 && (
+        {!backendLoading && visibleFindings.length === 0 && allFindings.length > 0 && (
           <span className="text-2xs text-success">✓ 已全部确认</span>
         )}
 
         {open
-          ? <ChevronUp size={13} className="text-gray-400 flex-shrink-0" />
+          ? <ChevronUp   size={13} className="text-gray-400 flex-shrink-0" />
           : <ChevronDown size={13} className="text-gray-400 flex-shrink-0" />
         }
       </button>
@@ -249,62 +258,49 @@ export function SmartAlertCard({ defaultOpen = true }) {
       {/* ── 展开内容 ────────────────────────────────────────── */}
       {open && (
         <div className="px-3 pb-3 space-y-2">
-          {findings.length === 0 ? (
-            <p className="text-2xs text-success text-center py-2">
-              ✓ 无诊断合理性问题
-            </p>
-          ) : (
-            // error 优先，其次 warning，最后 info
-            [...findings]
-              .sort((a, b) => {
-                const order = { error: 0, warning: 1, info: 2 }
-                return order[a.level] - order[b.level]
-              })
-              .map(finding => {
-                const cfg  = LEVEL_CFG[finding.level]
-                const Icon = cfg.icon
-                return (
-                  <div
-                    key={finding.id}
-                    className={cn(
-                      'rounded border px-2.5 py-2 space-y-1',
-                      cfg.bg, cfg.border
-                    )}
-                  >
-                    {/* 标题行 */}
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                        <Icon size={12} className={cn(cfg.iconColor, 'flex-shrink-0')} />
-                        <span className={cn(
-                          'text-2xs font-medium px-1 py-0.5 rounded flex-shrink-0',
-                          cfg.tagBg
-                        )}>
-                          {finding.tag}
-                        </span>
-                        <span className="text-xs font-medium text-gray-800 truncate">
-                          {finding.title}
-                        </span>
-                      </div>
-                      {/* 知道了 */}
-                      <button
-                        onClick={() => dismiss(finding.id)}
-                        className={cn(
-                          'text-2xs flex-shrink-0 transition-colors whitespace-nowrap',
-                          cfg.dismissCls
-                        )}
-                      >
-                        知道了
-                      </button>
-                    </div>
 
-                    {/* 内容 */}
-                    <p className="text-2xs text-gray-600 leading-relaxed pl-4">
-                      {finding.content}
-                    </p>
-                  </div>
-                )
-              })
+          {backendLoading && !allFindings.length && (
+            <div className="flex items-center gap-2 py-3 text-gray-300">
+              <Loader2 size={13} className="animate-spin" />
+              <span className="text-2xs">正在审核诊断合理性…</span>
+            </div>
           )}
+
+          {!backendLoading && visibleFindings.length === 0 && (
+            <p className="text-2xs text-success text-center py-2">✓ 无预警信息</p>
+          )}
+
+          {visibleFindings.map(finding => {
+            const cfg  = LEVEL_CFG[finding.level]
+            const Icon = cfg.Icon
+            return (
+              <div
+                key={finding.id}
+                className={cn('rounded border border-border bg-white px-2.5 py-2 space-y-1', cfg.accent)}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                    <Icon size={12} className={cn(cfg.iconColor, 'flex-shrink-0')} />
+                    <span className={cn('text-2xs font-medium px-1 py-0.5 rounded flex-shrink-0', cfg.tagBg)}>
+                      {finding.tag}
+                    </span>
+                    <span className="text-xs font-medium text-gray-800 truncate">
+                      {finding.title}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => dismiss(finding.id)}
+                    className={cn('text-2xs flex-shrink-0 transition-colors whitespace-nowrap', cfg.dismissCls)}
+                  >
+                    知道了
+                  </button>
+                </div>
+                <p className="text-2xs text-gray-600 leading-relaxed pl-4">
+                  {finding.content}
+                </p>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

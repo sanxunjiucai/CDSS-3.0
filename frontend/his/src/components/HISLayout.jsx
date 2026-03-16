@@ -6,56 +6,64 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Input } from './ui/input'
-import { usePatientStore }    from '@/stores/patient'
-import { useRecording }       from '@/hooks/useRecording'
-import { useNLPExtraction }   from '@/hooks/useNLPExtraction'
-import { PatientBar }         from './PatientBar'
+import { usePatientStore }     from '@/stores/patient'
+import { usePatientInference } from '@/hooks/usePatientInference'
+import { PatientBar }          from './PatientBar'
 
 // 左侧图标导航项
 const NAV_ITEMS = [
-  { icon: LayoutGrid,    label: '主面板',   path: '/main' },
-  { icon: Stethoscope,   label: '辅助诊断', path: '/diagnosis' },
+  { icon: LayoutGrid,    label: '主页',     path: '/main'       },
+  { icon: Stethoscope,   label: '辅助诊断', path: '/diagnosis'  },
   { icon: FlaskConical,  label: '检验解读', path: '/lab-result' },
-  { icon: ClipboardList, label: '量表评估', path: '/assessment/1' },
+  { icon: ClipboardList, label: '量表评估', path: '/assessment' },  // 改为列表页
   { icon: BookOpen,      label: '临床指南', path: '/guidelines' },
-  { icon: Pill,          label: '药品查询', path: '/drugs' },
+  { icon: Pill,          label: '药品查询', path: '/drugs'      },
 ]
 
-// 知识类型选项
-const KNOWLEDGE_TYPES = ['知识查询', '疾病', '药品', '检验', '指南']
+// 知识类型选项 → 对应搜索 type 参数
+const KNOWLEDGE_TYPES = [
+  { label: '全部',   type: null        },
+  { label: '疾病',   type: 'disease'   },
+  { label: '药品',   type: 'drug'      },
+  { label: '检验',   type: 'exam'      },
+  { label: '指南',   type: 'guideline' },
+]
 
 export function HISLayout() {
   const navigate  = useNavigate()
   const location  = useLocation()
-  const [searchValue,  setSearchValue]  = useState('')
-  const [knowledgeType, setKnowledgeType] = useState('知识查询')
-  const [typeDropOpen, setTypeDropOpen] = useState(false)
+  const [searchValue,   setSearchValue]   = useState('')
+  const [selectedType,  setSelectedType]  = useState(KNOWLEDGE_TYPES[0])
+  const [typeDropOpen,  setTypeDropOpen]  = useState(false)
 
   const patient  = usePatientStore(s => s.context)
   const loadMock = usePatientStore(s => s.loadMockPatient)
 
-  // 录音 Hook：toggle/start/pause 操作，状态存于 useRecordingStore
-  const { toggle: toggleRecording } = useRecording()
+  // 患者数据加载后自动触发 GLM 推断，全局持续运行
+  usePatientInference()
 
-  // NLP 提取 Hook：全局持续运行，不随页面切换中断
-  useNLPExtraction()
-
+  // 搜索：导航到内联 SearchPanel
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchValue.trim()) {
-      window.open(`/pc/#/search?q=${encodeURIComponent(searchValue)}`, '_blank')
+      const params = new URLSearchParams({ q: searchValue.trim() })
+      if (selectedType.type) params.set('type', selectedType.type)
+      navigate(`/search?${params}`)
+      setSearchValue('')
     }
   }
 
-  const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/')
+  // active 匹配：/assessment 前缀匹配（列表页和详情页都高亮量表图标）
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path + '/')
 
   return (
     <div className="flex h-screen w-[380px] bg-bg overflow-hidden select-none">
 
-      {/* ── 左侧图标导航 40px ──────────────────────────── */}
+      {/* ── 左侧图标导航 40px ──────────────────────────────────── */}
       <nav className="w-10 bg-navy flex flex-col items-center py-2 flex-shrink-0 gap-0.5">
         {/* Logo */}
         <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center mb-3">
-          <span className="text-white text-xs font-bold">灵</span>
+          <span className="text-white text-xs font-bold">CD</span>
         </div>
 
         {NAV_ITEMS.map((item) => {
@@ -83,12 +91,13 @@ export function HISLayout() {
         })}
       </nav>
 
-      {/* ── 主内容区 340px ──────────────────────────────── */}
+      {/* ── 主内容区 340px ──────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0">
 
-        {/* 顶部：知识类型选择 + 搜索框 */}
+        {/* 顶部：类型选择 + 搜索框 */}
         <div className="flex-shrink-0 bg-white border-b border-border px-2 py-2">
           <div className="flex items-center gap-1.5">
+
             {/* 知识类型下拉 */}
             <div className="relative">
               <button
@@ -97,7 +106,7 @@ export function HISLayout() {
                            px-2 py-1.5 rounded border border-primary/30 bg-primary-50
                            hover:bg-primary-100 transition-colors whitespace-nowrap"
               >
-                {knowledgeType}
+                {selectedType.label}
                 <ChevronDown size={12} />
               </button>
               {typeDropOpen && (
@@ -105,14 +114,14 @@ export function HISLayout() {
                                 rounded shadow-lg z-50 min-w-[80px] py-1">
                   {KNOWLEDGE_TYPES.map(t => (
                     <div
-                      key={t}
-                      onClick={() => { setKnowledgeType(t); setTypeDropOpen(false) }}
+                      key={t.label}
+                      onClick={() => { setSelectedType(t); setTypeDropOpen(false) }}
                       className={cn(
                         'px-3 py-1.5 text-sm cursor-pointer hover:bg-primary-50',
-                        t === knowledgeType ? 'text-primary font-medium' : 'text-gray-700'
+                        t.label === selectedType.label ? 'text-primary font-medium' : 'text-gray-700'
                       )}
                     >
-                      {t}
+                      {t.label}
                     </div>
                   ))}
                 </div>
@@ -122,7 +131,7 @@ export function HISLayout() {
             {/* 搜索框 */}
             <Input
               className="flex-1"
-              placeholder="请输入您想要查询的知识内容"
+              placeholder="搜索疾病、药品、检验、指南…"
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
               onKeyDown={handleSearch}
@@ -130,9 +139,9 @@ export function HISLayout() {
           </div>
         </div>
 
-        {/* 患者信息条（含录音状态） */}
+        {/* 患者信息条 */}
         {patient
-          ? <PatientBar patient={patient} onRecordingToggle={toggleRecording} />
+          ? <PatientBar patient={patient} />
           : (
             <div className="flex-shrink-0 bg-gray-50 border-b border-border
                             px-3 py-1.5 flex items-center justify-between">

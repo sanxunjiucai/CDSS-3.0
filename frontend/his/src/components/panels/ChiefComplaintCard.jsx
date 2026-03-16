@@ -2,7 +2,7 @@
  * ChiefComplaintCard — 主诉确认区
  *
  * 设计原则：系统自动完成，医生只需确认
- *  - 主诉文本由 GLM 自动生成，每5秒随录音更新
+ *  - 主诉文本由 GLM 自动生成
  *  - 实体摘要（症状/诊断/危急）自动提取，只读展示
  *  - 追问问题至多2条，内联展示，答完自动刷新主诉
  *  - 唯一主动操作：确认主诉 → 回写至 HIS
@@ -12,12 +12,8 @@ import { useState, useEffect } from 'react'
 import { Loader2, CheckCircle2, Pencil, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useClinicalContextStore } from '@/stores/clinicalContext'
-import { useRecordingStore }        from '@/stores/recording'
 
 export function ChiefComplaintCard() {
-  const recordStatus = useRecordingStore(s => s.status)
-  const isRecording  = recordStatus === 'recording'
-
   const {
     isExtracting,
     entities,
@@ -90,22 +86,6 @@ export function ChiefComplaintCard() {
           )}
         </div>
 
-        {/* 录音状态指示 */}
-        <div className="flex items-center gap-1">
-          {isRecording ? (
-            <>
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-danger" />
-              </span>
-              <span className="text-2xs text-danger">录音中</span>
-            </>
-          ) : (
-            <span className="text-2xs text-gray-400">
-              {recordStatus === 'paused' ? '已暂停' : '等待录音'}
-            </span>
-          )}
-        </div>
       </div>
 
       <div className="px-3 pb-3 space-y-2.5">
@@ -174,12 +154,10 @@ export function ChiefComplaintCard() {
             {isExtracting ? (
               <div className="flex items-center justify-center gap-1.5 text-2xs text-primary">
                 <Loader2 size={11} className="animate-spin" />
-                正在分析录音内容…
+                正在分析…
               </div>
             ) : (
-              <p className="text-2xs text-gray-400">
-                {isRecording ? '录音中，5秒后自动生成主诉…' : '开启录音后自动生成主诉'}
-              </p>
+              <p className="text-2xs text-gray-400">暂无主诉信息</p>
             )}
           </div>
         )}

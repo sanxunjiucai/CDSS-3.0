@@ -1,7 +1,6 @@
 import { usePatientStore }         from '@/stores/patient'
 import { useClinicalContextStore }  from '@/stores/clinicalContext'
-import { useWorkflowStage, STAGE_META, STAGE_LAYOUT } from '@/hooks/useWorkflowStage'
-import { AlertStrip }              from './AlertStrip'
+import { useWorkflowStage, STAGE_LAYOUT } from '@/hooks/useWorkflowStage'
 import { SmartAlertCard }          from './SmartAlertCard'
 import { AuxDiagnosisCard }        from './AuxDiagnosisCard'
 import { ExamRecommendCard }       from './ExamRecommendCard'
@@ -10,10 +9,11 @@ import { LabResultCard }           from './LabResultCard'
 import { RiskAssessEntryCard }     from './RiskAssessEntryCard'
 import { GuidelineCard }           from './GuidelineCard'
 import { InterventionCard }        from './InterventionCard'
-import { ChiefComplaintCard }      from './ChiefComplaintCard'
+import { SmartAssistCard }         from './SmartAssistCard'
+import { TransferAssessCard }      from './TransferAssessCard'
 
 /**
- * 动态卡片注册表（不含 ChiefComplaintCard，它始终固定置顶）
+ * 动态卡片注册表（不含 SmartAssistCard，它始终固定置顶）
  */
 const CARD_REGISTRY = {
   alert:        (open) => <SmartAlertCard      key="alert"        defaultOpen={open} />,
@@ -21,13 +21,13 @@ const CARD_REGISTRY = {
   exam:         (open) => <ExamRecommendCard   key="exam"         defaultOpen={open} />,
   treatment:    (open) => <TreatmentCard       key="treatment"    defaultOpen={open} />,
   labresult:    (open) => <LabResultCard       key="labresult"    defaultOpen={open} />,
+  transfer:     (open) => <TransferAssessCard  key="transfer"     defaultOpen={open} />,
   risk:         (open) => <RiskAssessEntryCard key="risk"         defaultOpen={open} />,
   guideline:    (open) => <GuidelineCard       key="guideline"    defaultOpen={open} />,
   intervention: (open) => <InterventionCard    key="intervention" defaultOpen={open} />,
 }
 
 export function MainPanel() {
-  // useNLPExtraction 已移至 HISLayout，全局持续运行
   const patient  = usePatientStore(s => s.context)
   const entities = useClinicalContextStore(s => s.entities)
   const stage    = useWorkflowStage(patient, entities)
@@ -45,22 +45,11 @@ export function MainPanel() {
     )
   }
 
-  const layout    = STAGE_LAYOUT[stage] || STAGE_LAYOUT.initial
-  const stageMeta = STAGE_META[stage]
+  const layout = STAGE_LAYOUT[stage] || STAGE_LAYOUT.initial
 
   return (
     <div key={stage}>
-
-      {/* ① 始终置顶：危急预警条 */}
-      <AlertStrip />
-
-      {/* ② 始终置顶：主诉确认区（核心操作区） */}
-      <ChiefComplaintCard />
-
-      {/* ③ 阶段进度指示器 */}
-      <StageBar stage={stage} meta={stageMeta} />
-
-      {/* ④ 动态推荐卡片（随阶段自动排序） */}
+      <SmartAssistCard />
       <div className="space-y-0">
         {layout.order.map(cardId => {
           const render = CARD_REGISTRY[cardId]
@@ -68,48 +57,6 @@ export function MainPanel() {
           return render(layout.expanded.includes(cardId))
         })}
       </div>
-    </div>
-  )
-}
-
-/* ── 阶段进度条 ──────────────────────────────────────────────── */
-function StageBar({ stage, meta }) {
-  const steps = [
-    { id: 'initial',       label: '主诉' },
-    { id: 'has_labs',      label: '检验' },
-    { id: 'has_diagnosis', label: '治疗' },
-    { id: 'high_risk',     label: '危急' },
-  ]
-  const curIdx = steps.findIndex(s => s.id === stage)
-
-  return (
-    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-50 border-b border-border">
-      {steps.map((step, i) => {
-        const isPast    = i < curIdx
-        const isCurrent = i === curIdx
-        return (
-          <div key={step.id} className="flex items-center gap-1.5">
-            <div className={`flex items-center gap-1 ${isCurrent ? 'opacity-100' : 'opacity-40'}`}>
-              <span className={cn(
-                'w-1.5 h-1.5 rounded-full flex-shrink-0',
-                isCurrent ? 'bg-primary' : isPast ? 'bg-success' : 'bg-gray-300'
-              )} />
-              <span className={cn(
-                'text-2xs font-medium',
-                isCurrent ? 'text-primary' : isPast ? 'text-success' : 'text-gray-400'
-              )}>
-                {step.label}
-              </span>
-            </div>
-            {i < steps.length - 1 && (
-              <span className="text-gray-300 text-2xs">›</span>
-            )}
-          </div>
-        )
-      })}
-      <span className={`ml-auto text-2xs font-medium ${meta.color}`}>
-        {meta.label}
-      </span>
     </div>
   )
 }

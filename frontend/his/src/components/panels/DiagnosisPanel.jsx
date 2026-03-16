@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Search, Loader2, ExternalLink, AlertCircle, Mic } from 'lucide-react'
+import { Search, Loader2, ExternalLink, AlertCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { usePatientStore } from '@/stores/patient'
-import { useRecordingStore } from '@/stores/recording'
 import { cn } from '@/lib/utils'
 
 // Mock 辅助诊断结果（后续对接 /v1/diagnosis/suggest）
@@ -55,28 +54,16 @@ const COMMON_SYMPTOMS = [
 export function DiagnosisPanel() {
   const navigate = useNavigate()
   const patient = usePatientStore(s => s.context)
-  const { transcript, status: recStatus } = useRecordingStore()
-
   const [input, setInput] = useState(patient?.chief_complaint || '')
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
-  const [usedTranscript, setUsedTranscript] = useState(false)
-
-  // 录音转写文字变化时，提示用户同步到输入框
-  const canSyncTranscript = transcript && transcript !== input && !usedTranscript
-
-  const syncTranscript = () => {
-    setInput(transcript)
-    setUsedTranscript(true)
-  }
 
   // 患者切换时重置
   useEffect(() => {
     setInput(patient?.chief_complaint || '')
     setResults([])
     setSearched(false)
-    setUsedTranscript(false)
   }, [patient?.patient_id]) // eslint-disable-line
 
   const handleSearch = async () => {
@@ -106,29 +93,8 @@ export function DiagnosisPanel() {
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {/* 录音转写同步提示 */}
-        {canSyncTranscript && (
-          <div className="flex items-center gap-2 px-2.5 py-2 rounded border border-primary-200
-                          bg-primary-50">
-            <Mic size={12} className="text-primary flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-2xs text-gray-600 truncate">
-                <span className="font-medium text-primary">录音转写：</span>{transcript}
-              </p>
-            </div>
-            <button
-              onClick={syncTranscript}
-              className="text-2xs text-white bg-primary hover:bg-primary-600
-                         px-2 py-1 rounded flex-shrink-0 transition-colors"
-            >
-              填入
-            </button>
-          </div>
-        )}
-
-        {/* 症状输入 */}
+        {/* 搜索区 */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-gray-700">症状 / 主诉</label>
           <div className="flex gap-1.5">
             <Input
               value={input}
@@ -138,9 +104,15 @@ export function DiagnosisPanel() {
               icon={<Search size={13} />}
               className="flex-1"
             />
-            <Button onClick={handleSearch} size="sm" disabled={loading}>
-              {loading ? <Loader2 size={13} className="animate-spin" /> : '分析'}
-            </Button>
+            <button
+              onClick={handleSearch}
+              disabled={loading}
+              className="px-3 py-1.5 rounded border border-primary text-primary text-xs
+                         hover:bg-primary hover:text-white transition-colors flex-shrink-0
+                         disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+            >
+              {loading ? <Loader2 size={12} className="animate-spin" /> : '分析'}
+            </button>
           </div>
 
           {/* 常见症状快捷标签 */}
@@ -149,9 +121,8 @@ export function DiagnosisPanel() {
               <button
                 key={s}
                 onClick={() => addSymptom(s)}
-                className="text-2xs px-1.5 py-0.5 rounded-sm border border-border
-                           bg-gray-50 text-gray-600 hover:bg-primary-50 hover:border-primary
-                           hover:text-primary transition-colors"
+                className="text-2xs px-2 py-1 rounded border border-border bg-white
+                           text-gray-500 hover:border-primary hover:text-primary transition-colors"
               >
                 {s}
               </button>
@@ -206,9 +177,6 @@ export function DiagnosisPanel() {
           <div className="text-center py-6 text-gray-400">
             <Search size={28} className="mx-auto mb-2 opacity-30" />
             <p className="text-xs">输入症状后点击"分析"获取诊断建议</p>
-            {recStatus === 'recording' && (
-              <p className="text-2xs text-primary mt-1">录音中，可点击上方"填入"同步转写内容</p>
-            )}
           </div>
         )}
       </div>
@@ -263,7 +231,8 @@ function DiagnosisResultCard({ result, rank, onDetail }) {
       {/* 内容 */}
       <div className="px-2.5 py-2 space-y-1.5">
         {result.warning && (
-          <div className="flex items-start gap-1.5 bg-red-50 rounded px-2 py-1.5 border border-red-100">
+          <div className="flex items-start gap-1.5 border-l-2 border-l-danger bg-white
+                          rounded px-2 py-1.5 border border-border">
             <AlertCircle size={11} className="text-danger mt-0.5 flex-shrink-0" />
             <span className="text-2xs text-danger">{result.warning}</span>
           </div>
@@ -274,8 +243,7 @@ function DiagnosisResultCard({ result, rank, onDetail }) {
           {result.matched_symptoms.map(s => (
             <span
               key={s}
-              className="text-2xs bg-primary-50 text-primary border border-primary-200
-                         px-1 py-0.5 rounded-sm"
+              className="text-2xs bg-gray-100 text-gray-600 px-1 py-0.5 rounded-sm"
             >
               {s}
             </span>

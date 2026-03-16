@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from db.repositories.exam_repo import ExamRepository
@@ -13,7 +14,11 @@ class ExamService:
     def __init__(self, session: AsyncSession):
         self.repo = ExamRepository(session)
 
-    async def get_list(self, params: PaginationParams):
+    async def get_list(self, params: PaginationParams, type: Optional[str] = None, q: Optional[str] = None):
+        if q:
+            return await self.repo.search_by_keyword(q, params.offset, params.page_size, type)
+        elif type:
+            return await self.repo.get_by_type(type, params.offset, params.page_size)
         return await self.repo.get_list(params.offset, params.page_size)
 
     async def get_detail(self, exam_id: UUID) -> Exam:

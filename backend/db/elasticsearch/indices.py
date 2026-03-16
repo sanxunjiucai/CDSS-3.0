@@ -15,7 +15,15 @@ INDEX_MAPPINGS = {
                 "department": {"type": "keyword"},
                 "system":     {"type": "keyword"},
                 "overview":   {"type": "text", "analyzer": "ik_max_word"},
+                "definition": {"type": "text", "analyzer": "ik_max_word"},
+                "pathogenesis": {"type": "text", "analyzer": "ik_max_word"},
                 "symptoms":   {"type": "text", "analyzer": "ik_max_word"},
+                "diagnosis_criteria": {"type": "text", "analyzer": "ik_max_word"},
+                "differential_diagnosis": {"type": "text", "analyzer": "ik_max_word"},
+                "complications": {"type": "text", "analyzer": "ik_max_word"},
+                "treatment": {"type": "text", "analyzer": "ik_max_word"},
+                "prognosis": {"type": "text", "analyzer": "ik_max_word"},
+                "prevention": {"type": "text", "analyzer": "ik_max_word"},
                 "type":       {"type": "keyword"},  # "disease"
                 "updated_at": {"type": "date"},
             }
@@ -65,11 +73,14 @@ INDEX_MAPPINGS = {
 
 
 async def init_es_indices():
-    """初始化 Elasticsearch 索引（已存在则跳过）"""
-    for index_name, body in INDEX_MAPPINGS.items():
-        exists = await es.indices.exists(index=index_name)
-        if not exists:
-            await es.indices.create(index=index_name, body=body)
-            print(f"[ES] 创建索引: {index_name}")
-        else:
-            print(f"[ES] 索引已存在: {index_name}")
+    """初始化 Elasticsearch 索引（已存在则跳过，ES 不可用时降级警告）"""
+    try:
+        for index_name, body in INDEX_MAPPINGS.items():
+            exists = await es.indices.exists(index=index_name)
+            if not exists:
+                await es.indices.create(index=index_name, body=body)
+                print(f"[ES] 创建索引: {index_name}")
+            else:
+                print(f"[ES] 索引已存在: {index_name}")
+    except Exception as e:
+        print(f"[ES] 警告：Elasticsearch 不可用，跳过索引初始化 ({e})")

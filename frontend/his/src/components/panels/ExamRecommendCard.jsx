@@ -1,45 +1,50 @@
-import { FlaskConical, ChevronRight, FileText } from 'lucide-react'
-import { useState } from 'react'
+import { FlaskConical, FileText, PlusCircle, CheckCircle2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { CollapsibleCard } from '@/components/ui/collapsible-card'
 import { Badge } from '@/components/ui/badge'
 import { usePatientStore } from '@/stores/patient'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-
-// Mock 推荐检验数据（按诊断规则生成，后续接 /v1/treatment 接口）
-const EXAM_RECOMMENDATIONS = {
-  '急性ST段抬高型心肌梗死': [
-    { name: '心电图',         level: 'required', code: 'ECG' },
-    { name: '冠状动脉造影',   level: 'required', code: 'CAG' },
-    { name: 'hs-cTnT',        level: 'optional', code: 'HSTNT' },
-    { name: 'NT-proBNP',      level: 'optional', code: 'NTPROBNP' },
-    { name: '多普勒超声心动图', level: 'optional', code: 'ECHO' },
-  ],
-  '高血压': [
-    { name: '血压监测',   level: 'required', code: 'BP' },
-    { name: '肾功能',     level: 'optional', code: 'RENAL' },
-    { name: '电解质',     level: 'optional', code: 'ELEC' },
-  ],
-}
+import { get } from '@shared/api/request'
 
 export function ExamRecommendCard({ defaultOpen = true }) {
-  const patient = usePatientStore(s => s.context)
+  const patient  = usePatientStore(s => s.context)
   const navigate = useNavigate()
 
-  // 合并所有诊断的推荐检验
-  const allExams = (patient?.diagnosis_names || []).flatMap(
-    d => EXAM_RECOMMENDATIONS[d] || []
-  )
-  // 去重
-  const exams = [...new Map(allExams.map(e => [e.code, e])).values()]
+  const [exams, setExams]           = useState([])
+  const [loading, setLoading]       = useState(false)
+  const [checked, setChecked]       = useState(new Set())
+  const [batchAdded, setBatchAdded] = useState(false)
 
-  const [checked, setChecked] = useState(new Set())
+  useEffect(() => {
+    const diagNames = patient?.diagnosis_names || []
+    if (!diagNames.length) { setExams([]); return }
+
+    setLoading(true)
+    get('/exam-recommend', { params: { disease_names: diagNames.join(','), limit: 15 } })
+      .then(data => {
+        const items = data?.items || []
+        setExams(items)
+        setChecked(new Set(items.filter(e => e.level === 'required').map(e => e.code)))
+      })
+      .catch(() => setExams([]))
+      .finally(() => setLoading(false))
+  }, [patient?.diagnosis_names?.join(',')])
+
   const toggle = (code) => setChecked(prev => {
     const next = new Set(prev)
     next.has(code) ? next.delete(code) : next.add(code)
     return next
   })
 
+  const handleBatchAdd = () => {
+    const selected = exams.filter(e => checked.has(e.code))
+    console.log('[HIS WriteBack] exams batch', selected.map(e => e.name))
+    setBatchAdded(true)
+    setTimeout(() => setBatchAdded(false), 2000)
+  }
+
+  if (loading) return null
   if (!exams.length) return null
 
   const requiredCount = exams.filter(e => e.level === 'required').length
@@ -49,10 +54,10 @@ export function ExamRecommendCard({ defaultOpen = true }) {
       title="推荐检验检查"
       iconBg="bg-teal-500"
       icon={<FlaskConical size={11} className="text-white" />}
-      badge={`${requiredCount}必查`}
+      badge={`${requiredCount} 必查`}
       defaultOpen={defaultOpen}
     >
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {exams.map((exam) => (
           <ExamItem
             key={exam.code}
@@ -64,10 +69,21 @@ export function ExamRecommendCard({ defaultOpen = true }) {
         ))}
       </div>
 
+      {/* 批量添加 */}
       {checked.size > 0 && (
-        <button className="mt-2 w-full text-xs bg-primary text-white py-1.5 rounded
-                           hover:bg-primary-600 transition-colors">
-          开具选中项目（{checked.size}项）
+        <button
+          onClick={handleBatchAdd}
+          className={cn(
+            'mt-2 w-full text-xs py-1.5 rounded flex items-center justify-center gap-1.5 transition-all',
+            batchAdded
+              ? 'bg-green-50 text-success border border-green-200'
+              : 'bg-primary text-white hover:bg-primary/90'
+          )}
+        >
+          {batchAdded
+            ? <><CheckCircle2 size={12} /> 已添加至 HIS</>
+            : <><PlusCircle   size={12} /> 添加至 HIS（{checked.size} 项）</>
+          }
         </button>
       )}
     </CollapsibleCard>
@@ -75,13 +91,10 @@ export function ExamRecommendCard({ defaultOpen = true }) {
 }
 
 function ExamItem({ exam, checked, onToggle, onDetail }) {
-  const levelLabel = exam.level === 'required' ? '必查' : '酌情'
-  const levelVariant = exam.level === 'required' ? 'required' : 'optional'
-
   return (
     <div className={cn(
-      'flex items-center gap-2 py-1.5 px-1.5 rounded hover:bg-gray-50',
-      'transition-colors group cursor-pointer'
+      'flex items-center gap-2 py-1.5 px-1.5 rounded transition-colors group',
+      checked ? 'bg-primary-50/50' : 'hover:bg-gray-50'
     )}>
       {/* 复选框 */}
       <div
@@ -101,26 +114,26 @@ function ExamItem({ exam, checked, onToggle, onDetail }) {
 
       {/* 检验名称 */}
       <span
-        className="flex-1 text-sm text-gray-700 truncate"
+        className="flex-1 text-xs text-gray-800 truncate cursor-pointer"
         onClick={onDetail}
       >
         {exam.name}
       </span>
 
-      {/* 必查/酌情 */}
-      <Badge variant={levelVariant}>{levelLabel}</Badge>
+      {/* 必查 / 酌情 */}
+      <Badge variant={exam.level === 'required' ? 'required' : 'optional'}>
+        {exam.level === 'required' ? '必查' : '酌情'}
+      </Badge>
 
-      {/* 操作按钮 */}
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={onDetail}
-          className="text-gray-400 hover:text-primary"
-          title="查看说明"
-        >
-          <FileText size={11} />
-        </button>
-        <ChevronRight size={11} className="text-gray-300" />
-      </div>
+      {/* 查阅说明 */}
+      <button
+        onClick={onDetail}
+        title="查阅说明"
+        className="text-gray-300 hover:text-primary flex-shrink-0 transition-colors
+                   opacity-0 group-hover:opacity-100"
+      >
+        <FileText size={11} />
+      </button>
     </div>
   )
 }

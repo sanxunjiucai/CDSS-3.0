@@ -15,6 +15,7 @@ router = APIRouter()
 async def get_treatment(
     disease_id: UUID,
     patient_id: Optional[str] = Query(None, description="患者ID（提供则返回个性化建议）"),
+    severity: Optional[str] = Query(None, description="病情严重度（轻度/中度/重度/危重）"),
     session: AsyncSession = Depends(get_db),
 ):
     service = TreatmentService(session)
@@ -23,10 +24,5 @@ async def get_treatment(
         ctx_service = PatientContextService()
         patient_context = await ctx_service.get_context(patient_id)
 
-    result = await service.get_treatment(disease_id, patient_context)
-    return Response.ok({
-        "disease_id": result.disease_id,
-        "disease_name": result.disease_name,
-        "treatment_text": result.treatment_text,
-        "personalized_notes": result.personalized_notes,
-    })
+    result = await service.get_treatment(disease_id, patient_context, severity=severity)
+    return Response.ok(result)

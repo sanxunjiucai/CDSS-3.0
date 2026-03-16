@@ -85,7 +85,7 @@ function AssessEntry({ item, isRecommended, onClick }) {
     >
       {/* 指示点 */}
       <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
-        isRecommended ? 'bg-purple-400' : 'bg-gray-300'
+        isRecommended ? 'bg-primary' : 'bg-gray-300'
       }`} />
 
       {/* 量表信息 */}
@@ -93,8 +93,7 @@ function AssessEntry({ item, isRecommended, onClick }) {
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-medium text-gray-800">{item.name}</span>
           {isRecommended && (
-            <span className="text-2xs bg-purple-50 text-purple-600 border border-purple-200
-                             px-1 py-0.5 rounded-sm">推荐</span>
+            <span className="text-2xs text-primary px-1 py-0.5 rounded-sm">推荐</span>
           )}
         </div>
         <p className="text-2xs text-gray-400 truncate">{item.desc}</p>

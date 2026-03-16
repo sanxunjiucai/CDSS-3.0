@@ -1,0 +1,68 @@
+{
+  "done": [
+    "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/normal-laboratory-values"
+  ],
+  "failed": [
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/blood-tests-normal-values",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/blood-tests-normal-values",
+      "time": "2026-03-13T11:40:45.944470"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/urine-tests-normal-values",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/urine-tests-normal-values",
+      "time": "2026-03-13T11:41:01.763085"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/cerebrospinal-fluid-csf-normal-values",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/cerebrospinal-fluid-csf-normal-values",
+      "time": "2026-03-13T11:41:19.887735"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/liver-function-tests",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/liver-function-tests",
+      "time": "2026-03-13T11:41:34.658605"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/coagulation-tests",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/coagulation-tests",
+      "time": "2026-03-13T11:41:49.917858"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/endocrine-tests",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/endocrine-tests",
+      "time": "2026-03-13T11:42:05.843261"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/tumor-markers",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/tumor-markers",
+      "time": "2026-03-13T11:42:22.556513"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/cardiac-markers",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/cardiac-markers",
+      "time": "2026-03-13T11:42:38.486554"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/renal-function-tests",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/renal-function-tests",
+      "time": "2026-03-13T11:42:55.915254"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/urine-tests-normal-values",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/urine-tests-normal-values",
+      "time": "2026-03-13T11:44:56.251376"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/stool-tests-normal-values",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/stool-tests-normal-values",
+      "time": "2026-03-13T11:45:12.837431"
+    },
+    {
+      "key": "https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/commonly-used-panels",
+      "reason": "404 Client Error: Not Found for url: https://www.msdmanuals.cn/professional/resources/normal-laboratory-values/commonly-used-panels",
+      "time": "2026-03-13T11:45:29.649624"
+    }
+  ],
+  "started_at": "2026-03-13T11:40:28.832885"
+}

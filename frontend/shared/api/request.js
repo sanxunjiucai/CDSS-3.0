@@ -14,8 +14,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
+    // 401 处理：只清 token，不在这里做跳转（由各页面或 store 负责）
+    // 注意：登录请求本身的 401（密码错误）也会到这里，不能在这里清 token
+    // 只有已登录状态下的 401 才清 token
     if (err.response?.status === 401) {
-      localStorage.removeItem('cdss_token')
+      const url = err.config?.url || ''
+      const isLoginRequest = url.includes('/auth/login')
+      if (!isLoginRequest) {
+        localStorage.removeItem('cdss_token')
+      }
     }
     return Promise.reject(err)
   }

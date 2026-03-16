@@ -40,3 +40,41 @@ class DiseaseRepository(BaseRepository[Disease]):
             select(Disease).where(where).offset(offset).limit(limit)
         )
         return list(result.scalars().all()), total
+
+    async def search_by_keyword(
+        self,
+        keyword: str,
+        offset: int = 0,
+        limit: int = 20,
+        department: Optional[str] = None,
+        system: Optional[str] = None,
+    ) -> Tuple[List[Disease], int]:
+        pattern = f"%{keyword}%"
+        conditions = [
+            or_(
+                Disease.name.ilike(pattern),
+                Disease.icd_code.ilike(pattern),
+                Disease.overview.ilike(pattern),
+                Disease.definition.ilike(pattern),
+                Disease.pathogenesis.ilike(pattern),
+                Disease.diagnosis_criteria.ilike(pattern),
+                Disease.differential_diagnosis.ilike(pattern),
+                Disease.complications.ilike(pattern),
+                Disease.treatment.ilike(pattern),
+                Disease.prognosis.ilike(pattern),
+                Disease.prevention.ilike(pattern),
+            )
+        ]
+        if department:
+            conditions.append(Disease.department == department)
+        if system:
+            conditions.append(Disease.system == system)
+
+        from sqlalchemy import and_
+        where = and_(*conditions)
+        count_result = await self.session.execute(select(func.count()).select_from(Disease).where(where))
+        total = count_result.scalar()
+        result = await self.session.execute(
+            select(Disease).where(where).offset(offset).limit(limit)
+        )
+        return list(result.scalars().all()), total
