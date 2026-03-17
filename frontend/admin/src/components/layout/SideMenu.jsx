@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard, Activity, Pill, FlaskConical,
   BookOpen, Users, Upload, FolderTree,
-  Calculator, ClipboardList, Settings, Newspaper,
+  Calculator, ClipboardList, Settings, Newspaper, Cpu,
   ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -18,6 +18,7 @@ const NAV_GROUPS = [
       { to: '/literature',    icon: Newspaper,     label: '文献库管理' },
       { to: '/formulas',      icon: Calculator,    label: '公式库管理' },
       { to: '/assessments',   icon: ClipboardList, label: '量表管理' },
+      { to: '/audit-rules',   icon: Cpu,           label: '规则引擎管理' },
     ],
   },
   {
