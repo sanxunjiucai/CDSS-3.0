@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FolderTree, Plus, Pencil, Trash2, Tag, BookOpen, Info, Check } from 'lucide-react'
 import { PageHeader }    from '@/components/common/PageHeader'
 import { Modal }         from '@/components/common/Modal'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { FormField, TextInput } from '@/components/common/FormField'
+import { configApi } from '@/api'
 
 // ─── 默认科室分类数据 ──────────────────────────────────────────────────────────
 
@@ -31,7 +32,16 @@ const DEFAULT_DEPARTMENTS = [
   { id: 'd21', name: '综合',     color: 'gray',   scope: ['疾病', '药品', '检验', '指南', '文献'] },
 ]
 
-const STORAGE_KEY = 'cdss_departments'
+const DEFAULT_PC_NAV = [
+  { key: 'home', label: '工作台', path: '/', enabled: true },
+  { key: 'diseases', label: '疾病库', path: '/diseases', enabled: true },
+  { key: 'drugs', label: '药品库', path: '/drugs', enabled: true },
+  { key: 'exams', label: '检验检查', path: '/exams', enabled: true },
+  { key: 'guidelines', label: '临床指南', path: '/guidelines', enabled: true },
+  { key: 'treatments', label: '治疗方案', path: '/treatments', enabled: true },
+  { key: 'formulas', label: '医学公式', path: '/formulas', enabled: true },
+  { key: 'assessments', label: '评估量表', path: '/assessments', enabled: true },
+]
 const COLOR_OPTIONS = [
   { value: 'blue',   label: '蓝色' },
   { value: 'green',  label: '绿色' },
@@ -63,18 +73,6 @@ const COLOR_CLASS = {
 // ─── 知识库入口配置（只读总览）────────────────────────────────────────────────
 
 const KB_ENTRIES = [
-  { group: 'PC端知识库',
-    items: [
-      { label: '疾病知识库', path: '/diseases',    desc: '含ICD编码、症状、诊断、治疗方案' },
-      { label: '药品库',     path: '/drugs',       desc: '西药+中成药+中药饮片' },
-      { label: '检验检查库', path: '/exams',       desc: '实验室检查+影像检查' },
-      { label: '临床指南库', path: '/guidelines',  desc: '国内外权威临床指南' },
-      { label: '动态文献库', path: '/literature',  desc: 'PubMed系统评价/Meta分析' },
-      { label: '案例文献库', path: '/cases',       desc: 'PubMed病例报告文献' },
-      { label: '医学公式库', path: '/formulas',    desc: '88条临床常用医学公式' },
-      { label: '评估量表库', path: '/assessments', desc: '22条标准化评估量表' },
-    ],
-  },
   { group: 'HIS嵌入端功能',
     items: [
       { label: '快捷搜索',   path: 'HIS侧边栏', desc: '患者上下文快速知识检索' },
@@ -86,19 +84,6 @@ const KB_ENTRIES = [
   },
 ]
 
-// ─── 持久化 helpers ────────────────────────────────────────────────────────────
-
-function loadDepts() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw)
-  } catch { /* ignore */ }
-  return DEFAULT_DEPARTMENTS
-}
-function saveDepts(list) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-}
-
 // ─── 空表单 ───────────────────────────────────────────────────────────────────
 
 const EMPTY_FORM = { name: '', color: 'blue', scope: [...SCOPE_OPTIONS] }
@@ -107,13 +92,24 @@ const EMPTY_FORM = { name: '', color: 'blue', scope: [...SCOPE_OPTIONS] }
 
 export function CategoriesAdminPage() {
   const [tab, setTab]           = useState('departments')
-  const [depts, setDepts]       = useState(loadDepts)
+  const [depts, setDepts]       = useState(DEFAULT_DEPARTMENTS)
+  const [pcNav, setPcNav]       = useState(DEFAULT_PC_NAV)
   const [modal, setModal]       = useState(null)   // 'create' | 'edit'
   const [editRow, setEditRow]   = useState(null)
   const [form, setForm]         = useState(EMPTY_FORM)
   const [formErr, setFormErr]   = useState({})
   const [delTarget, setDelTarget] = useState(null)
   const [saved, setSaved]       = useState(false)
+  const [loading, setLoading]   = useState(true)
+
+  useEffect(() => {
+    configApi.bundle()
+      .then((data) => {
+        setDepts(Array.isArray(data?.departments) ? data.departments : DEFAULT_DEPARTMENTS)
+        setPcNav(Array.isArray(data?.pc_nav) ? data.pc_nav : DEFAULT_PC_NAV)
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   // 表单字段更新
   const setField = (k, v) => setForm(f => ({ ...f, [k]: v }))
@@ -144,7 +140,7 @@ export function CategoriesAdminPage() {
   }
 
   // 保存（新建/编辑）
-  const handleSave = () => {
+  const handleSave = async () => {
     const errs = validate()
     if (Object.keys(errs).length) { setFormErr(errs); return }
 
@@ -158,19 +154,23 @@ export function CategoriesAdminPage() {
         : d
       )
     }
-    saveDepts(next)
-    setDepts(next)
-    setModal(null)
-    flashSaved()
+    try {
+      await configApi.saveBundle({ departments: next })
+      setDepts(next)
+      setModal(null)
+      flashSaved()
+    } catch {}
   }
 
   // 删除
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const next = depts.filter(d => d.id !== delTarget.id)
-    saveDepts(next)
-    setDepts(next)
-    setDelTarget(null)
-    flashSaved()
+    try {
+      await configApi.saveBundle({ departments: next })
+      setDepts(next)
+      setDelTarget(null)
+      flashSaved()
+    } catch {}
   }
 
   // 短暂提示已保存
@@ -184,6 +184,21 @@ export function CategoriesAdminPage() {
     setField('scope', form.scope.includes(s)
       ? form.scope.filter(x => x !== s)
       : [...form.scope, s]
+    )
+  }
+
+  const pcEntries = pcNav.map((item) => ({
+    label: item.label,
+    path: item.path,
+    desc: item.label,
+    enabled: item.enabled !== false,
+  }))
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-40 text-gray-400 text-sm">
+        加载配置中...
+      </div>
     )
   }
 
@@ -300,7 +315,7 @@ export function CategoriesAdminPage() {
             </p>
           </div>
 
-          {KB_ENTRIES.map(group => (
+          {[{ group: 'PC端知识库', items: pcEntries }, ...KB_ENTRIES].map(group => (
             <div key={group.group} className="bg-white rounded-xl border border-border overflow-hidden">
               <div className="px-5 py-3 border-b border-border bg-gray-50 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-gray-900">{group.group}</h3>
@@ -324,9 +339,15 @@ export function CategoriesAdminPage() {
                       <td className="px-5 py-3 text-gray-400 font-mono text-xs">{item.path}</td>
                       <td className="px-5 py-3 text-gray-500 text-xs">{item.desc}</td>
                       <td className="px-5 py-3">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-green-50 text-success border border-green-100">
-                          <Check size={10} /> 已启用
-                        </span>
+                        {item.enabled === false ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-gray-50 text-gray-500 border border-gray-200">
+                            未启用
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-green-50 text-success border border-green-100">
+                            <Check size={10} /> 已启用
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}

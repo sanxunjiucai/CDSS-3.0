@@ -25,6 +25,8 @@ export const diseaseApi = {
   list: ({ department, system, page = 1, pageSize = 20, q } = {}) =>
     get('/diseases', { params: { department, system, page, page_size: pageSize, q } }),
 
+  departments: () => get('/diseases/departments'),
+
   detail: (id) => get(`/diseases/${id}`),
 }
 
@@ -88,4 +90,8 @@ export const assessmentApi = {
 export const treatmentApi = {
   get: (diseaseId, patientId) =>
     get(`/treatment/${diseaseId}`, { params: patientId ? { patient_id: patientId } : undefined }),
+}
+
+export const configApi = {
+  nav: () => get('/config/nav'),
 }

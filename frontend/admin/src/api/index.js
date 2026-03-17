@@ -57,6 +57,10 @@ export const literatureAdminApi = {
     get('/literature', { params: { page, page_size: pageSize, q } }),
   listCases: ({ page = 1, pageSize = 20, q } = {}) =>
     get('/cases', { params: { page, page_size: pageSize, q } }),
+  create: (data) => post('/admin/literature', data),
+  update: (id, data) => put(`/admin/literature/${id}`, data),
+  remove: (id) => del(`/admin/literature/${id}`),
+  detail: (pmid) => get(`/literature/${pmid}`),
 }
 
 // ── 公式库管理 ──────────────────────────────────────────────
@@ -79,6 +83,73 @@ export const assessmentApi = {
   remove: (id) => del(`/admin/assessments/${id}`),
 }
 
+const is404 = (e) => e?.response?.status === 404
+
+async function withAuditRuleFallbackChain(requests) {
+  let lastError
+  for (let i = 0; i < requests.length; i += 1) {
+    try {
+      return await requests[i]()
+    } catch (e) {
+      lastError = e
+      if (!is404(e) || i === requests.length - 1) throw e
+    }
+  }
+  throw lastError
+}
+
+export const auditRuleApi = {
+  list: ({ page = 1, pageSize = 20, q, scenario } = {}) =>
+    withAuditRuleFallbackChain([
+      () => get('/admin/audit-rules', { params: { page, page_size: pageSize, q, scenario } }),
+      () => get('/admin/audit-rule', { params: { page, page_size: pageSize, q, scenario } }),
+      () => get('/audit-rules', { params: { page, page_size: pageSize, q, scenario } }),
+      () => get('/audit-rule', { params: { page, page_size: pageSize, q, scenario } }),
+    ]),
+  detail: (id) => withAuditRuleFallbackChain([
+    () => get(`/admin/audit-rules/${id}`),
+    () => get(`/admin/audit-rule/${id}`),
+    () => get(`/audit-rules/${id}`),
+    () => get(`/audit-rule/${id}`),
+  ]),
+  create: (data) => withAuditRuleFallbackChain([
+    () => post('/admin/audit-rules', data),
+    () => post('/admin/audit-rule', data),
+    () => post('/audit-rules', data),
+    () => post('/audit-rule', data),
+  ]),
+  update: (id, data) => withAuditRuleFallbackChain([
+    () => put(`/admin/audit-rules/${id}`, data),
+    () => put(`/admin/audit-rule/${id}`, data),
+    () => put(`/audit-rules/${id}`, data),
+    () => put(`/audit-rule/${id}`, data),
+  ]),
+  remove: (id) => withAuditRuleFallbackChain([
+    () => del(`/admin/audit-rules/${id}`),
+    () => del(`/admin/audit-rule/${id}`),
+    () => del(`/audit-rules/${id}`),
+    () => del(`/audit-rule/${id}`),
+  ]),
+  publish: (id) => withAuditRuleFallbackChain([
+    () => post(`/admin/audit-rules/${id}/publish`),
+    () => post(`/admin/audit-rule/${id}/publish`),
+    () => post(`/audit-rules/${id}/publish`),
+    () => post(`/audit-rule/${id}/publish`),
+  ]),
+  toggleEnabled: (id, enabled) => withAuditRuleFallbackChain([
+    () => post(`/admin/audit-rules/${id}/toggle-enabled`, { enabled }),
+    () => post(`/admin/audit-rule/${id}/toggle-enabled`, { enabled }),
+    () => post(`/audit-rules/${id}/toggle-enabled`, { enabled }),
+    () => post(`/audit-rule/${id}/toggle-enabled`, { enabled }),
+  ]),
+  test: (data) => withAuditRuleFallbackChain([
+    () => post('/admin/audit-rules/test', data),
+    () => post('/admin/audit-rule/test', data),
+    () => post('/audit-rules/test', data),
+    () => post('/audit-rule/test', data),
+  ]),
+}
+
 // ── 用户管理 ────────────────────────────────────────────────
 export const userApi = {
   list: ({ page = 1, pageSize = 20, q } = {}) =>
@@ -90,15 +161,22 @@ export const userApi = {
   remove: (id) => del(`/admin/users/${id}`),
 }
 
+export const configApi = {
+  bundle: () => get('/admin/config/nav'),
+  saveBundle: (data) => put('/admin/config/nav', data),
+}
+
 // ── 批量导入 ────────────────────────────────────────────────
 export const importApi = {
-  upload: (type, file) => {
+  upload: (type, file, { asyncMode = true } = {}) => {
     const fd = new FormData()
     fd.append('file', file)
     fd.append('type', type)
+    fd.append('async_mode', String(asyncMode))
     return post('/admin/import', fd, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
+  taskStatus: (taskId) => get(`/admin/import/tasks/${taskId}`),
   history: () => get('/admin/import/history'),
 }

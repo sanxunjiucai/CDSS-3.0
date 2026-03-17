@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronLeft, Activity, Pill, FlaskConical } from 'lucide-react'
+import { ChevronLeft, Activity } from 'lucide-react'
 import { diseaseApi, drugApi, examApi } from '@/api'
 import { DetailSection, RichText } from '@/components/common/DetailSection'
 import { TagBadge } from '@/components/common/TagBadge'
@@ -55,6 +55,10 @@ export function DiseaseDetailPage() {
     )
   }
 
+  const overviewContent = disease.overview || disease.definition || disease.etiology || disease.symptoms || disease.treatment
+  const definitionContent = disease.definition || disease.overview
+  const diagnosisContent = disease.diagnosis_criteria || disease.differential_diagnosis
+
   return (
     <div>
       {/* 面包屑 */}
@@ -96,11 +100,11 @@ export function DiseaseDetailPage() {
       {/* 内容分节 */}
       <div className="space-y-3">
         <DetailSection title="概述" defaultOpen={true}>
-          <RichText content={disease.overview} />
+          <RichText content={overviewContent} />
         </DetailSection>
 
         <DetailSection title="定义">
-          <RichText content={disease.definition} />
+          <RichText content={definitionContent} />
         </DetailSection>
 
         <DetailSection title="病因与发病机制">
@@ -112,7 +116,7 @@ export function DiseaseDetailPage() {
         </DetailSection>
 
         <DetailSection title="诊断标准">
-          <RichText content={disease.diagnosis_criteria} />
+          <RichText content={diagnosisContent} />
         </DetailSection>
 
         <DetailSection title="鉴别诊断">
@@ -132,8 +136,19 @@ export function DiseaseDetailPage() {
         </DetailSection>
 
         <DetailSection title="预防与随访">
-          <RichText content={disease.prevention} />
+          <RichText content={[disease.prevention, disease.follow_up].filter(Boolean).join('\n\n')} />
         </DetailSection>
+
+        {(disease.source || disease.version_no) && (
+          <DetailSection title="来源信息" defaultOpen={false}>
+            <RichText
+              content={[
+                disease.source ? `数据来源：${disease.source}` : '',
+                disease.version_no ? `版本号：${disease.version_no}` : '',
+              ].filter(Boolean).join('\n')}
+            />
+          </DetailSection>
+        )}
 
         {/* 关联推荐 */}
         {relDrugs.length > 0 && (

@@ -9,6 +9,7 @@ import { GuidelinesAdminPage }     from './pages/GuidelinesAdminPage'
 import { FormulasAdminPage }       from './pages/FormulasAdminPage'
 import { AssessmentsAdminPage }    from './pages/AssessmentsAdminPage'
 import { LiteratureAdminPage }     from './pages/LiteratureAdminPage'
+import { AuditRulesAdminPage }     from './pages/AuditRulesAdminPage'
 import { UsersAdminPage }          from './pages/UsersAdminPage'
 import { ImportPage }              from './pages/ImportPage'
 import { CategoriesAdminPage }     from './pages/CategoriesAdminPage'
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="literature"    element={<LiteratureAdminPage />} />
         <Route path="formulas"      element={<FormulasAdminPage />} />
         <Route path="assessments"   element={<AssessmentsAdminPage />} />
+        <Route path="audit-rules"   element={<AuditRulesAdminPage />} />
         <Route path="categories"    element={<CategoriesAdminPage />} />
         <Route path="search-config" element={<SearchConfigPage />} />
         <Route path="import"        element={<ImportPage />} />

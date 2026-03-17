@@ -8,11 +8,11 @@ import { Pagination } from '@/components/common/Pagination'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
-const DEPARTMENTS = [
+const FALLBACK_DEPARTMENTS = [
   '内科', '外科', '妇产科', '儿科', '神经科',
   '心血管科', '呼吸科', '消化科', '内分泌科', '肿瘤科',
   '感染科', '肾内科', '风湿免疫科', '皮肤科', '眼科',
-  '耳鼻喉科', '口腔科', '骨科', '泌尿科', '急诊科',
+  '耳鼻喉科', '口腔科', '骨科', '泌尿科', '急诊科', '综合',
 ]
 
 export function DiseasesPage() {
@@ -26,6 +26,7 @@ export function DiseasesPage() {
   const [totalPages, setPages]    = useState(0)
   const [loading, setLoading]     = useState(false)
   const [inputQ, setInputQ]       = useState(q)
+  const [departments, setDepartments] = useState(FALLBACK_DEPARTMENTS)
 
   useEffect(() => {
     setLoading(true)
@@ -38,6 +39,17 @@ export function DiseasesPage() {
       .catch(() => setItems([]))
       .finally(() => setLoading(false))
   }, [dept, page, q])
+
+  useEffect(() => {
+    diseaseApi.departments()
+      .then((rows) => {
+        const fromApi = Array.isArray(rows)
+          ? rows.map(item => item?.name).filter(Boolean)
+          : []
+        if (fromApi.length) setDepartments(fromApi)
+      })
+      .catch(() => {})
+  }, [])
 
   const setDept = (d) => {
     const p = new URLSearchParams()
@@ -91,7 +103,7 @@ export function DiseasesPage() {
             >
               全部科室
             </button>
-            {DEPARTMENTS.map(d => (
+            {departments.map(d => (
               <button
                 key={d}
                 onClick={() => setDept(d)}

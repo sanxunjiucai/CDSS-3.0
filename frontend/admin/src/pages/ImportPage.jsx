@@ -8,6 +8,8 @@ const IMPORT_TYPES = [
   { value: 'drug',      label: '药品库',   accept: '.json,.csv', hint: 'JSON 格式：[{name, category, indications, dosage, ...}]' },
   { value: 'exam',      label: '检验库',   accept: '.json,.csv', hint: 'JSON 格式：[{name, type, specimen, reference_range, ...}]' },
   { value: 'guideline', label: '指南库',   accept: '.json',      hint: 'JSON 格式：[{title, organization, department, published_at, ...}]' },
+  { value: 'formula',   label: '公式库',   accept: '.json',      hint: 'JSON 格式：[{name, category, formula_expr, parameters, interpretation_rules, ...}]' },
+  { value: 'assessment',label: '量表库',   accept: '.json',      hint: 'JSON 格式：[{name, department, description, questions, scoring_rules, ...}]' },
   { value: 'literature', label: '动态文献', accept: '.json',      hint: 'JSON 格式：[{pmid, title, journal, publish_year, abstract, ...}]' },
   { value: 'case',       label: '案例文献', accept: '.json',      hint: 'JSON 格式：[{pmid, title, journal, publish_year, abstract, ...}]' },
 ]
@@ -28,6 +30,19 @@ export function ImportPage() {
   const fileRef = useRef(null)
 
   const currentType = IMPORT_TYPES.find(t => t.value === importType)
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+  const waitTaskDone = async (taskId) => {
+    for (let i = 0; i < 300; i += 1) {
+      const task = await importApi.taskStatus(taskId)
+      if (task?.state === 'SUCCESS') return task?.result || {}
+      if (task?.state === 'FAILURE') {
+        throw new Error(task?.error || '异步导入失败')
+      }
+      await sleep(1000)
+    }
+    throw new Error('导入任务超时，请稍后在历史任务中查看结果')
+  }
 
   const handleFileChange = (e) => {
     const f = e.target.files?.[0]
@@ -45,17 +60,22 @@ export function ImportPage() {
     setUploading(true)
     setResult(null)
     try {
-      const res = await importApi.upload(importType, file)
-      setResult({ status: 'success', ...res })
+      const submitRes = await importApi.upload(importType, file, { asyncMode: true })
+      const res = submitRes?.task_id
+        ? await waitTaskDone(submitRes.task_id)
+        : submitRes
+      const importedCount = res.imported ?? res.success ?? 0
+      const skippedCount = res.skipped ?? 0
+      setResult({ status: 'success', imported: importedCount, skipped: skippedCount })
       setHistory(h => [{
         id: Date.now(), type: importType, filename: file.name,
-        status: 'success', count: res.imported || 0,
+        status: 'success', count: importedCount,
         time: new Date().toLocaleString('zh-CN'),
       }, ...h.slice(0, 9)])
       setFile(null)
       if (fileRef.current) fileRef.current.value = ''
     } catch (e) {
-      const detail = e?.response?.data?.detail || '导入失败，请检查文件格式'
+      const detail = e?.response?.data?.detail || e?.message || '导入失败，请检查文件格式'
       setResult({ status: 'failed', message: detail })
       setHistory(h => [{
         id: Date.now(), type: importType, filename: file.name,

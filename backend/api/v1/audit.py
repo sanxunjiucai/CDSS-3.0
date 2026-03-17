@@ -1,7 +1,9 @@
 from typing import List, Optional
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.common import Response
+from db.database import get_db
 from services.audit_service import AuditService
 from services.patient_context_service import PatientContextService
 
@@ -54,8 +56,8 @@ def _serialize_warnings(warnings):
 # ── 接口 ───────────────────────────────────────────────────────────────────────
 
 @router.post("/audit/drug", summary="药物开单审核（过敏/禁忌检查）")
-async def audit_drug_order(body: DrugOrderRequest):
-    service = AuditService()
+async def audit_drug_order(body: DrugOrderRequest, session: AsyncSession = Depends(get_db)):
+    service = AuditService(session)
     patient_context = await _get_patient_context(body.patient_id)
     warnings = await service.check_drug_order(body.drug_name, body.drug_id, patient_context)
     return Response.ok({
@@ -65,8 +67,8 @@ async def audit_drug_order(body: DrugOrderRequest):
 
 
 @router.post("/audit/exam", summary="检验开单审核")
-async def audit_exam_order(body: ExamOrderRequest):
-    service = AuditService()
+async def audit_exam_order(body: ExamOrderRequest, session: AsyncSession = Depends(get_db)):
+    service = AuditService(session)
     patient_context = await _get_patient_context(body.patient_id)
     warnings = await service.check_exam_order(body.exam_name, patient_context)
     return Response.ok({
@@ -76,7 +78,10 @@ async def audit_exam_order(body: ExamOrderRequest):
 
 
 @router.post("/audit/diagnosis-consistency", summary="诊断合理性审核")
-async def audit_diagnosis_consistency(body: DiagnosisConsistencyRequest):
+async def audit_diagnosis_consistency(
+    body: DiagnosisConsistencyRequest,
+    session: AsyncSession = Depends(get_db),
+):
     """
     诊断与处置一致性校验。
 
@@ -85,7 +90,7 @@ async def audit_diagnosis_consistency(body: DiagnosisConsistencyRequest):
     - passed=false 时，warnings 中至少有一条 error/warning/info 级别的问题。
     - 前端应要求医生逐条确认 error 级问题后方可继续。
     """
-    service = AuditService()
+    service = AuditService(session)
     patient_context = await _get_patient_context(body.patient_id)
     warnings = await service.check_diagnosis_consistency(
         body.diagnoses,

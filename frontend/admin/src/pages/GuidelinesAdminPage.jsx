@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { BookOpen, Plus, Search, Pencil, Trash2 } from 'lucide-react'
+import { BookOpen, Plus, Search, Pencil, Trash2, Eye } from 'lucide-react'
 import { guidelineApi } from '@/api'
 import { useListPage }   from '@/hooks/useListPage'
 import { PageHeader }    from '@/components/common/PageHeader'
@@ -26,6 +26,9 @@ export function GuidelinesAdminPage() {
   const [delTarget, setDelTarget] = useState(null)
   const [deleting, setDeleting]   = useState(false)
 
+  const openView = async (row) => {
+    setEditRow(row); setModal('view')
+  }
   const openCreate = () => { setForm(EMPTY_FORM); setFormErr({}); setEditRow(null); setModal('create') }
   const openEdit   = (row) => {
     setForm({
@@ -72,9 +75,13 @@ export function GuidelinesAdminPage() {
     { key: 'published_at', title: '发布日期',  width: '110px',
       render: (v) => v ? v.slice(0, 10) : '—'
     },
-    { key: '_actions', title: '操作', width: '100px',
+    { key: '_actions', title: '操作', width: '120px',
       render: (_, row) => (
         <div className="flex items-center gap-1">
+          <button onClick={() => openView(row)}
+            className="p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+            <Eye size={14} />
+          </button>
           <button onClick={() => openEdit(row)}
             className="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-primary-50 transition-colors">
             <Pencil size={14} />
@@ -124,9 +131,11 @@ export function GuidelinesAdminPage() {
         description={`即将删除「${delTarget?.title}」，此操作不可恢复。`}
         onConfirm={handleDelete} onCancel={() => setDelTarget(null)} loading={deleting} />
 
-      <Modal open={!!modal} title={modal === 'create' ? '新增临床指南' : '编辑临床指南'}
+      <Modal open={!!modal} title={modal === 'create' ? '新增临床指南' : modal === 'view' ? '查看临床指南' : '编辑临床指南'}
         onClose={() => setModal(null)} width={600}
-        footer={
+        footer={modal === 'view' ? (
+          <button onClick={() => setModal(null)} className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">关闭</button>
+        ) : (
           <>
             <button onClick={() => setModal(null)}
               className="px-4 py-2 text-sm text-gray-600 border border-border rounded-lg hover:bg-gray-50 transition-colors">
@@ -138,8 +147,17 @@ export function GuidelinesAdminPage() {
               {saving ? '保存中...' : '保存'}
             </button>
           </>
-        }
+        )}
       >
+        {modal === 'view' ? (
+          <div className="space-y-3 text-sm">
+            <div><span className="text-gray-500">标题:</span> <span className="ml-2 font-medium">{editRow?.title}</span></div>
+            <div><span className="text-gray-500">发布机构:</span> <span className="ml-2">{editRow?.organization || '—'}</span></div>
+            <div><span className="text-gray-500">科室:</span> <span className="ml-2">{editRow?.department || '—'}</span></div>
+            <div><span className="text-gray-500">摘要:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.summary || '—'}</div></div>
+          </div>
+        ) : (
+        <>
         <FormField label="指南标题" required error={formErr.title}>
           <TextInput value={form.title} onChange={set('title')} placeholder="如：2型糖尿病基层诊疗指南（2022）" />
         </FormField>
@@ -160,6 +178,8 @@ export function GuidelinesAdminPage() {
         <FormField label="指南摘要">
           <TextArea value={form.summary} onChange={set('summary')} placeholder="指南核心要点..." rows={4} />
         </FormField>
+        </>
+        )}
       </Modal>
     </div>
   )

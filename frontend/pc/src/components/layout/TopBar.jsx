@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Search, User, LogOut, ChevronDown,
@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
+import { configApi } from '@/api'
 
 const NAV_ITEMS = [
   { icon: Home,          label: '工作台',   path: '/',            exact: true },
@@ -19,6 +20,17 @@ const NAV_ITEMS = [
   { icon: ClipboardList, label: '评估量表', path: '/assessments' },
 ]
 
+const ICON_MAP = {
+  home: Home,
+  activity: Activity,
+  pill: Pill,
+  flask: FlaskConical,
+  book: BookOpen,
+  stethoscope: Stethoscope,
+  calculator: Calculator,
+  clipboard: ClipboardList,
+}
+
 export function TopBar() {
   const navigate  = useNavigate()
   const location  = useLocation()
@@ -26,6 +38,23 @@ export function TopBar() {
 
   const [query, setQuery]       = useState('')
   const [userOpen, setUserOpen] = useState(false)
+  const [navItems, setNavItems] = useState(NAV_ITEMS)
+
+  useEffect(() => {
+    configApi.nav().then((data) => {
+      const remote = Array.isArray(data?.pc_nav) ? data.pc_nav : []
+      if (!remote.length) return
+      const normalized = remote
+        .filter(item => item?.enabled !== false && item?.path && item?.label)
+        .map((item) => ({
+          icon: ICON_MAP[item.icon] || BookOpen,
+          label: item.label,
+          path: item.path,
+          exact: !!item.exact,
+        }))
+      if (normalized.length) setNavItems(normalized)
+    }).catch(() => {})
+  }, [])
 
   const isActive = (item) => {
     if (item.exact) return location.pathname === '/'
@@ -59,7 +88,7 @@ export function TopBar() {
 
       {/* 导航页签 — 填满中间空间，允许横向滚动 */}
       <nav className="flex items-center flex-1 h-full overflow-x-auto scrollbar-none min-w-0">
-        {NAV_ITEMS.map(item => {
+        {navItems.map(item => {
           const Icon   = item.icon
           const active = isActive(item)
           return (

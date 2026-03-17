@@ -37,6 +37,9 @@ class DiseaseService:
             items, total = await self.repo.get_list(params.offset, params.page_size)
         return items, total
 
+    async def get_departments(self) -> List[dict]:
+        return await self.repo.list_departments()
+
     async def get_detail(self, disease_id: UUID) -> Disease:
         """获取疾病详情，含治疗方案列表（eager load）"""
         result = await self.session.execute(

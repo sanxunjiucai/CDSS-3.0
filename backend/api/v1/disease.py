@@ -36,6 +36,13 @@ async def list_diseases(
     ))
 
 
+@router.get("/diseases/departments", response_model=Response[List[dict]], summary="疾病库科室列表")
+async def list_disease_departments(session: AsyncSession = Depends(get_db)):
+    service = DiseaseService(session)
+    departments = await service.get_departments()
+    return Response.ok(departments)
+
+
 @router.get("/diseases/{disease_id}", response_model=Response[DiseaseDetail], summary="疾病详情（含治疗方案）")
 async def get_disease(disease_id: UUID, session: AsyncSession = Depends(get_db)):
     service = DiseaseService(session)

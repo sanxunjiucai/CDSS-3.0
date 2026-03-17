@@ -27,30 +27,55 @@ from tqdm import tqdm
 
 from base_scraper import BaseScraper, RAW_DIR, PROCESSED_DIR, CHECKPOINT_DIR, url_to_key
 
-# ── MSD 系统→科室 映射 ──────────────────────────────────────────────────────
+# ── MSD 路径→系统/科室 映射 ─────────────────────────────────────────────────
 SYSTEM_DEPT_MAP = {
-    "cardiovascular-disorders": ("心血管系统", "心内科"),
+    "cardiovascular-disorders": ("心血管系统", "心血管科"),
+    "cardiovascular-medicine": ("心血管系统", "心血管科"),
+    "cardiology": ("心血管系统", "心血管科"),
     "dermatologic-disorders": ("皮肤系统", "皮肤科"),
+    "dermatology": ("皮肤系统", "皮肤科"),
     "ear-nose-and-throat-disorders": ("耳鼻喉系统", "耳鼻喉科"),
+    "ear-nose-and-throat": ("耳鼻喉系统", "耳鼻喉科"),
+    "otolaryngology": ("耳鼻喉系统", "耳鼻喉科"),
     "endocrine-and-metabolic-disorders": ("内分泌系统", "内分泌科"),
+    "endocrine-and-metabolic-disorders-and-diseases": ("内分泌系统", "内分泌科"),
+    "endocrinology": ("内分泌系统", "内分泌科"),
     "eye-disorders": ("眼系统", "眼科"),
+    "ophthalmology": ("眼系统", "眼科"),
     "gastrointestinal-disorders": ("消化系统", "消化科"),
+    "gastrointestinal-disorders-and-diseases": ("消化系统", "消化科"),
+    "gastroenterology": ("消化系统", "消化科"),
     "genitourinary-disorders": ("泌尿生殖系统", "泌尿科"),
+    "genitourinary-disorders-and-diseases": ("泌尿生殖系统", "泌尿科"),
     "gynecology-and-obstetrics": ("生殖系统", "妇产科"),
+    "gynecology-and-obstetrics-disorders": ("生殖系统", "妇产科"),
     "hematology-and-oncology": ("血液肿瘤系统", "血液科"),
-    "hepatic-and-biliary-disorders": ("肝胆系统", "肝胆科"),
-    "immunology-allergic-disorders": ("免疫系统", "免疫科"),
+    "hematology-and-oncology-disorders": ("血液肿瘤系统", "血液科"),
+    "hepatic-and-biliary-disorders": ("肝胆系统", "消化科"),
+    "immunology-allergic-disorders": ("免疫系统", "风湿免疫科"),
     "infectious-diseases": ("感染系统", "感染科"),
     "injuries-poisoning": ("损伤中毒", "急诊科"),
     "musculoskeletal-and-connective-tissue-disorders": ("骨骼肌肉系统", "骨科"),
+    "musculoskeletal-and-connective-tissue-disorders-and-diseases": ("骨骼肌肉系统", "骨科"),
+    "orthopedics": ("骨骼肌肉系统", "骨科"),
     "neurologic-disorders": ("神经系统", "神经科"),
-    "nutritional-disorders": ("营养代谢", "营养科"),
+    "neurologic-disorders-and-diseases": ("神经系统", "神经科"),
+    "neurology": ("神经系统", "神经科"),
+    "nutritional-disorders": ("营养代谢", "内科"),
     "pediatrics": ("儿科", "儿科"),
+    "pediatrics-disorders": ("儿科", "儿科"),
     "psychiatric-disorders": ("精神系统", "精神科"),
+    "psychiatry": ("精神系统", "精神科"),
     "pulmonary-disorders": ("呼吸系统", "呼吸科"),
+    "pulmonary-disorders-and-diseases": ("呼吸系统", "呼吸科"),
+    "pulmonary-medicine": ("呼吸系统", "呼吸科"),
+    "critical-care-medicine": ("呼吸系统", "重症医学"),
     "renal-and-urologic-disorders": ("泌尿系统", "肾内科"),
+    "renal-and-urologic-disorders-and-diseases": ("泌尿系统", "肾内科"),
+    "nephrology": ("泌尿系统", "肾内科"),
     "reproductive-health": ("生殖健康", "妇产科"),
     "special-subjects": ("特殊专题", "综合"),
+    "clinical-pharmacology": ("药理", "综合"),
 }
 
 BASE_URL = "https://www.msdmanuals.cn"
@@ -216,6 +241,11 @@ class DiseaseScraper(BaseScraper):
         for slug, (system, dept) in SYSTEM_DEPT_MAP.items():
             if f"/{slug}/" in url:
                 return system, dept
+        m = re.search(r"/professional/([^/]+)/", url)
+        if m:
+            slug = m.group(1).strip().lower()
+            if slug in SYSTEM_DEPT_MAP:
+                return SYSTEM_DEPT_MAP[slug]
         return "综合", "综合"
 
     def _extract_icd(self, soup: BeautifulSoup) -> str:

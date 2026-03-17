@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Pill, Plus, Search, Pencil, Trash2 } from 'lucide-react'
+import { Pill, Plus, Search, Pencil, Trash2, Eye } from 'lucide-react'
 import { drugApi } from '@/api'
 import { useListPage }   from '@/hooks/useListPage'
 import { PageHeader }    from '@/components/common/PageHeader'
@@ -33,6 +33,9 @@ export function DrugsAdminPage() {
   const [delTarget, setDelTarget] = useState(null)
   const [deleting, setDeleting]   = useState(false)
 
+  const openView = async (row) => {
+    setEditRow(row); setModal('view')
+  }
   const openCreate = () => { setForm(EMPTY_FORM); setFormErr({}); setEditRow(null); setModal('create') }
   const openEdit   = (row) => {
     setForm({
@@ -87,9 +90,13 @@ export function DrugsAdminPage() {
     { key: 'dosage', title: '用法用量', width: '150px',
       render: (v) => <span className="text-sm line-clamp-1">{v || '—'}</span>
     },
-    { key: '_actions', title: '操作', width: '100px',
+    { key: '_actions', title: '操作', width: '120px',
       render: (_, row) => (
         <div className="flex items-center gap-1">
+          <button onClick={() => openView(row)}
+            className="p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+            <Eye size={14} />
+          </button>
           <button onClick={() => openEdit(row)}
             className="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-primary-50 transition-colors">
             <Pencil size={14} />
@@ -139,9 +146,11 @@ export function DrugsAdminPage() {
         description={`即将删除「${delTarget?.name}」，此操作不可恢复。`}
         onConfirm={handleDelete} onCancel={() => setDelTarget(null)} loading={deleting} />
 
-      <Modal open={!!modal} title={modal === 'create' ? '新增药品' : '编辑药品'}
+      <Modal open={!!modal} title={modal === 'create' ? '新增药品' : modal === 'view' ? '查看药品' : '编辑药品'}
         onClose={() => setModal(null)} width={640}
-        footer={
+        footer={modal === 'view' ? (
+          <button onClick={() => setModal(null)} className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">关闭</button>
+        ) : (
           <>
             <button onClick={() => setModal(null)}
               className="px-4 py-2 text-sm text-gray-600 border border-border rounded-lg hover:bg-gray-50 transition-colors">
@@ -153,8 +162,19 @@ export function DrugsAdminPage() {
               {saving ? '保存中...' : '保存'}
             </button>
           </>
-        }
+        )}
       >
+        {modal === 'view' ? (
+          <div className="space-y-3 text-sm">
+            <div><span className="text-gray-500">药品名称:</span> <span className="ml-2 font-medium">{editRow?.name}</span></div>
+            <div><span className="text-gray-500">通用名:</span> <span className="ml-2">{editRow?.generic_name || '—'}</span></div>
+            <div><span className="text-gray-500">分类:</span> <span className="ml-2">{editRow?.category || '—'}</span></div>
+            <div><span className="text-gray-500">适应症:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.indications || '—'}</div></div>
+            <div><span className="text-gray-500">用法用量:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.dosage || '—'}</div></div>
+            <div><span className="text-gray-500">禁忌症:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.contraindications || '—'}</div></div>
+          </div>
+        ) : (
+        <>
         <div className="grid grid-cols-2 gap-x-4">
           <FormField label="药品名称" required error={formErr.name}>
             <TextInput value={form.name} onChange={set('name')} placeholder="如：二甲双胍" />
@@ -185,6 +205,8 @@ export function DrugsAdminPage() {
         <FormField label="不良反应">
           <TextArea value={form.adverse_effects} onChange={set('adverse_effects')} placeholder="常见不良反应..." rows={2} />
         </FormField>
+        </>
+        )}
       </Modal>
     </div>
   )

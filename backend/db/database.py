@@ -25,7 +25,7 @@ class Base(DeclarativeBase):
 async def init_db():
     """创建所有表（开发用，生产用 Alembic）"""
     async with engine.begin() as conn:
-        from db.models import disease, drug, exam, guideline, assessment, formula, user, audit_log  # noqa
+        from db.models import disease, drug, exam, guideline, assessment, formula, user, audit_log, system_config, audit_rule  # noqa
         await conn.run_sync(Base.metadata.create_all)
         statements = [
             # diseases 旧字段补丁

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Settings, Save, RefreshCw, CheckCircle } from 'lucide-react'
-import { get, put } from '@shared/api/request'
+import { configApi } from '@/api'
 import { PageHeader } from '@/components/common/PageHeader'
 
 const DEFAULT_WEIGHTS = {
@@ -20,10 +20,9 @@ export function SearchConfigPage() {
 
   useEffect(() => {
     setLoading(true)
-    get('/config/nav')
-      .then(() => {
-        // 后端目前只有导航配置，检索权重配置本地维护
-        setConfig(DEFAULT_WEIGHTS)
+    configApi.bundle()
+      .then((data) => {
+        setConfig(data?.search_weights || DEFAULT_WEIGHTS)
       })
       .catch(() => setConfig(DEFAULT_WEIGHTS))
       .finally(() => setLoading(false))
@@ -43,14 +42,10 @@ export function SearchConfigPage() {
   const handleSave = async () => {
     setSaving(true)
     try {
-      // 将配置更新到后端（目前后端 /config/nav 接受任意 dict）
-      await put('/config/nav', { search_weights: config })
+      await configApi.saveBundle({ search_weights: config })
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     } catch {
-      // 后端暂时 mock，忽略错误
-      setSaved(true)
-      setTimeout(() => setSaved(false), 3000)
     } finally {
       setSaving(false)
     }

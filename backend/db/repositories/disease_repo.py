@@ -36,10 +36,28 @@ class DiseaseRepository(BaseRepository[Disease]):
         where = Disease.department == department
         count_result = await self.session.execute(select(func.count()).select_from(Disease).where(where))
         total = count_result.scalar()
+        if not total:
+            where = Disease.department.ilike(f"%{department}%")
+            count_result = await self.session.execute(select(func.count()).select_from(Disease).where(where))
+            total = count_result.scalar()
         result = await self.session.execute(
             select(Disease).where(where).offset(offset).limit(limit)
         )
         return list(result.scalars().all()), total
+
+    async def list_departments(self) -> List[dict]:
+        result = await self.session.execute(
+            select(Disease.department, func.count(Disease.id))
+            .where(Disease.department.is_not(None), Disease.department != "")
+            .group_by(Disease.department)
+            .order_by(func.count(Disease.id).desc(), Disease.department.asc())
+        )
+        rows = result.all()
+        return [
+            {"name": department, "count": int(count)}
+            for department, count in rows
+            if department
+        ]
 
     async def search_by_keyword(
         self,

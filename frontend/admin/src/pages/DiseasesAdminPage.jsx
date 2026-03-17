@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Activity, Plus, Search, Pencil, Trash2 } from 'lucide-react'
+import { Activity, Plus, Search, Pencil, Trash2, Eye } from 'lucide-react'
 import { diseaseApi } from '@/api'
 import { useListPage } from '@/hooks/useListPage'
 import { PageHeader }    from '@/components/common/PageHeader'
@@ -66,7 +66,7 @@ export function DiseasesAdminPage() {
   const { items, total, totalPages, page, inputQ, loading,
           setInputQ, handleSearch, handlePageChange, reload } = useListPage(fetchFn)
 
-  const [modal, setModal]     = useState(null)   // null | 'create' | 'edit'
+  const [modal, setModal]     = useState(null)   // null | 'create' | 'edit' | 'view'
   const [activeTab, setActiveTab] = useState('basic')
   const [editRow, setEditRow] = useState(null)
   const [form, setForm]       = useState(EMPTY_FORM)
@@ -75,6 +75,11 @@ export function DiseasesAdminPage() {
 
   const [delTarget, setDelTarget] = useState(null)
   const [deleting, setDeleting]   = useState(false)
+
+  const openView = async (row) => {
+    setEditRow(row)
+    setModal('view')
+  }
 
   const openCreate = () => {
     setForm(EMPTY_FORM)
@@ -177,9 +182,13 @@ export function DiseasesAdminPage() {
     { key: 'is_published', title: '状态', width: '70px',
       render: (v) => <StatusBadge status={v !== false ? 'active' : 'inactive'} />
     },
-    { key: '_actions', title: '操作', width: '100px',
+    { key: '_actions', title: '操作', width: '120px',
       render: (_, row) => (
         <div className="flex items-center gap-1">
+          <button onClick={() => openView(row)}
+            className="p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title="查看">
+            <Eye size={14} />
+          </button>
           <button
             onClick={() => openEdit(row)}
             className="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-primary-50 transition-colors"
@@ -348,13 +357,16 @@ export function DiseasesAdminPage() {
         loading={deleting}
       />
 
-      {/* 新增/编辑弹窗 */}
+      {/* 新增/编辑/查看弹窗 */}
       <Modal
         open={!!modal}
-        title={modal === 'create' ? '新增疾病' : `编辑疾病 — ${editRow?.name || ''}`}
+        title={modal === 'create' ? '新增疾病' : modal === 'view' ? `查看疾病 — ${editRow?.name || ''}` : `编辑疾病 — ${editRow?.name || ''}`}
         onClose={() => setModal(null)}
         width={720}
-        footer={
+        bodyMinHeight={modal === 'view' ? undefined : 460}
+        footer={modal === 'view' ? (
+          <button onClick={() => setModal(null)} className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">关闭</button>
+        ) : (
           <>
             <button
               onClick={() => setModal(null)}
@@ -373,8 +385,23 @@ export function DiseasesAdminPage() {
               {saving ? '保存中...' : '保存'}
             </button>
           </>
-        }
+        )}
       >
+        {modal === 'view' ? (
+          <div className="space-y-3 text-sm max-h-[60vh] overflow-y-auto">
+            <div><span className="text-gray-500">疾病名称:</span> <span className="ml-2 font-medium">{editRow?.name}</span></div>
+            <div><span className="text-gray-500">ICD编码:</span> <span className="ml-2">{editRow?.icd_code || '—'}</span></div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><span className="text-gray-500">科室:</span> <span className="ml-2">{editRow?.department || '—'}</span></div>
+              <div><span className="text-gray-500">系统:</span> <span className="ml-2">{editRow?.system || '—'}</span></div>
+            </div>
+            <div><span className="text-gray-500">概述:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.overview || '—'}</div></div>
+            <div><span className="text-gray-500">症状:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.symptoms || '—'}</div></div>
+            <div><span className="text-gray-500">诊断标准:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.diagnosis_criteria || '—'}</div></div>
+            <div><span className="text-gray-500">治疗方案:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.treatment || '—'}</div></div>
+          </div>
+        ) : (
+          <>
         {/* 分节 Tab */}
         <div className="flex border-b border-border mb-5 -mt-1">
           {SECTIONS.map(s => (
@@ -393,6 +420,8 @@ export function DiseasesAdminPage() {
 
         {/* Tab 内容 */}
         {tabContent[activeTab]?.()}
+          </>
+        )}
       </Modal>
     </div>
   )

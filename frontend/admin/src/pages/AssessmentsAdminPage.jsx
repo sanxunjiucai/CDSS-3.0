@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { ClipboardList, Plus, Search, Pencil, Trash2, AlertCircle } from 'lucide-react'
+import { ClipboardList, Plus, Search, Pencil, Trash2, AlertCircle, Eye } from 'lucide-react'
 import { assessmentApi } from '@/api'
 import { useListPage }   from '@/hooks/useListPage'
 import { PageHeader }    from '@/components/common/PageHeader'
@@ -57,6 +57,9 @@ export function AssessmentsAdminPage() {
   const [delTarget, setDelTarget] = useState(null)
   const [deleting, setDeleting]   = useState(false)
 
+  const openView = async (row) => {
+    setEditRow(row); setModal('view')
+  }
   const openCreate = () => {
     setForm(EMPTY_FORM)
     setFormErr({})
@@ -148,6 +151,10 @@ export function AssessmentsAdminPage() {
     )},
     { key: 'actions', title: '操作', render: (_, row) => (
       <div className="flex items-center gap-2">
+        <button onClick={() => openView(row)}
+          className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors">
+          <Eye size={14} />
+        </button>
         <button onClick={() => openEdit(row)}
           className="p-1.5 text-gray-400 hover:text-primary hover:bg-primary-50 rounded transition-colors">
           <Pencil size={14} />
@@ -195,10 +202,13 @@ export function AssessmentsAdminPage() {
       {/* 新增/编辑弹窗 */}
       {modal && (
         <Modal
-          title={modal === 'create' ? '新增量表' : '编辑量表'}
+          open={!!modal}
+          title={modal === 'create' ? '新增量表' : modal === 'view' ? '查看量表' : '编辑量表'}
           onClose={() => setModal(null)}
           width="max-w-3xl"
-          footer={
+          footer={modal === 'view' ? (
+            <button onClick={() => setModal(null)} className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">关闭</button>
+          ) : (
             <div className="flex justify-end gap-2">
               <button onClick={() => setModal(null)}
                 className="px-4 py-2 text-sm border border-border rounded-md hover:bg-gray-50">
@@ -210,8 +220,17 @@ export function AssessmentsAdminPage() {
                 {saving ? '保存中...' : '保存'}
               </button>
             </div>
-          }
+          )}
         >
+          {modal === 'view' ? (
+            <div className="space-y-3 text-sm">
+              <div><span className="text-gray-500">量表名称:</span> <span className="ml-2 font-medium">{editRow?.name}</span></div>
+              <div><span className="text-gray-500">分类:</span> <span className="ml-2">{editRow?.category || '—'}</span></div>
+              <div><span className="text-gray-500">描述:</span> <div className="mt-1 text-gray-700">{editRow?.description || '—'}</div></div>
+              <div><span className="text-gray-500">评分方法:</span> <div className="mt-1 text-gray-700">{editRow?.scoring_method || '—'}</div></div>
+            </div>
+          ) : (
+          <>
           {formErr._api && (
             <div className="flex items-center gap-2 mb-3 p-2.5 bg-red-50 border border-red-200 rounded text-sm text-danger">
               <AlertCircle size={14} />
@@ -255,6 +274,8 @@ export function AssessmentsAdminPage() {
               />
             </FormField>
           </div>
+          </>
+          )}
         </Modal>
       )}
 

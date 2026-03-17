@@ -70,18 +70,18 @@ export const STAGE_META = {
 export const STAGE_LAYOUT = {
   initial: {
     order:    ['alert', 'diagnosis', 'risk', 'exam', 'treatment', 'labresult', 'transfer', 'guideline', 'intervention'],
-    expanded: ['alert', 'diagnosis'],
+    expanded: [],
   },
   has_labs: {
     order:    ['alert', 'labresult', 'diagnosis', 'risk', 'transfer', 'treatment', 'exam', 'guideline', 'intervention'],
-    expanded: ['alert', 'labresult'],
+    expanded: [],
   },
   has_diagnosis: {
     order:    ['alert', 'treatment', 'risk', 'transfer', 'guideline', 'labresult', 'exam', 'intervention'],
-    expanded: ['alert', 'treatment', 'risk'],
+    expanded: [],
   },
   high_risk: {
     order:    ['alert', 'transfer', 'risk', 'labresult', 'treatment', 'diagnosis', 'guideline', 'exam', 'intervention'],
-    expanded: ['alert', 'transfer', 'risk'],
+    expanded: [],
   },
 }

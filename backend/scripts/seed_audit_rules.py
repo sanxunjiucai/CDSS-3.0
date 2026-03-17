@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from db.database import async_session_maker
+from db.database import AsyncSessionLocal
 from db.models.audit_rule import AuditRule
 
 
@@ -119,7 +119,7 @@ SEED_RULES = [
 
 
 async def seed_audit_rules():
-    async with async_session_maker() as session:
+    async with AsyncSessionLocal() as session:
         try:
             for rule_data in SEED_RULES:
                 rule = AuditRule(**rule_data)

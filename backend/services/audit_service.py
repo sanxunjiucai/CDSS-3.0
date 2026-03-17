@@ -2,8 +2,10 @@
 诊断合理性审核 + 实时预警服务
 MVP阶段：基于规则引擎（药物禁忌、适应症不符、必要检查缺口等）
 """
-from typing import List, Optional, Callable
+from typing import List, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.patient import PatientContext
+from services.audit_rule_service import AuditRuleService
 
 
 class AuditWarning:
@@ -249,6 +251,157 @@ _CONSISTENCY_RULES = [
 
 
 class AuditService:
+    def __init__(self, session: Optional[AsyncSession] = None):
+        self.session = session
+
+    def _get_field_values(
+        self,
+        field: str,
+        diagnoses: List[str],
+        drug_names: List[str],
+        exam_names: List[str],
+        patient_context: Optional[PatientContext],
+    ):
+        if field == "diagnoses":
+            return diagnoses
+        if field == "drug_names":
+            return drug_names
+        if field == "exam_names":
+            return exam_names
+        if field == "patient_allergies":
+            return (patient_context.allergies if patient_context else []) or []
+        if field == "lab_item_names":
+            return [i.item_name or "" for i in ((patient_context.lab_results if patient_context else []) or [])]
+        if field == "lab_item_codes":
+            return [i.item_code or "" for i in ((patient_context.lab_results if patient_context else []) or [])]
+        if field == "patient_gender":
+            return (patient_context.gender.value if patient_context and patient_context.gender else "")
+        if field == "patient_age":
+            return patient_context.age if patient_context else None
+        return []
+
+    def _match_keyword_list(self, source_values, keywords, mode: str) -> bool:
+        source = [str(v).lower() for v in (source_values or []) if v is not None]
+        targets = [str(v).lower() for v in (keywords or []) if v is not None]
+        if mode == "contains_all":
+            return all(any(t in s for s in source) for t in targets)
+        if mode == "not_contains_any":
+            return not any(any(t in s for s in source) for t in targets)
+        return any(any(t in s for s in source) for t in targets)
+
+    def _match_condition_item(
+        self,
+        item: dict,
+        diagnoses: List[str],
+        drug_names: List[str],
+        exam_names: List[str],
+        patient_context: Optional[PatientContext],
+    ) -> bool:
+        if not isinstance(item, dict):
+            return False
+        op = str(item.get("op") or "").strip().lower()
+        field = str(item.get("field") or "").strip()
+
+        if op in {"contains_any", "contains_all", "not_contains_any"}:
+            values = self._get_field_values(field, diagnoses, drug_names, exam_names, patient_context)
+            return self._match_keyword_list(values, item.get("values") or [], op)
+
+        if op == "equals":
+            value = self._get_field_values(field, diagnoses, drug_names, exam_names, patient_context)
+            if isinstance(value, list):
+                return str(item.get("value")) in [str(v) for v in value]
+            return str(value) == str(item.get("value"))
+
+        if op == "in":
+            value = self._get_field_values(field, diagnoses, drug_names, exam_names, patient_context)
+            candidates = [str(v) for v in (item.get("values") or [])]
+            if isinstance(value, list):
+                return any(str(v) in candidates for v in value)
+            return str(value) in candidates
+
+        if op in {"lab_ratio_ge", "lab_value_ge", "lab_value_le", "lab_is_abnormal"}:
+            if not patient_context:
+                return False
+            item_code = str(item.get("item_code") or "").upper()
+            lab = next((i for i in (patient_context.lab_results or []) if (i.item_code or "").upper() == item_code), None)
+            if not lab:
+                return False
+            if op == "lab_is_abnormal":
+                return bool(lab.is_abnormal) == bool(item.get("value", True))
+            threshold = float(item.get("value", 0))
+            if op == "lab_ratio_ge":
+                if not lab.reference_high or lab.reference_high <= 0:
+                    return False
+                return (lab.value / lab.reference_high) >= threshold
+            if op == "lab_value_ge":
+                return float(lab.value) >= threshold
+            if op == "lab_value_le":
+                return float(lab.value) <= threshold
+        return False
+
+    def _evaluate_runtime_condition(
+        self,
+        condition: dict,
+        diagnoses: List[str],
+        drug_names: List[str],
+        exam_names: List[str],
+        patient_context: Optional[PatientContext],
+    ) -> bool:
+        if not isinstance(condition, dict):
+            return False
+        all_items = condition.get("all") or []
+        any_items = condition.get("any") or []
+        not_items = condition.get("not") or []
+
+        all_passed = all(
+            self._match_condition_item(i, diagnoses, drug_names, exam_names, patient_context)
+            for i in all_items
+        ) if all_items else True
+        any_passed = any(
+            self._match_condition_item(i, diagnoses, drug_names, exam_names, patient_context)
+            for i in any_items
+        ) if any_items else True
+        not_passed = all(
+            not self._match_condition_item(i, diagnoses, drug_names, exam_names, patient_context)
+            for i in not_items
+        ) if not_items else True
+        return all_passed and any_passed and not_passed
+
+    async def _run_runtime_rules(
+        self,
+        diagnoses: List[str],
+        drug_names: List[str],
+        exam_names: List[str],
+        patient_context: Optional[PatientContext],
+    ):
+        if not self.session:
+            return False, []
+        service = AuditRuleService(self.session)
+        runtime_rules = await service.get_runtime_rules("diagnosis_consistency")
+        if not runtime_rules:
+            return False, []
+
+        warnings = []
+        for rule in runtime_rules:
+            try:
+                matched = self._evaluate_runtime_condition(
+                    rule.condition or {},
+                    diagnoses,
+                    drug_names,
+                    exam_names,
+                    patient_context,
+                )
+            except Exception:
+                matched = False
+            if matched:
+                warnings.append(AuditWarning(
+                    rule_id=str(rule.id),
+                    level=rule.level,
+                    code=rule.code,
+                    message=rule.message,
+                    suggestion=rule.suggestion or "",
+                ))
+        return True, warnings
 
     async def check_drug_order(
         self,
@@ -292,21 +445,27 @@ class AuditService:
         - exam_names : 即将开具检查列表
         - patient_context : 患者上下文（含过敏史、检验结果）
         """
-        warnings = []
-        for rule in _CONSISTENCY_RULES:
-            try:
-                triggered = rule["check"](diagnoses, drug_names, exam_names, patient_context)
-            except Exception:
-                continue
-            if triggered:
-                warnings.append(AuditWarning(
-                    rule_id=rule["id"],
-                    level=rule["level"],
-                    code=rule["code"],
-                    message=rule["message"],
-                    suggestion=rule["suggestion"],
-                ))
-        # error 优先，其次 warning，最后 info
+        runtime_on, warnings = await self._run_runtime_rules(
+            diagnoses,
+            drug_names,
+            exam_names,
+            patient_context,
+        )
+        if not runtime_on:
+            warnings = []
+            for rule in _CONSISTENCY_RULES:
+                try:
+                    triggered = rule["check"](diagnoses, drug_names, exam_names, patient_context)
+                except Exception:
+                    continue
+                if triggered:
+                    warnings.append(AuditWarning(
+                        rule_id=rule["id"],
+                        level=rule["level"],
+                        code=rule["code"],
+                        message=rule["message"],
+                        suggestion=rule["suggestion"],
+                    ))
         _order = {"error": 0, "warning": 1, "info": 2}
         warnings.sort(key=lambda w: _order.get(w.level, 9))
         return warnings

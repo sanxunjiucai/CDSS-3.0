@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text, DateTime, JSON, Boolean, Integer, ForeignKey
+from sqlalchemy import String, Text, DateTime, JSON, Boolean, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from uuid import uuid4, UUID
@@ -19,9 +19,18 @@ class AuditRule(Base):
     suggestion: Mapped[str | None] = mapped_column(Text)
     rule_type: Mapped[str | None] = mapped_column(String(64))
     trigger_scene: Mapped[str | None] = mapped_column(String(64))
+    category: Mapped[str | None] = mapped_column(String(64))
+    module_name: Mapped[str | None] = mapped_column(String(64))
+    clinical_scene: Mapped[str | None] = mapped_column(String(32))
+    trigger_timing: Mapped[str | None] = mapped_column(String(64))
+    action_type: Mapped[str | None] = mapped_column(String(64))
+    writeback_target: Mapped[str | None] = mapped_column(String(128))
+    source_type: Mapped[str | None] = mapped_column(String(64))
+    source_name: Mapped[str | None] = mapped_column(String(255))
+    maintainer: Mapped[str | None] = mapped_column(String(64))
     priority_level: Mapped[int] = mapped_column(Integer, default=0)
-    disease_id: Mapped[UUID | None] = mapped_column(ForeignKey("diseases.id"))
-    source_id: Mapped[UUID | None] = mapped_column(ForeignKey("knowledge_sources.id"))
+    disease_id: Mapped[UUID | None] = mapped_column()
+    source_id: Mapped[UUID | None] = mapped_column()
     evidence_text: Mapped[str | None] = mapped_column(Text)
     condition: Mapped[dict] = mapped_column(JSON, default=dict)
     enabled: Mapped[bool] = mapped_column(Boolean, default=True, index=True)

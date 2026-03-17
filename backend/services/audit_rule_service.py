@@ -149,6 +149,6 @@ class AuditRuleService:
                 AuditRule.is_published == True,
                 AuditRule.enabled == True,
             )
-            .order_by(AuditRule.updated_at.desc())
+            .order_by(AuditRule.priority_level.desc(), AuditRule.updated_at.desc())
         )
         return list((await self.session.execute(stmt)).scalars().all())

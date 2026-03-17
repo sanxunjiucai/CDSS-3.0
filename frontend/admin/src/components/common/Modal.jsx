@@ -2,9 +2,9 @@ import { X } from 'lucide-react'
 
 /**
  * 通用弹窗容器
- * Props: open, title, onClose, children, footer, width
+ * Props: open, title, onClose, children, footer, width, bodyMinHeight
  */
-export function Modal({ open, title, onClose, children, footer, width = 560 }) {
+export function Modal({ open, title, onClose, children, footer, width = 560, bodyMinHeight }) {
   if (!open) return null
 
   return (
@@ -29,7 +29,10 @@ export function Modal({ open, title, onClose, children, footer, width = 560 }) {
         </div>
 
         {/* 内容区 */}
-        <div className="flex-1 overflow-y-auto px-5 py-5">
+        <div
+          className="flex-1 overflow-y-auto [scrollbar-gutter:stable] px-5 py-5"
+          style={bodyMinHeight ? { minHeight: bodyMinHeight } : undefined}
+        >
           {children}
         </div>
 

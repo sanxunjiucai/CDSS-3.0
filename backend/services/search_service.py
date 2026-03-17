@@ -1,6 +1,6 @@
 from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, func, text
+from sqlalchemy import select, or_, func
 
 from db.models.disease import Disease
 from db.models.drug import Drug
@@ -10,6 +10,7 @@ from db.models.assessment import Assessment
 from db.models.guideline import Guideline
 from schemas.search import SearchResultItem, SearchResponse
 from services.literature_service import LiteratureService
+from services.system_config_service import SystemConfigService, DEFAULT_SEARCH_WEIGHTS
 
 
 class SearchService:
@@ -27,8 +28,21 @@ class SearchService:
         pattern = f"%{keyword}%"
         offset = (page - 1) * page_size
 
-        # 决定要搜哪些类型
-        search_types = types if types else ["disease", "drug", "exam", "guideline", "formula", "assessment", "literature", "case"]
+        config_service = SystemConfigService(self.session)
+        weights_config = await config_service.get_search_weights()
+        enabled_types = [k for k, v in weights_config.items() if v.get("enabled")]
+        search_types = types if types else enabled_types
+        search_types = [t for t in search_types if t in DEFAULT_SEARCH_WEIGHTS and t in enabled_types]
+        type_weights = {k: float(v.get("weight", 1)) for k, v in weights_config.items()}
+
+        if not search_types:
+            return SearchResponse(
+                query=keyword,
+                total=0,
+                total_pages=1,
+                items=[],
+                facets={},
+            )
 
         all_items: List[SearchResultItem] = []
         facets: dict = {}
@@ -62,7 +76,7 @@ class SearchService:
                     type="disease",
                     snippet=snippet,
                     department=d.department,
-                    score=_score(keyword, d.name),
+                    score=_score(keyword, d.name) * type_weights.get("disease", 1.0),
                 ))
 
         # ── 药品 ──────────────────────────────────────────────────
@@ -93,7 +107,7 @@ class SearchService:
                     type="drug",
                     snippet=snippet,
                     department=d.category,
-                    score=_score(keyword, d.name),
+                    score=_score(keyword, d.name) * type_weights.get("drug", 1.0),
                 ))
 
         # ── 检验检查 ──────────────────────────────────────────────
@@ -124,7 +138,7 @@ class SearchService:
                     type="exam",
                     snippet=snippet,
                     department=e.type,
-                    score=_score(keyword, e.name),
+                    score=_score(keyword, e.name) * type_weights.get("exam", 1.0),
                 ))
 
         # ── 临床指南 ──────────────────────────────────────────────
@@ -155,7 +169,7 @@ class SearchService:
                     type="guideline",
                     snippet=snippet,
                     department=g.department,
-                    score=_score(keyword, g.title),
+                    score=_score(keyword, g.title) * type_weights.get("guideline", 1.0),
                 ))
 
         # ── 医学公式 ──────────────────────────────────────────────
@@ -185,7 +199,7 @@ class SearchService:
                     type="formula",
                     snippet=snippet,
                     department=f.category,
-                    score=_score(keyword, f.name),
+                    score=_score(keyword, f.name) * type_weights.get("formula", 1.0),
                 ))
 
         # ── 评估量表 ──────────────────────────────────────────────
@@ -211,7 +225,7 @@ class SearchService:
                     type="assessment",
                     snippet=snippet,
                     department=a.department,
-                    score=_score(keyword, a.name),
+                    score=_score(keyword, a.name) * type_weights.get("assessment", 1.0),
                 ))
 
         literature_service = LiteratureService()
@@ -228,7 +242,7 @@ class SearchService:
                     type="literature",
                     snippet=abstract[:120] + ("…" if len(abstract) > 120 else ""),
                     department=item.get("department"),
-                    score=_score(keyword, title),
+                    score=_score(keyword, title) * type_weights.get("literature", 1.0),
                 ))
 
         if "case" in search_types:
@@ -243,7 +257,7 @@ class SearchService:
                     type="case",
                     snippet=abstract[:120] + ("…" if len(abstract) > 120 else ""),
                     department=item.get("department"),
-                    score=_score(keyword, title),
+                    score=_score(keyword, title) * type_weights.get("case", 1.0),
                 ))
 
         # 排序：名称完全匹配 > 名称前缀匹配 > 其他

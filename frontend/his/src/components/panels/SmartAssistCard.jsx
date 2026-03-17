@@ -1,93 +1,39 @@
 /**
- * SmartAssistCard — 智能辅助（合同 2.1 辅助输入）
- *
- * 数据流：
- *   HIS患者数据（patient store）
- *     ↓  患者加载后自动触发 usePatientInference
- *   GLM推断（inferFromPatientData）
- *     ↓  综合诊断 + 检验 + 用药 + 主诉 + 既往史
- *   推断结果（clinicalContext.inferred）
- *     ↓  结构化展示，区分 HIS原始 / AI推断
- *   医生确认后写回 HIS
+ * SmartAssistCard — 智能辅助（重构版）
+ * 单辅助项聚焦模式
  */
 import { useState } from 'react'
-import { Sparkles, Loader2, PlusCircle, CheckCircle2, AlertTriangle, ChevronDown } from 'lucide-react'
+import { Sparkles, AlertTriangle, ChevronDown, ChevronRight, Play, SkipForward, SkipBack } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { usePatientStore }         from '@/stores/patient'
+import { usePatientStore } from '@/stores/patient'
 import { useClinicalContextStore } from '@/stores/clinicalContext'
+import { useAssistItems } from '@/hooks/useAssistItems'
+import { useDemoModeStore } from '@/stores/demoMode'
+import { STAGE_META } from '@/hooks/useWorkflowStage'
 
-/* ── 主组件 ─────────────────────────────────────────────────────── */
-export function SmartAssistCard({ defaultOpen = true }) {
-  const patient    = usePatientStore(s => s.context)
-  const { inferred, isInferring } = useClinicalContextStore()
-  const [open, setOpen] = useState(defaultOpen)
+export function SmartAssistCard() {
+  const patient = usePatientStore(s => s.context)
+  const clinicalContext = useClinicalContextStore()
+  const { current, pending, confirmed } = useAssistItems(patient, clinicalContext)
+
+  const demoMode = useDemoModeStore()
+  const demoItem = demoMode.getCurrentItem()
+
+  const [open, setOpen] = useState(true)
+  const [showMore, setShowMore] = useState(false)
+  const [showConfirmed, setShowConfirmed] = useState(false)
 
   if (!patient) return null
 
-  const fmt = (arr = []) => arr.filter(Boolean).join('、')
+  const stage = clinicalContext?.entities?.stage_hint || 'initial'
+  const stageMeta = STAGE_META[stage] || STAGE_META.initial
 
-  /* ── 规则兜底：GLM失败时从患者数据提取风险信号 ─── */
-  const deriveFallbackRisks = (pt) => {
-    const signals = []
-
-    // 1. 危急检验值
-    const CRITICAL_LABS = {
-      HSTNT:    v => v > 52,
-      NTPROBNP: v => v > 900,
-      K:        v => v > 6.0 || v < 3.0,
-      NA:       v => v > 150 || v < 125,
-      GLU:      v => v > 16.7 || v < 3.9,
-      CREA:     v => v > 440,
-      HB:       v => v < 60,
-    }
-    ;(pt.lab_results || []).forEach(r => {
-      const rule = CRITICAL_LABS[r.item_code]
-      const val  = parseFloat(r.value)
-      if (rule && !isNaN(val) && rule(val)) {
-        signals.push(`${r.item_name} ${r.value}${r.unit}（危急值）`)
-      } else if (r.is_abnormal && r.abnormal_type === 'high') {
-        signals.push(`${r.item_name}↑（${r.value}${r.unit}）`)
-      }
-    })
-
-    // 2. 高风险诊断关键词
-    const HIGH_RISK_DX = [
-      ['STEMI', '急性ST段抬高型心肌梗死'],
-      ['NSTEMI', '急性非ST段抬高型心肌梗死'],
-      ['脓毒症', '感染性休克'],
-      ['急性心力衰竭', '心力衰竭急性发作'],
-      ['脑卒中', '脑梗死', '脑出血'],
-      ['肺栓塞'],
-      ['主动脉夹层'],
-      ['急性肾衰竭', '急性肾损伤'],
-    ]
-    const dxNames = pt.diagnosis_names || []
-    HIGH_RISK_DX.forEach(group => {
-      const matched = group.find(kw => dxNames.some(d => d.includes(kw)))
-      if (matched) signals.push(`高风险诊断：${matched}`)
-    })
-
-    // 3. 过敏-用药冲突
-    const allergies  = pt.allergies || []
-    const meds       = pt.current_medications || []
-    allergies.forEach(al => {
-      meds.forEach(med => {
-        if (
-          med.includes(al) || al.includes(med) ||
-          (al.includes('青霉素') && (med.includes('青霉素') || med.includes('阿莫西林') || med.includes('氨苄')))
-        ) {
-          signals.push(`⚠ 过敏冲突：${al} ↔ ${med}`)
-        }
-      })
-    })
-
-    return signals
-  }
+  // 演示模式优先
+  const displayItem = demoMode.enabled ? demoItem : current
 
   return (
     <div className="bg-white border-b border-border">
-
-      {/* ── 标题行（可点击展开/收起）──────────────────────────── */}
+      {/* 标题行 */}
       <div
         className="flex items-center justify-between px-3 py-2 cursor-pointer select-none"
         onClick={() => setOpen(o => !o)}
@@ -95,231 +41,217 @@ export function SmartAssistCard({ defaultOpen = true }) {
         <div className="flex items-center gap-1.5">
           <Sparkles size={12} className="text-primary" />
           <span className="text-xs font-semibold text-gray-800">智能辅助</span>
-          {isInferring && (
-            <div className="flex items-center gap-1 text-2xs text-primary">
-              <Loader2 size={10} className="animate-spin" />
-              <span>推断中…</span>
-            </div>
+          {demoMode.enabled ? (
+            <span className="text-2xs text-orange-500">演示模式</span>
+          ) : (
+            <span className={cn('text-2xs', stageMeta.color)}>
+              {stageMeta.label}
+            </span>
           )}
         </div>
-
-        <div className="flex items-center gap-2">
-          {/* HIS 实时监听状态 */}
-          <div className="flex items-center gap-1">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full
-                               rounded-full bg-success opacity-60" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-success" />
-            </span>
-            <span className="text-2xs text-gray-400">HIS 实时监听</span>
-          </div>
-          <ChevronDown
-            size={13}
-            className={cn('text-gray-400 transition-transform', open && 'rotate-180')}
-          />
-        </div>
+        <ChevronDown
+          size={13}
+          className={cn('text-gray-400 transition-transform', open && 'rotate-180')}
+        />
       </div>
 
-      {/* ── 内容区（可收起）──────────────────────────────────── */}
       {open && (
-        <div className="px-3 pb-3 space-y-1.5">
+        <div className="px-3 pb-3 space-y-2">
+          {/* 演示模式控制 */}
+          {!demoMode.enabled ? (
+            <button
+              onClick={() => demoMode.enableDemo()}
+              className="w-full flex items-center justify-center gap-1 px-2 py-1.5 text-2xs text-primary border border-primary rounded hover:bg-primary-50"
+            >
+              <Play size={10} />
+              启动演示流程
+            </button>
+          ) : (
+            <div className="flex items-center justify-between gap-2">
+              <button
+                onClick={() => demoMode.prevStep()}
+                disabled={demoMode.currentStep === 0}
+                className="flex items-center gap-1 px-2 py-1 text-2xs border border-border rounded hover:bg-gray-50 disabled:opacity-30"
+              >
+                <SkipBack size={10} />
+                上一步
+              </button>
+              <span className="text-2xs text-gray-500">
+                {demoMode.currentStep + 1} / {demoMode.steps.length}
+              </span>
+              <button
+                onClick={() => demoMode.nextStep()}
+                disabled={demoMode.currentStep === demoMode.steps.length - 1}
+                className="flex items-center gap-1 px-2 py-1 text-2xs border border-border rounded hover:bg-gray-50 disabled:opacity-30"
+              >
+                下一步
+                <SkipForward size={10} />
+              </button>
+              <button
+                onClick={() => demoMode.disableDemo()}
+                className="px-2 py-1 text-2xs text-gray-500 hover:text-gray-700"
+              >
+                退出
+              </button>
+            </div>
+          )}
 
-          {/* 主诉 */}
-          <Field
-            label="主诉"
-            hisValue={patient.chief_complaint}
-            aiValue={inferred?.chief_complaint_refined}
-            isLoading={isInferring}
-          />
+          {/* 当前辅助项 */}
+          {displayItem ? (
+            <AssistItemCard item={displayItem} />
+          ) : (
+            <div className="text-xs text-gray-400 text-center py-4">
+              当前无待处理辅助项
+            </div>
+          )}
 
-          {/* 现病史（纯AI推断） */}
-          <Field
-            label="现病史"
-            hisValue={null}
-            aiValue={inferred?.present_illness}
-            isLoading={isInferring}
-            multiline
-          />
+          {/* 更多建议 / 已采纳 */}
+          {!demoMode.enabled && (
+            <div className="flex items-center gap-2 text-2xs">
+              {pending.length > 0 && (
+                <button
+                  onClick={() => setShowMore(!showMore)}
+                  className="flex items-center gap-1 text-gray-500 hover:text-primary"
+                >
+                  <ChevronRight size={10} className={cn('transition-transform', showMore && 'rotate-90')} />
+                  更多建议 ({pending.length})
+                </button>
+              )}
+              {confirmed.length > 0 && (
+                <button
+                  onClick={() => setShowConfirmed(!showConfirmed)}
+                  className="flex items-center gap-1 text-gray-500 hover:text-primary"
+                >
+                  <ChevronRight size={10} className={cn('transition-transform', showConfirmed && 'rotate-90')} />
+                  已采纳 ({confirmed.length})
+                </button>
+              )}
+            </div>
+          )}
 
-          {/* 既往史 */}
-          <Field
-            label="既往史"
-            hisValue={fmt(patient.past_history)}
-            aiValue={null}
-          />
-
-          {/* 过敏史 */}
-          <Field
-            label="过敏史"
-            hisValue={fmt(patient.allergies)}
-            aiValue={null}
-            danger
-          />
-
-          {/* 风险信号（AI优先，GLM失败时用规则兜底） */}
-          {(() => {
-            if (isInferring) {
-              return <RiskSignals signals={null} isLoading />
-            }
-            const aiSignals = inferred?.risk_signals
-            if (aiSignals?.length > 0) {
-              return <RiskSignals signals={aiSignals} isLoading={false} />
-            }
-            // GLM未返回时，规则兜底
-            const fallback = deriveFallbackRisks(patient)
-            if (fallback.length > 0) {
-              return <RiskSignals signals={fallback} isLoading={false} isFallback />
-            }
-            return null
-          })()}
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── 单字段行：支持 HIS原始 + AI推断 并列或各自展示 ────────────── */
-function Field({ label, hisValue, aiValue, isLoading, danger = false, multiline = false }) {
-  // HIS 原始值和 AI 推断值各自有独立的写入状态
-  const [hisAdded, setHisAdded] = useState(false)
-  const [aiAdded,  setAiAdded]  = useState(false)
-
-  const handleWrite = (value, setAdded) => {
-    console.log('[HIS WriteBack]', { label, value })
-    setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
-  }
-
-  // 若两个值相同（或 AI 值只是小调整），只展示 AI 版本
-  const showBoth = hisValue && aiValue && hisValue !== aiValue
-
-  return (
-    <div className="space-y-0.5">
-      {/* HIS 原始行 */}
-      {hisValue && (
-        <div className="flex items-start gap-1.5 group">
-          <span className="text-2xs text-gray-400 w-14 flex-shrink-0 pt-0.5">{label}</span>
-          <div className="flex-1 min-w-0">
-            <span className={cn(
-              'text-xs leading-relaxed',
-              danger ? 'text-danger font-medium' : showBoth ? 'text-gray-400' : 'text-gray-800'
-            )}>
-              {hisValue}
-            </span>
-            {showBoth && (
-              <span className="ml-1 text-2xs text-gray-300 bg-gray-50 border border-gray-200
-                               px-1 py-px rounded-sm">HIS</span>
-            )}
-          </div>
-          <WriteBtn added={hisAdded} onClick={() => handleWrite(hisValue, setHisAdded)} />
-        </div>
-      )}
-
-      {/* AI 推断行 */}
-      {aiValue && (
-        <div className="flex items-start gap-1.5 group">
-          {/* 标签：若 HIS 已显示过则留空，否则显示字段名 */}
-          <span className="text-2xs text-gray-400 w-14 flex-shrink-0 pt-0.5">
-            {!hisValue ? label : ''}
-          </span>
-          <div className="flex-1 min-w-0">
-            <span className={cn(
-              'text-xs leading-relaxed text-gray-800',
-              multiline ? 'block' : ''
-            )}>
-              {aiValue}
-            </span>
-            <AiBadge />
-          </div>
-          <WriteBtn added={aiAdded} onClick={() => handleWrite(aiValue, setAiAdded)} />
-        </div>
-      )}
-
-      {/* 加载占位 */}
-      {isLoading && !aiValue && !hisValue && (
-        <div className="flex items-start gap-1.5">
-          <span className="text-2xs text-gray-400 w-14 flex-shrink-0 pt-0.5">{label}</span>
-          <span className="text-xs text-gray-300">推断中…</span>
-        </div>
-      )}
-
-      {/* 空值占位 */}
-      {!isLoading && !hisValue && !aiValue && (
-        <div className="flex items-start gap-1.5">
-          <span className="text-2xs text-gray-400 w-14 flex-shrink-0 pt-0.5">{label}</span>
-          <span className="text-xs text-gray-300">—</span>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── 风险信号区块 ───────────────────────────────────────────────── */
-function RiskSignals({ signals, isLoading, isFallback = false }) {
-  const [added, setAdded] = useState(false)
-  if (isLoading) return (
-    <div className="flex items-center gap-1.5 px-2 py-1.5 rounded bg-gray-50">
-      <AlertTriangle size={11} className="text-gray-300 flex-shrink-0" />
-      <span className="text-2xs text-gray-300">风险信号识别中…</span>
-    </div>
-  )
-  if (!signals?.length) return null
-
-  const handleWrite = () => {
-    console.log('[HIS WriteBack]', { label: '风险信号', value: signals.join('、') })
-    setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
-  }
-
-  return (
-    <div className="flex items-start gap-1.5 px-2 py-1.5 rounded bg-white border border-border border-l-2 border-l-danger group">
-      <AlertTriangle size={11} className="text-danger flex-shrink-0 mt-0.5" />
-      <div className="flex-1 min-w-0">
-        <div className="flex flex-wrap gap-1">
-          {signals.map((s, i) => (
-            <span key={i} className="text-2xs text-danger font-medium">{s}</span>
+          {/* 更多建议列表 */}
+          {showMore && pending.map((item, i) => (
+            <AssistItemCard key={i} item={item} isSecondary />
           ))}
         </div>
-        {isFallback
-          ? <span className="inline-flex items-center gap-0.5 text-2xs px-1 py-px rounded-sm mt-0.5
-                              text-orange-500 bg-orange-50 border border-orange-200">
-              规则识别
-            </span>
-          : <AiBadge danger />
-        }
-      </div>
-      <WriteBtn added={added} onClick={handleWrite} />
+      )}
     </div>
   )
 }
 
-/* ── AI推断标记 ─────────────────────────────────────────────────── */
-function AiBadge({ danger = false }) {
-  return (
-    <span className={cn(
-      'inline-flex items-center gap-0.5 text-2xs px-1 py-px rounded-sm mt-0.5',
-      danger
-        ? 'text-danger bg-red-50 border border-red-200'
-        : 'text-primary bg-primary-50 border border-primary-100'
-    )}>
-      <Sparkles size={8} />
-      AI推断
-    </span>
-  )
-}
+/* 辅助项卡片 */
+function AssistItemCard({ item, isSecondary = false }) {
+  const [editing, setEditing] = useState(false)
+  const [editedContent, setEditedContent] = useState(item.content)
 
-/* ── 写入HIS按钮 ─────────────────────────────────────────────────── */
-function WriteBtn({ added, onClick }) {
+  const handleAdopt = () => {
+    console.log('[HIS WriteBack]', { type: item.type, content: item.content })
+    // TODO: 实际写入HIS逻辑
+  }
+
+  const handleEdit = () => {
+    console.log('[HIS WriteBack]', { type: item.type, content: editedContent })
+    setEditing(false)
+  }
+
+  const isHighRisk = item.type === 'high_risk'
+
   return (
-    <button
-      onClick={onClick}
-      title="写入 HIS"
-      className={cn(
-        'flex-shrink-0 mt-0.5 transition-colors',
-        added ? 'text-success' : 'text-gray-300 hover:text-primary'
+    <div className={cn(
+      'border rounded-lg p-2.5 space-y-1.5',
+      isHighRisk ? 'border-danger bg-red-50' : 'border-border bg-gray-50',
+      isSecondary && 'opacity-60'
+    )}>
+      {/* 标题 */}
+      <div className="flex items-start gap-1.5">
+        {isHighRisk && <AlertTriangle size={12} className="text-danger mt-0.5 flex-shrink-0" />}
+        <span className={cn('text-xs font-medium', isHighRisk ? 'text-danger' : 'text-gray-800')}>
+          {item.title}
+        </span>
+      </div>
+
+      {/* 原因 */}
+      {item.reason && (
+        <div className="text-2xs text-gray-500">
+          {item.reason}
+        </div>
       )}
-    >
-      {added ? <CheckCircle2 size={13} /> : <PlusCircle size={13} />}
-    </button>
+
+      {/* 内容 */}
+      {editing ? (
+        <textarea
+          value={editedContent}
+          onChange={e => setEditedContent(e.target.value)}
+          className="w-full text-xs border border-border rounded px-2 py-1 resize-none"
+          rows={3}
+        />
+      ) : (
+        <div className="text-xs text-gray-700 leading-relaxed">
+          {item.content}
+        </div>
+      )}
+
+      {/* 操作按钮 */}
+      <div className="flex items-center gap-1.5 pt-1">
+        {editing ? (
+          <>
+            <button
+              onClick={handleEdit}
+              className="px-2 py-1 text-2xs bg-primary text-white rounded hover:bg-primary-600"
+            >
+              确认写入
+            </button>
+            <button
+              onClick={() => setEditing(false)}
+              className="px-2 py-1 text-2xs text-gray-600 hover:text-gray-800"
+            >
+              取消
+            </button>
+          </>
+        ) : (
+          <>
+            {item.actions.includes('采纳并写入HIS') && (
+              <button
+                onClick={handleAdopt}
+                className="px-2 py-1 text-2xs bg-primary text-white rounded hover:bg-primary-600"
+              >
+                采纳并写入HIS
+              </button>
+            )}
+            {item.actions.includes('修改后写入') && (
+              <button
+                onClick={() => setEditing(true)}
+                className="px-2 py-1 text-2xs border border-border rounded hover:bg-white"
+              >
+                修改后写入
+              </button>
+            )}
+            {item.actions.includes('立即处理') && (
+              <button
+                onClick={handleAdopt}
+                className="px-2 py-1 text-2xs bg-danger text-white rounded hover:bg-red-600"
+              >
+                立即处理
+              </button>
+            )}
+            {item.actions.includes('查看详情') && (
+              <button className="px-2 py-1 text-2xs text-primary hover:underline">
+                查看详情
+              </button>
+            )}
+            {item.actions.includes('查看依据') && (
+              <button className="px-2 py-1 text-2xs text-primary hover:underline">
+                查看依据
+              </button>
+            )}
+            {item.actions.includes('暂不处理') && (
+              <button className="px-2 py-1 text-2xs text-gray-500 hover:text-gray-700">
+                暂不处理
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   )
 }

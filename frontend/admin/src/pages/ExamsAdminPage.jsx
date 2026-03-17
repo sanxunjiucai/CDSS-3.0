@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { FlaskConical, Plus, Search, Pencil, Trash2 } from 'lucide-react'
+import { FlaskConical, Plus, Search, Pencil, Trash2, Eye } from 'lucide-react'
 import { examApi } from '@/api'
 import { useListPage }   from '@/hooks/useListPage'
 import { PageHeader }    from '@/components/common/PageHeader'
@@ -32,6 +32,9 @@ export function ExamsAdminPage() {
   const [delTarget, setDelTarget] = useState(null)
   const [deleting, setDeleting]   = useState(false)
 
+  const openView = async (row) => {
+    setEditRow(row); setModal('view')
+  }
   const openCreate = () => { setForm(EMPTY_FORM); setFormErr({}); setEditRow(null); setModal('create') }
   const openEdit   = (row) => {
     setForm({
@@ -86,9 +89,13 @@ export function ExamsAdminPage() {
     { key: 'clinical_significance', title: '临床意义',
       render: (v) => <span className="text-gray-500 text-sm line-clamp-2">{v || '—'}</span>
     },
-    { key: '_actions', title: '操作', width: '100px',
+    { key: '_actions', title: '操作', width: '120px',
       render: (_, row) => (
         <div className="flex items-center gap-1">
+          <button onClick={() => openView(row)}
+            className="p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
+            <Eye size={14} />
+          </button>
           <button onClick={() => openEdit(row)}
             className="p-1.5 rounded text-gray-400 hover:text-primary hover:bg-primary-50 transition-colors">
             <Pencil size={14} />
@@ -138,9 +145,11 @@ export function ExamsAdminPage() {
         description={`即将删除「${delTarget?.name}」，此操作不可恢复。`}
         onConfirm={handleDelete} onCancel={() => setDelTarget(null)} loading={deleting} />
 
-      <Modal open={!!modal} title={modal === 'create' ? '新增检验项目' : '编辑检验项目'}
+      <Modal open={!!modal} title={modal === 'create' ? '新增检验项目' : modal === 'view' ? '查看检验项目' : '编辑检验项目'}
         onClose={() => setModal(null)} width={600}
-        footer={
+        footer={modal === 'view' ? (
+          <button onClick={() => setModal(null)} className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">关闭</button>
+        ) : (
           <>
             <button onClick={() => setModal(null)}
               className="px-4 py-2 text-sm text-gray-600 border border-border rounded-lg hover:bg-gray-50 transition-colors">
@@ -152,8 +161,18 @@ export function ExamsAdminPage() {
               {saving ? '保存中...' : '保存'}
             </button>
           </>
-        }
+        )}
       >
+        {modal === 'view' ? (
+          <div className="space-y-3 text-sm">
+            <div><span className="text-gray-500">项目名称:</span> <span className="ml-2 font-medium">{editRow?.name}</span></div>
+            <div><span className="text-gray-500">分类:</span> <span className="ml-2">{editRow?.type || '—'}</span></div>
+            <div><span className="text-gray-500">标本类型:</span> <span className="ml-2">{editRow?.specimen || '—'}</span></div>
+            <div><span className="text-gray-500">参考范围:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.reference_range || '—'}</div></div>
+            <div><span className="text-gray-500">临床意义:</span> <div className="mt-1 text-gray-700 whitespace-pre-wrap">{editRow?.clinical_significance || '—'}</div></div>
+          </div>
+        ) : (
+        <>
         <div className="grid grid-cols-2 gap-x-4">
           <FormField label="项目名称" required error={formErr.name}>
             <TextInput value={form.name} onChange={set('name')} placeholder="如：空腹血糖" />
@@ -181,6 +200,8 @@ export function ExamsAdminPage() {
           <TextArea value={form.preparation} onChange={set('preparation')}
             placeholder="采集前注意事项、禁食要求等..." rows={2} />
         </FormField>
+        </>
+        )}
       </Modal>
     </div>
   )
